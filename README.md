@@ -1,1 +1,1 @@
-# module-ballerinax-zoom.schduler
+# module-ballerinax-zoom.scheduler
