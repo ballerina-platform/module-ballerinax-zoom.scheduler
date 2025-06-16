@@ -4,9 +4,17 @@
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-zoom.scheduler.svg)](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/commits/master)
 [![GitHub Issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-library/module/zoom.scheduler.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-library/labels/module%zoom.scheduler)
 
+[![Build](https://github.com/ballerina-platform/module-ballerinax-twitter/workflows/CI/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-twitter/actions?query=workflow%3ACI)
+[![codecov](https://codecov.io/gh/ballerina-platform/module-ballerinax-twitter/branch/main/graph/badge.svg)](https://codecov.io/gh/ballerina-platform/module-ballerinax-twitter)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+
 ## Overview
 
-[//]: # (TODO: Add overview mentioning the purpose of the module, supported REST API versions, and other high-level details.)
+[Zoom](https://www.zoom.com/) is a video communications platform that enables users to schedule, host, and join virtual meetings, webinars, and conferences.
+
+The `ballerinax/zoom-schedular` package offers APIs to connect ant interract with [Zoom](https://developers.zoom.us/docs/api/) endpoints. specifically based on [Zoom API v2]()
+
 
 ## Setup guide
 
