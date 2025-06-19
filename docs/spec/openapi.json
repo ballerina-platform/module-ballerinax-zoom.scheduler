@@ -15,10 +15,10 @@
     "url" : "https://swagger.io"
   },
   "servers" : [ {
-    "url" : "https://api.zoom.us/v2"
+    "url" : "https://api.zoom.us/v2/scheduler"
   } ],
   "paths" : {
-    "/scheduler/analytics" : {
+    "/analytics" : {
       "get" : {
         "tags" : [ "analytics" ],
         "summary" : "Report analytics",
@@ -27,7 +27,7 @@
         "parameters" : [ {
           "name" : "to",
           "in" : "query",
-          "description" : "The upper bound (exclusive) for an event's start time to filter by. Optional. The default is not to filter by start time. It must be an RFC3339 timestamp with mandatory time zone offset. For example, 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds may be provided but are ignored. If `timeMin` is set, `timeMax` must be greater than `timeMin`.",
+          "description" : "The upper bound (exclusive) for an event's start time to filter by. Optional. The default is not to filter by start time. It must be an RFC3339 timestamp with mandatory time zone offset. For example, 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds may be provided but are ignored. If `timeMin` is set, `timeMax` must be greater than `timeMin`",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -38,7 +38,7 @@
         }, {
           "name" : "from",
           "in" : "query",
-          "description" : "The lower bound (exclusive) for an event's end time from which to filter. Optional. The default is not to filter by end time. It must be an RFC3339 timestamp with mandatory time zone offset, for example, 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds can be provided but are ignored. If `timeMax` is set, `timeMin` must be smaller than `timeMax`.",
+          "description" : "The lower bound (exclusive) for an event's end time from which to filter. Optional. The default is not to filter by end time. It must be an RFC3339 timestamp with mandatory time zone offset, for example, 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds can be provided but are ignored. If `timeMax` is set, `timeMin` must be smaller than `timeMax`",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -73,7 +73,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "If successful, this method returns the scheduler analytics or the user ID or account ID provided.",
+            "description" : "If successful, this method returns the scheduler analytics or the user ID or account ID provided",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -112,7 +112,7 @@
         }
       }
     },
-    "/scheduler/availability" : {
+    "/availability" : {
       "get" : {
         "tags" : [ "availability" ],
         "summary" : "List availability",
@@ -121,7 +121,7 @@
         "parameters" : [ {
           "name" : "page_size",
           "in" : "query",
-          "description" : "The maximum number of availability returned on one result page.",
+          "description" : "The maximum number of availability returned on one result page",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -133,7 +133,7 @@
         }, {
           "name" : "next_page_token",
           "in" : "query",
-          "description" : "The token that specifies which result page to return.",
+          "description" : "The token that specifies which result page to return",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -145,7 +145,7 @@
         }, {
           "name" : "user_id",
           "in" : "query",
-          "description" : "The return of the specific user's availability.",
+          "description" : "The return of the specific user's availability",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -157,7 +157,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "Successful availability of the schedule query result of given user.",
+            "description" : "Successful availability of the schedule query result of given user",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -198,7 +198,7 @@
         "description" : "Inserts a user availability schedule. \n\n**[Scopes](https://developers.zoom.us/docs/integrations/oauth-scopes-overview/):** `scheduler:write:admin`,`scheduler:write`\n\n**[Granular Scopes](https://developers.zoom.us/docs/integrations/oauth-scopes-overview/):** `scheduler:write:availability`,`scheduler:write:availability:admin`\n\n**[Rate Limit Label](https://marketplace.zoom.us/docs/api-reference/rate-limits#rate-limits):** `LIGHT`",
         "operationId" : "insert_availability",
         "requestBody" : {
-          "description" : "In the request body, it supplies an availability resource properties.",
+          "description" : "In the request body, it supplies an availability resource properties",
           "content" : {
             "application/json" : {
               "schema" : {
@@ -209,7 +209,7 @@
         },
         "responses" : {
           "201" : {
-            "description" : "If successful, this method returns a availability resource in the response body.",
+            "description" : "If successful, this method returns a availability resource in the response body",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -245,7 +245,7 @@
         }
       }
     },
-    "/scheduler/availability/{availabilityId}" : {
+    "/availability/{availabilityId}" : {
       "get" : {
         "tags" : [ "availability" ],
         "summary" : "Get availability ",
@@ -254,7 +254,7 @@
         "parameters" : [ {
           "name" : "availabilityId",
           "in" : "path",
-          "description" : "The UUID of the availability schedule.",
+          "description" : "The UUID of the availability schedule",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -265,7 +265,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "If successful, this method returns an availability resource in the response body.",
+            "description" : "If successful, this method returns an availability resource in the response body",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -311,7 +311,7 @@
         "parameters" : [ {
           "name" : "availabilityId",
           "in" : "path",
-          "description" : " The UUID of the availability schedule.",
+          "description" : " The UUID of the availability schedule",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -322,7 +322,7 @@
         } ],
         "responses" : {
           "204" : {
-            "description" : "If successful, this method returns an empty response body."
+            "description" : "If successful, this method returns an empty response body"
           },
           "404" : {
             "description" : "**HTTP Status Code:** `404` <br>\n Not Found  \n\n **Error Code:** `404` <br>\n notFound <br>\n"
@@ -352,7 +352,7 @@
         "parameters" : [ {
           "name" : "availabilityId",
           "in" : "path",
-          "description" : "The UUID of the availability schedule.",
+          "description" : "The UUID of the availability schedule",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -362,7 +362,7 @@
           }
         } ],
         "requestBody" : {
-          "description" : "In the request body, supply availability resource properties.",
+          "description" : "In the request body, supply availability resource properties",
           "content" : {
             "application/json" : {
               "schema" : {
@@ -373,7 +373,7 @@
         },
         "responses" : {
           "204" : {
-            "description" : "If successful, this method returns an empty response body."
+            "description" : "If successful, this method returns an empty response body"
           },
           "400" : {
             "description" : "**HTTP Status Code:** `400` <br>\n Bad Request  \n\n **Error Code:** `400` <br>\n invalidArgument <br>\n"
@@ -405,7 +405,7 @@
         }
       }
     },
-    "/scheduler/events" : {
+    "/events" : {
       "get" : {
         "tags" : [ "scheduled events" ],
         "summary" : "List scheduled events",
@@ -414,7 +414,7 @@
         "parameters" : [ {
           "name" : "to",
           "in" : "query",
-          "description" : "The upper bound (exclusive) for an event's start time from which to filter.",
+          "description" : "The upper bound (exclusive) for an event's start time from which to filter",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -436,7 +436,7 @@
         }, {
           "name" : "page_size",
           "in" : "query",
-          "description" : "The maximum number of events returned on one result page.",
+          "description" : "The maximum number of events returned on one result page",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -448,7 +448,7 @@
         }, {
           "name" : "order_by",
           "in" : "query",
-          "description" : "This field indicates the start time or the time when the event has been updated.",
+          "description" : "This field indicates the start time or the time when the event has been updated",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -460,7 +460,7 @@
         }, {
           "name" : "time_zone",
           "in" : "query",
-          "description" : "The time zone in the response.",
+          "description" : "The time zone in the response",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -472,7 +472,7 @@
         }, {
           "name" : "next_page_token",
           "in" : "query",
-          "description" : "The token that specifies which result page to return.",
+          "description" : "The token that specifies which result page to return",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -484,7 +484,7 @@
         }, {
           "name" : "show_deleted",
           "in" : "query",
-          "description" : "Whether to include deleted events (with status equals `cancelled`) in the result.",
+          "description" : "Whether to include deleted events (with status equals `cancelled`) in the result",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -496,7 +496,7 @@
         }, {
           "name" : "event_type",
           "in" : "query",
-          "description" : "Whether to return the pending events.",
+          "description" : "Whether to return the pending events",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -521,7 +521,7 @@
         }, {
           "name" : "search",
           "in" : "query",
-          "description" : "This field returns search results from meeting ID or summary.",
+          "description" : "This field returns search results from meeting ID or summary",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -562,7 +562,7 @@
         }
       }
     },
-    "/scheduler/events/{eventId}" : {
+    "/events/{eventId}" : {
       "get" : {
         "tags" : [ "scheduled events" ],
         "summary" : "Get scheduled events ",
@@ -580,7 +580,7 @@
         }, {
           "name" : "user_id",
           "in" : "query",
-          "description" : "This field indicates whether the admin handles certain users. It's only for admin.",
+          "description" : "This field indicates whether the admin handles certain users. It's only for admin",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -592,7 +592,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "If successful, this method returns the scheduled event resource in the response body.",
+            "description" : "If successful, this method returns the scheduled event resource in the response body",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -641,7 +641,7 @@
         }, {
           "name" : "user_id",
           "in" : "query",
-          "description" : "This field indicates whether the admin handles certain users. It's only for admin.",
+          "description" : "This field indicates whether the admin handles certain users. It's only for admin",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -653,7 +653,7 @@
         } ],
         "responses" : {
           "204" : {
-            "description" : "If successful, this method returns an empty response body."
+            "description" : "If successful, this method returns an empty response body"
           },
           "401" : {
             "description" : "**HTTP Status Code:** `401` <br>\n Unauthorized  \n\n **Error Code:** `401` <br>\n Unauthorized <br>\n"
@@ -689,7 +689,7 @@
         "parameters" : [ {
           "name" : "eventId",
           "in" : "path",
-          "description" : "The opaque identifier of the scheduled event.",
+          "description" : "The opaque identifier of the scheduled event",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -700,7 +700,7 @@
         }, {
           "name" : "user_id",
           "in" : "query",
-          "description" : "This field indicates whether the admin handles certain users. It's only for admin.",
+          "description" : "This field indicates whether the admin handles certain users. It's only for admin",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -711,7 +711,7 @@
           "x-ballerina-name" : "userId"
         } ],
         "requestBody" : {
-          "description" : "In the request body, it supplies the relevant portions of event resource.",
+          "description" : "In the request body, it supplies the relevant portions of event resource",
           "content" : {
             "application/json" : {
               "schema" : {
@@ -722,7 +722,7 @@
         },
         "responses" : {
           "204" : {
-            "description" : "If successful, this method returns an event resource in the response body."
+            "description" : "If successful, this method returns an event resource in the response body"
           },
           "400" : {
             "description" : "**HTTP Status Code:** `400` <br>\n Bad Request  \n\n **Error Code:** `400` <br>\n InvalidArgument <br>\n"
@@ -748,7 +748,7 @@
         }
       }
     },
-    "/scheduler/schedules" : {
+    "/schedules" : {
       "get" : {
         "tags" : [ "schedules" ],
         "summary" : "List schedules",
@@ -757,7 +757,7 @@
         "parameters" : [ {
           "name" : "to",
           "in" : "query",
-          "description" : "The upper bound (exclusive) for a schedule's start time from which to filter.",
+          "description" : "The upper bound (exclusive) for a schedule's start time from which to filter",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -768,7 +768,7 @@
         }, {
           "name" : "from",
           "in" : "query",
-          "description" : "The lower bound (exclusive) for a schedule's end time from which to filter.",
+          "description" : "The lower bound (exclusive) for a schedule's end time from which to filter",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -779,7 +779,7 @@
         }, {
           "name" : "page_size",
           "in" : "query",
-          "description" : "The maximum number of schedule results returned on a result page.",
+          "description" : "The maximum number of schedule results returned on a result page",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -791,7 +791,7 @@
         }, {
           "name" : "next_page_token",
           "in" : "query",
-          "description" : "The token that specifies which result page to return.",
+          "description" : "The token that specifies which result page to return",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -803,7 +803,7 @@
         }, {
           "name" : "show_deleted",
           "in" : "query",
-          "description" : "Whether to include the deleted schedule (with status equals \"cancelled\") in the result.",
+          "description" : "Whether to include the deleted schedule (with status equals \"cancelled\") in the result",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -815,7 +815,7 @@
         }, {
           "name" : "time_zone",
           "in" : "query",
-          "description" : "The time zone in the response.",
+          "description" : "The time zone in the response",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -827,7 +827,7 @@
         }, {
           "name" : "user_id",
           "in" : "query",
-          "description" : "The return of the specific user's schedules. Ths setting is only for admin.",
+          "description" : "The return of the specific user's schedules. Ths setting is only for admin",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -839,7 +839,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "If successful, this method returns a response body with this structure.",
+            "description" : "If successful, this method returns a response body with this structure",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -879,7 +879,7 @@
         "parameters" : [ {
           "name" : "user_id",
           "in" : "query",
-          "description" : "This field indicates that the admin handles certain users. This setting is only for admin.",
+          "description" : "This field indicates that the admin handles certain users. This setting is only for admin",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -890,7 +890,7 @@
           "x-ballerina-name" : "userId"
         } ],
         "requestBody" : {
-          "description" : "In the request body, it supplies the schedule resource properties.",
+          "description" : "In the request body, it supplies the schedule resource properties",
           "content" : {
             "application/json" : {
               "schema" : {
@@ -901,7 +901,7 @@
         },
         "responses" : {
           "201" : {
-            "description" : "If successful, this method returns an schedule resource in the response body.",
+            "description" : "If successful, this method returns an schedule resource in the response body",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -934,7 +934,7 @@
         }
       }
     },
-    "/scheduler/schedules/{scheduleId}" : {
+    "/schedules/{scheduleId}" : {
       "get" : {
         "tags" : [ "schedules" ],
         "summary" : "Get schedules",
@@ -943,7 +943,7 @@
         "parameters" : [ {
           "name" : "scheduleId",
           "in" : "path",
-          "description" : "The schedule's unique identifier.",
+          "description" : "The schedule's unique identifier",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -954,7 +954,7 @@
         }, {
           "name" : "user_id",
           "in" : "query",
-          "description" : "This field indicates that admins handle certain users. This setting is only for admin.",
+          "description" : "This field indicates that admins handle certain users. This setting is only for admin",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -966,7 +966,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "If successful, this method returns an schedule resource in the response body.",
+            "description" : "If successful, this method returns an schedule resource in the response body",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1006,7 +1006,7 @@
         "parameters" : [ {
           "name" : "scheduleId",
           "in" : "path",
-          "description" : "The unique identifier of the schedule.",
+          "description" : "The unique identifier of the schedule",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -1017,7 +1017,7 @@
         }, {
           "name" : "user_id",
           "in" : "query",
-          "description" : "This field indicates that the admin handles certain users. This setting is only for admin.",
+          "description" : "This field indicates that the admin handles certain users. This setting is only for admin",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -1029,7 +1029,7 @@
         } ],
         "responses" : {
           "204" : {
-            "description" : "If successful, this method returns an empty response body."
+            "description" : "If successful, this method returns an empty response body"
           },
           "400" : {
             "description" : "**HTTP Status Code:** `400` <br>\n Bad Request  \n\n **Error Code:** `400` <br>\n invalidArgument <br>\n"
@@ -1065,7 +1065,7 @@
         "parameters" : [ {
           "name" : "scheduleId",
           "in" : "path",
-          "description" : "The schedule's unique identifier.",
+          "description" : "The schedule's unique identifier",
           "required" : true,
           "style" : "simple",
           "explode" : false,
@@ -1076,7 +1076,7 @@
         }, {
           "name" : "user_id",
           "in" : "query",
-          "description" : "This field indicates that the admin handles certain users. This setting is only for admin.",
+          "description" : "This field indicates that the admin handles certain users. This setting is only for admin",
           "required" : false,
           "style" : "form",
           "explode" : true,
@@ -1087,7 +1087,7 @@
           "x-ballerina-name" : "userId"
         } ],
         "requestBody" : {
-          "description" : "In the request body, it supplies the relevant portions of a schedule resource, according to the rules of patch semantics.",
+          "description" : "In the request body, it supplies the relevant portions of a schedule resource, according to the rules of patch semantics",
           "content" : {
             "application/json" : {
               "schema" : {
@@ -1098,7 +1098,7 @@
         },
         "responses" : {
           "204" : {
-            "description" : "If successful, this method returns an empty response body."
+            "description" : "If successful, this method returns an empty response body"
           },
           "400" : {
             "description" : "**HTTP Status Code:** `400` <br>\n Bad Request  \n\n **Error Code:** `400` <br>\n InvaildArgument <br>\n"
@@ -1127,7 +1127,7 @@
         }
       }
     },
-    "/scheduler/schedules/single_use_link" : {
+    "/schedules/single_use_link" : {
       "post" : {
         "tags" : [ "scheduling links" ],
         "summary" : "Single use link",
@@ -1144,7 +1144,7 @@
         },
         "responses" : {
           "201" : {
-            "description" : "If successful, this method returns a scheduling link URL in the response body.",
+            "description" : "If successful, this method returns a scheduling link URL in the response body",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1180,7 +1180,7 @@
         }
       }
     },
-    "/scheduler/users/{userId}" : {
+    "/users/{userId}" : {
       "get" : {
         "tags" : [ "users" ],
         "summary" : "Get user",
@@ -1198,7 +1198,7 @@
         } ],
         "responses" : {
           "200" : {
-            "description" : "If successful, this method returns user information in the response body.",
+            "description" : "If successful, this method returns user information in the response body",
             "content" : {
               "application/json" : {
                 "schema" : {
@@ -1290,7 +1290,7 @@
             }
           }
         },
-        "description" : "The week of available time rule."
+        "description" : "The week of available time rule"
       },
       "SchedulerAvailabilityBody" : {
         "required" : [ "name", "time_zone" ],
@@ -1298,23 +1298,23 @@
         "properties" : {
           "owner" : {
             "type" : "string",
-            "description" : "the owner's ID.",
+            "description" : "the owner's ID",
             "readOnly" : true,
             "example" : "easonfsxsysks3lgchitiw@scheudler.zoom.us"
           },
           "default" : {
             "type" : "boolean",
-            "description" : "The default availability schedule in use."
+            "description" : "The default availability schedule in use"
           },
           "name" : {
             "minLength" : 1,
             "type" : "string",
-            "description" : "The name of this availability schedule.",
+            "description" : "The name of this availability schedule",
             "example" : "Working hours"
           },
           "availability_id" : {
             "type" : "string",
-            "description" : "The unique ID of availability.",
+            "description" : "The unique ID of availability",
             "readOnly" : true,
             "example" : "x3h1u4id4liffdyszsp8kpxl80",
             "x-ballerina-name" : "availabilityId"
@@ -1327,43 +1327,43 @@
           },
           "time_zone" : {
             "type" : "string",
-            "description" : "The timezone for which this availability schedule originates.",
+            "description" : "The timezone for which this availability schedule originates",
             "example" : "Asia/Shanghai",
             "x-ballerina-name" : "timeZone"
           },
           "segments" : {
             "type" : "array",
-            "description" : "The date on which the rule needs to be applied outside of the availability rule.",
+            "description" : "The date on which the rule needs to be applied outside of the availability rule",
             "items" : {
               "$ref" : "#/components/schemas/ScheduleravailabilitySegments"
             }
           }
         },
-        "description" : "The availability schedule set by the user."
+        "description" : "The availability schedule set by the user"
       },
       "InlineResponse2011Creator" : {
         "type" : "object",
         "properties" : {
           "self" : {
             "type" : "boolean",
-            "description" : "This field indicates if you created the schedule. The field is read-only.",
+            "description" : "This field indicates if you created the schedule. The field is read-only",
             "readOnly" : true,
             "example" : true
           },
           "display_name" : {
             "type" : "string",
-            "description" : "This field indicates the creator of the display name.",
+            "description" : "This field indicates the creator of the display name",
             "readOnly" : true,
             "example" : "name",
             "x-ballerina-name" : "displayName"
           },
           "email" : {
             "type" : "string",
-            "description" : "This field indicates the creator's email address.",
+            "description" : "This field indicates the creator's email address",
             "example" : "easonfsxsysks3lgchitiw@scheduler.zoom.us"
           }
         },
-        "description" : "The creator of the schedule. The field is read-only."
+        "description" : "The creator of the schedule. The field is read-only"
       },
       "SchedulesSingleUseLinkBody" : {
         "required" : [ "schedule_id" ],
@@ -1371,7 +1371,7 @@
         "properties" : {
           "schedule_id" : {
             "type" : "string",
-            "description" : "The unique identifier of a schedule.",
+            "description" : "The unique identifier of a schedule",
             "example" : "kb1i8qrplqn7r3zmmhphz4uxd0",
             "x-ballerina-name" : "scheduleId"
           }
@@ -1382,7 +1382,7 @@
         "properties" : {
           "use_custom" : {
             "type" : "boolean",
-            "description" : "This field indicates the use of custom availability instead of the rule.",
+            "description" : "This field indicates the use of custom availability instead of the rule",
             "example" : false,
             "x-ballerina-name" : "useCustom"
           },
@@ -1411,7 +1411,7 @@
           },
           "segments" : {
             "type" : "array",
-            "description" : "The available time segments of the event.",
+            "description" : "The available time segments of the event",
             "items" : {
               "$ref" : "#/components/schemas/SchedulerschedulesSegments"
             }
@@ -1426,7 +1426,7 @@
             "maxItems" : 50,
             "minItems" : 1,
             "type" : "array",
-            "description" : "The invitee's option(s) for `single_select` or `multi_select` type of responses.",
+            "description" : "The invitee's option(s) for `single_select` or `multi_select` type of responses",
             "items" : {
               "maxLength" : 8192,
               "minLength" : 1,
@@ -1438,7 +1438,7 @@
           },
           "custom_field_id" : {
             "type" : "string",
-            "description" : "The ID of this question.",
+            "description" : "The ID of this question",
             "example" : "0l6imf50il8jchyapni3p5ckc0",
             "x-ballerina-name" : "customFieldId"
           },
@@ -1450,28 +1450,28 @@
           },
           "name" : {
             "type" : "string",
-            "description" : "The custom question the host created for the event type.",
+            "description" : "The custom question the host created for the event type",
             "example" : "Please share anything that will help prepare for our meeting."
           },
           "include_other" : {
             "type" : "boolean",
-            "description" : "This field is true if the custom question allows invitees to record a written response in addition to single-select or multiple-select type of responses. This field is false if the custom question does not allow invitees to record a written response.",
+            "description" : "This field is true if the custom question allows invitees to record a written response in addition to single-select or multiple-select type of responses. This field is false if the custom question does not allow invitees to record a written response",
             "example" : false,
             "x-ballerina-name" : "includeOther"
           },
           "position" : {
             "type" : "number",
-            "description" : "The position of this question.",
+            "description" : "The position of this question",
             "example" : 0
           },
           "enabled" : {
             "type" : "boolean",
-            "description" : "This field is true if the question the host creates is ON and visible on the event booking page. This field is false if it's OFF and invisible on the event booking page.",
+            "description" : "This field is true if the question the host creates is ON and visible on the event booking page. This field is false if it's OFF and invisible on the event booking page",
             "example" : true
           },
           "required" : {
             "type" : "boolean",
-            "description" : "This field is true if a response to the question created by the host is required for invitees to book the event type. This field is false if a response to the question created by the host is not required for invitees to book the event type.",
+            "description" : "This field is true if a response to the question created by the host is required for invitees to book the event type. This field is false if a response to the question created by the host is not required for invitees to book the event type",
             "example" : false
           }
         }
@@ -1481,14 +1481,14 @@
         "properties" : {
           "add_on_type" : {
             "type" : "string",
-            "description" : "The method of `addOn`, such as Zoom meeting, Zoom phone, and offline.",
+            "description" : "The method of `addOn`, such as Zoom meeting, Zoom phone, and offline",
             "example" : "zoomMeeting",
             "enum" : [ "zoomMeeting", "zoomPhone", "offline" ],
             "x-ballerina-name" : "addOnType"
           },
           "end_date" : {
             "type" : "string",
-            "description" : "The schedule's end date.",
+            "description" : "The schedule's end date",
             "example" : "2023-12-28",
             "x-ballerina-name" : "endDate"
           },
@@ -1496,24 +1496,24 @@
             "maximum" : 720,
             "minimum" : 5,
             "type" : "number",
-            "description" : "This field sets the frequency of available time slots for invitees.",
+            "description" : "This field sets the frequency of available time slots for invitees",
             "example" : 30,
             "x-ballerina-name" : "startTimeIncrement"
           },
           "summary" : {
             "maxLength" : 256,
             "type" : "string",
-            "description" : "The event's summary.",
+            "description" : "The event's summary",
             "example" : "daily meeting"
           },
           "color" : {
             "type" : "string",
-            "description" : "The hexadecimal color value of the event type's scheduling page.",
+            "description" : "The hexadecimal color value of the event type's scheduling page",
             "example" : "#fff200"
           },
           "custom_fields" : {
             "type" : "array",
-            "description" : "The custom question.",
+            "description" : "The custom question",
             "items" : {
               "$ref" : "#/components/schemas/SchedulerschedulesscheduleIdCustomFields"
             },
@@ -1527,20 +1527,20 @@
           },
           "active" : {
             "type" : "boolean",
-            "description" : "This field indicates if the schedule is active.",
+            "description" : "This field indicates if the schedule is active",
             "example" : true
           },
           "booking_limit" : {
             "maximum" : 96,
             "minimum" : 0,
             "type" : "number",
-            "description" : "This field sets the maximum events allowed per day.",
+            "description" : "This field sets the maximum events allowed per day",
             "example" : 0,
             "x-ballerina-name" : "bookingLimit"
           },
           "secret" : {
             "type" : "boolean",
-            "description" : "This field indicates if the event type is hidden on the owner's main scheduling page.",
+            "description" : "This field indicates if the event type is hidden on the owner's main scheduling page",
             "example" : false
           },
           "time_zone" : {
@@ -1551,7 +1551,7 @@
           },
           "availability_rules" : {
             "type" : "array",
-            "description" : "The availability time rule.",
+            "description" : "The availability time rule",
             "items" : {
               "$ref" : "#/components/schemas/SchedulerschedulesscheduleIdAvailabilityRules"
             },
@@ -1561,12 +1561,12 @@
             "maximum" : 200,
             "minimum" : 1,
             "type" : "number",
-            "description" : "The maximum invitees per event.",
+            "description" : "The maximum invitees per event",
             "example" : 1
           },
           "segments" : {
             "type" : "array",
-            "description" : "The available time segments of the event.",
+            "description" : "The available time segments of the event",
             "items" : {
               "$ref" : "#/components/schemas/SchedulerschedulesSegments"
             }
@@ -1575,20 +1575,20 @@
             "maximum" : 1440,
             "minimum" : 15,
             "type" : "number",
-            "description" : "The duration of meeting in minutes, range: [1, 1440].",
+            "description" : "The duration of meeting in minutes, range: [1, 1440]",
             "example" : 30
           },
           "cushion" : {
             "maximum" : 14340,
             "minimum" : 0,
             "type" : "number",
-            "description" : "The minimum time before a schedule starts that attendees can book.",
+            "description" : "The minimum time before a schedule starts that attendees can book",
             "example" : 0
           },
           "location" : {
             "maxLength" : 1024,
             "type" : "string",
-            "description" : "The information for a custom location.",
+            "description" : "The information for a custom location",
             "example" : "AAA office"
           },
           "buffer" : {
@@ -1604,31 +1604,31 @@
             "maxLength" : 256,
             "minLength" : 3,
             "type" : "string",
-            "description" : "The event portion of the event's URL that identifies a specific web page.",
+            "description" : "The event portion of the event's URL that identifies a specific web page",
             "example" : "sales"
           },
           "interval_type" : {
             "type" : "string",
-            "description" : "The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`.",
+            "description" : "The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`",
             "example" : "fixed",
             "enum" : [ "unlimited", "fixed" ],
             "x-ballerina-name" : "intervalType"
           },
           "availability_override" : {
             "type" : "boolean",
-            "description" : "This field indicates the use of the availability rule.",
+            "description" : "This field indicates the use of the availability rule",
             "example" : false,
             "x-ballerina-name" : "availabilityOverride"
           },
           "start_date" : {
             "type" : "string",
-            "description" : "The schedule's start date.",
+            "description" : "The schedule's start date",
             "example" : "2023-12-21",
             "x-ballerina-name" : "startDate"
           },
           "status" : {
             "type" : "string",
-            "description" : "The status of schedule, confirmed or cancelled.",
+            "description" : "The status of schedule, confirmed or cancelled",
             "example" : "confirmed",
             "enum" : [ "confirmed", "cancelled" ]
           }
@@ -1640,12 +1640,12 @@
           "summary" : {
             "maxLength" : 256,
             "type" : "string",
-            "description" : "The event's summary.",
+            "description" : "The event's summary",
             "example" : "daily meeting"
           },
           "attendees" : {
             "type" : "array",
-            "description" : "The attendees of the event.",
+            "description" : "The attendees of the event",
             "items" : {
               "$ref" : "#/components/schemas/InlineResponse2003Attendees"
             }
@@ -1653,31 +1653,31 @@
           "meeting_notes" : {
             "maxLength" : 1024,
             "type" : "string",
-            "description" : "The meeting notes of the event.",
+            "description" : "The meeting notes of the event",
             "example" : "meeting notes",
             "x-ballerina-name" : "meetingNotes"
           },
           "description" : {
             "maxLength" : 8192,
             "type" : "string",
-            "description" : "The event's description.",
+            "description" : "The event's description",
             "example" : "15 Minute Meeting"
           },
           "end_date_time" : {
             "type" : "string",
-            "description" : "The scheduled event end date time.",
+            "description" : "The scheduled event end date time",
             "example" : "2023-12-21T16:30:00+08:00",
             "x-ballerina-name" : "endDateTime"
           },
           "event_id" : {
             "type" : "string",
-            "description" : "The unique identifier of event.",
+            "description" : "The unique identifier of event",
             "example" : "woft7torlatbw8ek24bmit5k60",
             "x-ballerina-name" : "eventId"
           },
           "event_type" : {
             "type" : "string",
-            "description" : "This field indicates the type is default(scheduled) or pending event.",
+            "description" : "This field indicates the type is default(scheduled) or pending event",
             "readOnly" : true,
             "example" : "default",
             "enum" : [ "default", "pending" ],
@@ -1685,7 +1685,7 @@
           },
           "tracking_params" : {
             "type" : "array",
-            "description" : "The information to track the source of invitee. This occurs when you add UTM parameters in schedule links.",
+            "description" : "The information to track the source of invitee. This occurs when you add UTM parameters in schedule links",
             "items" : {
               "$ref" : "#/components/schemas/InlineResponse2003TrackingParams"
             },
@@ -1693,7 +1693,7 @@
           },
           "guests" : {
             "type" : "array",
-            "description" : "The guest's collection.",
+            "description" : "The guest's collection",
             "items" : {
               "type" : "string",
               "description" : "The guest's email.",
@@ -1703,28 +1703,28 @@
           "location" : {
             "maxLength" : 1024,
             "type" : "string",
-            "description" : "The information for a custom location.",
+            "description" : "The information for a custom location",
             "example" : "AAA office"
           },
           "start_date_time" : {
             "type" : "string",
-            "description" : "The scheduled event start date time.",
+            "description" : "The scheduled event start date time",
             "example" : "2023-12-21T16:00:00+08:00",
             "x-ballerina-name" : "startDateTime"
           },
           "schedule_id" : {
             "type" : "string",
-            "description" : "The unique identifier of schedule.",
+            "description" : "The unique identifier of schedule",
             "example" : "ygfx661g9x8dwcgeusdqhsplc0_20231220T160000Z",
             "x-ballerina-name" : "scheduleId"
           },
           "updated" : {
             "type" : "string",
-            "description" : "The moment the event was updated.",
+            "description" : "The moment the event was updated",
             "example" : "2023-12-21T06:19:28.309Z"
           },
           "external_location" : {
-            "description" : "The meeting details for when users have scheduled appointments.",
+            "description" : "The meeting details for when users have scheduled appointments",
             "readOnly" : true,
             "oneOf" : [ {
               "type" : "object",
@@ -1765,7 +1765,7 @@
           },
           "status" : {
             "type" : "string",
-            "description" : "The status of event: confirmed or cancelled.",
+            "description" : "The status of event: confirmed or cancelled",
             "example" : "confirmed",
             "enum" : [ "confirmed", "cancelled" ]
           }
@@ -1779,7 +1779,7 @@
             "maxItems" : 50,
             "minItems" : 1,
             "type" : "array",
-            "description" : "The invitee's option(s) for single_select or multi_select type of responses.",
+            "description" : "The invitee's option(s) for single_select or multi_select type of responses",
             "items" : {
               "maxLength" : 8192,
               "minLength" : 1,
@@ -1791,7 +1791,7 @@
           },
           "custom_field_id" : {
             "type" : "string",
-            "description" : "The ID of this question.",
+            "description" : "The ID of this question",
             "example" : "0l6imf50il8jchyapni3p5ckc0",
             "x-ballerina-name" : "customFieldId"
           },
@@ -1803,28 +1803,28 @@
           },
           "name" : {
             "type" : "string",
-            "description" : "The custom question the host created for the event type.",
+            "description" : "The custom question the host created for the event type",
             "example" : "Please share anything that will help prepare for our meeting."
           },
           "include_other" : {
             "type" : "boolean",
-            "description" : "This field is true if the custom question allows invitees to record a written response in addition to single-select or multiple-select type of responses. This field is false if the custom question does not allow invitees to record a written response.",
+            "description" : "This field is true if the custom question allows invitees to record a written response in addition to single-select or multiple-select type of responses. This field is false if the custom question does not allow invitees to record a written response",
             "example" : false,
             "x-ballerina-name" : "includeOther"
           },
           "position" : {
             "type" : "number",
-            "description" : "The position of this question.",
+            "description" : "The position of this question",
             "example" : 0
           },
           "enabled" : {
             "type" : "boolean",
-            "description" : "This field is true if the question the host creates is ON and visible on the event booking page. This field is false if it's OFF and invisible on the event booking page.",
+            "description" : "This field is true if the question the host creates is ON and visible on the event booking page. This field is false if it's OFF and invisible on the event booking page",
             "example" : true
           },
           "required" : {
             "type" : "boolean",
-            "description" : "This field is true if a response to the question created by the host is required for invitees to book the event type. This field is false if a response to the question created by the host is not required for invitees to book the event type.",
+            "description" : "This field is true if a response to the question created by the host is required for invitees to book the event type. This field is false if a response to the question created by the host is not required for invitees to book the event type",
             "example" : false
           }
         }
@@ -1834,7 +1834,7 @@
         "properties" : {
           "use_custom" : {
             "type" : "boolean",
-            "description" : "This field indicates the use of custom availability instead of the rule.",
+            "description" : "This field indicates the use of custom availability instead of the rule",
             "example" : false,
             "x-ballerina-name" : "useCustom"
           },
@@ -1863,7 +1863,7 @@
           },
           "segments" : {
             "type" : "array",
-            "description" : "The available time segments of the event.",
+            "description" : "The available time segments of the event",
             "items" : {
               "$ref" : "#/components/schemas/SchedulerschedulesSegments"
             }
@@ -1875,7 +1875,7 @@
         "properties" : {
           "use_custom" : {
             "type" : "boolean",
-            "description" : "This field indicates the use of custom availability instead of the rule.",
+            "description" : "This field indicates the use of custom availability instead of the rule",
             "example" : false,
             "x-ballerina-name" : "useCustom"
           },
@@ -1904,7 +1904,7 @@
           },
           "segments" : {
             "type" : "array",
-            "description" : "The available time segments of the event.",
+            "description" : "The available time segments of the event",
             "items" : {
               "$ref" : "#/components/schemas/SchedulerschedulesSegments"
             }
@@ -1916,31 +1916,31 @@
         "properties" : {
           "self" : {
             "type" : "boolean",
-            "description" : "This field indicates if this user is the organizer. This field is read-only.",
+            "description" : "This field indicates if this user is the organizer. This field is read-only",
             "readOnly" : true,
             "example" : true
           },
           "display_name" : {
             "type" : "string",
-            "description" : "The organizer's display name.",
+            "description" : "The organizer's display name",
             "readOnly" : true,
             "example" : "name",
             "x-ballerina-name" : "displayName"
           },
           "email" : {
             "type" : "string",
-            "description" : "The organizer's email address.",
+            "description" : "The organizer's email address",
             "example" : "easonfsxsysks3lgchitiw@scheduler.zoom.us"
           }
         },
-        "description" : "The organizer of the schedule. This field is read-only."
+        "description" : "The organizer of the schedule. This field is read-only"
       },
       "SchedulerschedulesscheduleIdAvailabilityRules" : {
         "type" : "object",
         "properties" : {
           "use_custom" : {
             "type" : "boolean",
-            "description" : "This field indicates whether to use the custom availability instead of the rule.",
+            "description" : "This field indicates whether to use the custom availability instead of the rule",
             "example" : false,
             "x-ballerina-name" : "useCustom"
           },
@@ -1969,7 +1969,7 @@
           },
           "segments" : {
             "type" : "array",
-            "description" : "The available time segments of the event.",
+            "description" : "The available time segments of the event",
             "items" : {
               "$ref" : "#/components/schemas/SchedulerschedulesscheduleIdSegments"
             }
@@ -1982,33 +1982,33 @@
         "properties" : {
           "start" : {
             "type" : "string",
-            "description" : "This field indicates the start date to override.",
+            "description" : "This field indicates the start date to override",
             "example" : "2024-01-07T09:00:00Z"
           },
           "end" : {
             "type" : "string",
-            "description" : "This field indicates the end date to override.",
+            "description" : "This field indicates the end date to override",
             "example" : "2024-01-08T09:00:00Z"
           }
         },
-        "description" : "The date interval to override."
+        "description" : "The date interval to override"
       },
       "InlineResponse2004TrackingParams" : {
         "type" : "object",
         "properties" : {
           "label" : {
             "type" : "string",
-            "description" : "The scheduler tags that correspond to UTM parameters one by one.",
+            "description" : "The scheduler tags that correspond to UTM parameters one by one",
             "example" : "UTM_Source"
           },
           "value" : {
             "type" : "string",
-            "description" : "The value of UTM parameters set in schedule links by host.",
+            "description" : "The value of UTM parameters set in schedule links by host",
             "example" : "zoom"
           },
           "key" : {
             "type" : "string",
-            "description" : "The UTM parameters in schedule links.",
+            "description" : "The UTM parameters in schedule links",
             "example" : "utm_source"
           }
         }
@@ -2018,7 +2018,7 @@
         "properties" : {
           "owner" : {
             "type" : "string",
-            "description" : "The owner's ID.",
+            "description" : "The owner's ID",
             "example" : "easonfsxsysks3lgchitiw@scheudler.zoom.us"
           },
           "default" : {
@@ -2052,56 +2052,56 @@
         "properties" : {
           "created" : {
             "type" : "string",
-            "description" : "This field indicates when the attendee attended this event.",
+            "description" : "This field indicates when the attendee attended this event",
             "readOnly" : true,
             "example" : "2023-12-21T06:19:23.899Z"
           },
           "attendee_id" : {
             "type" : "string",
-            "description" : "The ID of attendee.",
+            "description" : "The ID of attendee",
             "readOnly" : true,
             "example" : "z7q0q2962w8iyj87249zbi7t10",
             "x-ballerina-name" : "attendeeId"
           },
           "last_name" : {
             "type" : "string",
-            "description" : " The attendee's last name.",
+            "description" : " The attendee's last name",
             "example" : "tom",
             "x-ballerina-name" : "lastName"
           },
           "display_name" : {
             "type" : "string",
-            "description" : "The attendee's name.",
+            "description" : "The attendee's name",
             "example" : "bob",
             "x-ballerina-name" : "displayName"
           },
           "time_zone" : {
             "type" : "string",
-            "description" : "The attendee's time zone.",
+            "description" : "The attendee's time zone",
             "example" : "Asia/Shanghai",
             "x-ballerina-name" : "timeZone"
           },
           "no_show" : {
             "type" : "boolean",
-            "description" : "Whether to show events or not.",
+            "description" : "Whether to show events or not",
             "example" : false,
             "x-ballerina-name" : "noShow"
           },
           "booker" : {
             "type" : "boolean",
-            "description" : "Whether the attendee is the booker.",
+            "description" : "Whether the attendee is the booker",
             "readOnly" : true,
             "example" : true
           },
           "first_name" : {
             "type" : "string",
-            "description" : "The attendee's first name.",
+            "description" : "The attendee's first name",
             "example" : "green",
             "x-ballerina-name" : "firstName"
           },
           "email" : {
             "type" : "string",
-            "description" : "The attendee's email.",
+            "description" : "The attendee's email",
             "example" : "abc@zoom.us"
           }
         }
@@ -2159,7 +2159,7 @@
             }
           }
         },
-        "description" : "The rules of this availability schedule."
+        "description" : "The rules of this availability schedule"
       },
       "InlineResponse2001SegmentsRecurrence" : {
         "type" : "object",
@@ -2220,73 +2220,73 @@
         "properties" : {
           "all_host_available" : {
             "type" : "integer",
-            "description" : "The number of \"all host available\" type schedules.",
+            "description" : "The number of \"all host available\" type schedules",
             "example" : 10,
             "x-ballerina-name" : "allHostAvailable"
           },
           "scheduled_events_rescheduled" : {
             "type" : "integer",
-            "description" : "The number of rescheduled scheduled events.",
+            "description" : "The number of rescheduled scheduled events",
             "example" : 10,
             "x-ballerina-name" : "scheduledEventsRescheduled"
           },
           "scheduled_events_completed" : {
             "type" : "integer",
-            "description" : "The number of completed scheduled events.",
+            "description" : "The number of completed scheduled events",
             "example" : 10,
             "x-ballerina-name" : "scheduledEventsCompleted"
           },
           "schedules_canceled" : {
             "type" : "integer",
-            "description" : "The number of cancelled schedules.",
+            "description" : "The number of cancelled schedules",
             "example" : 10,
             "x-ballerina-name" : "schedulesCanceled"
           },
           "one_off_meeting" : {
             "type" : "integer",
-            "description" : "The number of \"one-off\" type schedules.",
+            "description" : "The number of \"one-off\" type schedules",
             "example" : 10,
             "x-ballerina-name" : "oneOffMeeting"
           },
           "meeting_poll" : {
             "type" : "integer",
-            "description" : "The number of \"meeting poll\" type schedules.",
+            "description" : "The number of \"meeting poll\" type schedules",
             "example" : 10,
             "x-ballerina-name" : "meetingPoll"
           },
           "one_to_many" : {
             "type" : "integer",
-            "description" : "The number of \"one to many\" type schedules.",
+            "description" : "The number of \"one to many\" type schedules",
             "example" : 10,
             "x-ballerina-name" : "oneToMany"
           },
           "any_host_available" : {
             "type" : "integer",
-            "description" : "The number of \"any host available\" type schedules.",
+            "description" : "The number of \"any host available\" type schedules",
             "example" : 10,
             "x-ballerina-name" : "anyHostAvailable"
           },
           "scheduled_events_canceled" : {
             "type" : "integer",
-            "description" : "The number of cancelled scheduled events.",
+            "description" : "The number of cancelled scheduled events",
             "example" : 10,
             "x-ballerina-name" : "scheduledEventsCanceled"
           },
           "one_to_one" : {
             "type" : "integer",
-            "description" : "The number of \"one to one\" type schedules.",
+            "description" : "The number of \"one to one\" type schedules",
             "example" : 10,
             "x-ballerina-name" : "oneToOne"
           },
           "scheduled_events_created" : {
             "type" : "integer",
-            "description" : "The number of created scheduled events.",
+            "description" : "The number of created scheduled events",
             "example" : 10,
             "x-ballerina-name" : "scheduledEventsCreated"
           },
           "schedules_created" : {
             "type" : "integer",
-            "description" : "The number of created schedules.",
+            "description" : "The number of created schedules",
             "example" : 10,
             "x-ballerina-name" : "schedulesCreated"
           }
@@ -2299,7 +2299,7 @@
         "properties" : {
           "attendee_id" : {
             "type" : "string",
-            "description" : "The ID of attendee.",
+            "description" : "The ID of attendee",
             "readOnly" : true,
             "example" : "z7q0q2962w8iyj87249zbi7t10",
             "x-ballerina-name" : "attendeeId"
@@ -2312,7 +2312,7 @@
           },
           "email" : {
             "type" : "string",
-            "description" : "The attendee's email.",
+            "description" : "The attendee's email",
             "example" : "abc@zoom.us"
           }
         }
@@ -2323,14 +2323,14 @@
         "properties" : {
           "add_on_type" : {
             "type" : "string",
-            "description" : "The method of the type of `addOn`, such as Zoom meeting, Zoom phone, or offline.",
+            "description" : "The method of the type of `addOn`, such as Zoom meeting, Zoom phone, or offline",
             "example" : "zoomMeeting",
             "enum" : [ "zoomMeeting", "zoomPhone", "offline" ],
             "x-ballerina-name" : "addOnType"
           },
           "end_date" : {
             "type" : "string",
-            "description" : "The schedule's end date.",
+            "description" : "The schedule's end date",
             "example" : "2023-12-28",
             "x-ballerina-name" : "endDate"
           },
@@ -2338,31 +2338,31 @@
             "maximum" : 720,
             "minimum" : 5,
             "type" : "number",
-            "description" : "This field sets the frequency of available time slots for invitees.",
+            "description" : "This field sets the frequency of available time slots for invitees",
             "example" : 30,
             "x-ballerina-name" : "startTimeIncrement"
           },
           "summary" : {
             "maxLength" : 256,
             "type" : "string",
-            "description" : "The event's summary.",
+            "description" : "The event's summary",
             "example" : "daily meeting"
           },
           "schedule_type" : {
             "type" : "string",
-            "description" : "This field indicates if the schedule type is \"one\" (belongs to an individual user) or \"multiple\".",
+            "description" : "This field indicates if the schedule type is \"one\" (belongs to an individual user) or \"multiple\"",
             "example" : "one",
             "enum" : [ "one", "multiple" ],
             "x-ballerina-name" : "scheduleType"
           },
           "color" : {
             "type" : "string",
-            "description" : "The hexadecimal color value of the event type's scheduling page.",
+            "description" : "The hexadecimal color value of the event type's scheduling page",
             "example" : "#fff200"
           },
           "custom_fields" : {
             "type" : "array",
-            "description" : "This field contains the custom question.",
+            "description" : "This field contains the custom question",
             "items" : {
               "$ref" : "#/components/schemas/SchedulerschedulesCustomFields"
             },
@@ -2371,25 +2371,25 @@
           "description" : {
             "maxLength" : 8192,
             "type" : "string",
-            "description" : "The schedule's description.",
+            "description" : "The schedule's description",
             "example" : "15 Minute Meeting"
           },
           "active" : {
             "type" : "boolean",
-            "description" : "This field indicates if the schedule is active.",
+            "description" : "This field indicates if the schedule is active",
             "example" : true
           },
           "booking_limit" : {
             "maximum" : 96,
             "minimum" : 0,
             "type" : "number",
-            "description" : "This field sets the maximum events allowed per day.",
+            "description" : "This field sets the maximum events allowed per day",
             "example" : 0,
             "x-ballerina-name" : "bookingLimit"
           },
           "secret" : {
             "type" : "boolean",
-            "description" : "This field indicates if the event type is hidden on the owner's main scheduling page.",
+            "description" : "This field indicates if the event type is hidden on the owner's main scheduling page",
             "example" : false
           },
           "time_zone" : {
@@ -2400,7 +2400,7 @@
           },
           "availability_rules" : {
             "type" : "array",
-            "description" : "The availability of the time rule.",
+            "description" : "The availability of the time rule",
             "items" : {
               "$ref" : "#/components/schemas/SchedulerschedulesAvailabilityRules"
             },
@@ -2410,12 +2410,12 @@
             "maximum" : 200,
             "minimum" : 1,
             "type" : "number",
-            "description" : "This field indicates the maximum invitees per event.",
+            "description" : "This field indicates the maximum invitees per event",
             "example" : 1
           },
           "segments" : {
             "type" : "array",
-            "description" : "The available time segments of the event.",
+            "description" : "The available time segments of the event",
             "items" : {
               "$ref" : "#/components/schemas/SchedulerschedulesSegments"
             }
@@ -2424,20 +2424,20 @@
             "maximum" : 1440,
             "minimum" : 15,
             "type" : "number",
-            "description" : "This field indicates the duration of the meeting in minutes, range: [1, 1440].",
+            "description" : "This field indicates the duration of the meeting in minutes, range: [1, 1440]",
             "example" : 30
           },
           "cushion" : {
             "maximum" : 14340,
             "minimum" : 0,
             "type" : "number",
-            "description" : "This field indicates the minimum time before a schedule starts when the attendees can book.",
+            "description" : "This field indicates the minimum time before a schedule starts when the attendees can book",
             "example" : 0
           },
           "location" : {
             "maxLength" : 1024,
             "type" : "string",
-            "description" : "The information for a custom location.",
+            "description" : "The information for a custom location",
             "example" : "AAA office"
           },
           "buffer" : {
@@ -2451,7 +2451,7 @@
           },
           "interval_type" : {
             "type" : "string",
-            "description" : "The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`.",
+            "description" : "The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`",
             "example" : "fixed",
             "enum" : [ "unlimited", "fixed" ],
             "x-ballerina-name" : "intervalType"
@@ -2460,18 +2460,18 @@
             "maxLength" : 256,
             "minLength" : 3,
             "type" : "string",
-            "description" : "The event portion of the event's URL that identifies a specific web page.",
+            "description" : "The event portion of the event's URL that identifies a specific web page",
             "example" : "sales"
           },
           "availability_override" : {
             "type" : "boolean",
-            "description" : "This field indicates the use of the availability rule.",
+            "description" : "This field indicates the use of the availability rule",
             "example" : false,
             "x-ballerina-name" : "availabilityOverride"
           },
           "start_date" : {
             "type" : "string",
-            "description" : "The schedule's start date.",
+            "description" : "The schedule's start date",
             "example" : "2023-12-21",
             "x-ballerina-name" : "startDate"
           }
@@ -2530,24 +2530,24 @@
             }
           }
         },
-        "description" : "The week of the available time rule."
+        "description" : "The week of the available time rule"
       },
       "InlineResponse2003TrackingParams" : {
         "type" : "object",
         "properties" : {
           "label" : {
             "type" : "string",
-            "description" : "The scheduler tags that correspond to UTM parameters one by one.",
+            "description" : "The scheduler tags that correspond to UTM parameters one by one",
             "example" : "UTM_Source"
           },
           "value" : {
             "type" : "string",
-            "description" : "The value of UTM parameters set in schedule links by host.",
+            "description" : "The value of UTM parameters set in schedule links by host",
             "example" : "zoom"
           },
           "key" : {
             "type" : "string",
-            "description" : "The UTM parameters in the schedule links.",
+            "description" : "The UTM parameters in the schedule links",
             "example" : "utm_source"
           }
         }
@@ -2559,18 +2559,18 @@
             "maximum" : 240,
             "minimum" : 0,
             "type" : "number",
-            "description" : "This field adds the time after the booked schedule.",
+            "description" : "This field adds the time after the booked schedule",
             "example" : 0
           },
           "after" : {
             "maximum" : 240,
             "minimum" : 0,
             "type" : "number",
-            "description" : "This field adds the time before the booked schedule.",
+            "description" : "This field adds the time before the booked schedule",
             "example" : 0
           }
         },
-        "description" : "This field indicates the extra time before or after the booked schedule."
+        "description" : "This field indicates the extra time before or after the booked schedule"
       },
       "SchedulerschedulesscheduleIdBuffer" : {
         "type" : "object",
@@ -2579,30 +2579,30 @@
             "maximum" : 240,
             "minimum" : 0,
             "type" : "number",
-            "description" : "This field adds time after the booked schedule.",
+            "description" : "This field adds time after the booked schedule",
             "example" : 0
           },
           "after" : {
             "maximum" : 240,
             "minimum" : 0,
             "type" : "number",
-            "description" : "This field adds time before the booked schedule.",
+            "description" : "This field adds time before the booked schedule",
             "example" : 0
           }
         },
-        "description" : "The extra time before or after booked schedule."
+        "description" : "The extra time before or after booked schedule"
       },
       "SchedulerschedulesscheduleIdSegments" : {
         "type" : "object",
         "properties" : {
           "start" : {
             "type" : "string",
-            "description" : "The start date-time of the segment.",
+            "description" : "The start date-time of the segment",
             "example" : "2023-12-21T06:00:00Z"
           },
           "end" : {
             "type" : "string",
-            "description" : "The end date-time of the segment.",
+            "description" : "The end date-time of the segment",
             "example" : "2023-12-21T06:00:00Z"
           }
         }
@@ -2612,22 +2612,22 @@
         "properties" : {
           "owner" : {
             "type" : "string",
-            "description" : "An URI reference to a user.",
+            "description" : "An URI reference to a user",
             "example" : "easonfsxsysks3lgchitiw"
           },
           "default" : {
             "type" : "boolean",
-            "description" : "The default availability schedule in use.",
+            "description" : "The default availability schedule in use",
             "example" : false
           },
           "name" : {
             "type" : "string",
-            "description" : "The name of this availability schedule.",
+            "description" : "The name of this availability schedule",
             "example" : "Working hours"
           },
           "availability_id" : {
             "type" : "string",
-            "description" : "The unique ID of the availability.",
+            "description" : "The unique ID of the availability",
             "example" : "x3h1u4id4liffdyszsp8kpxl80",
             "x-ballerina-name" : "availabilityId"
           },
@@ -2639,76 +2639,76 @@
           },
           "time_zone" : {
             "type" : "string",
-            "description" : "The timezone for which this availability schedule originates.",
+            "description" : "The timezone for which this availability schedule originates",
             "example" : "Asia/Shanghai",
             "x-ballerina-name" : "timeZone"
           },
           "segments" : {
             "type" : "array",
-            "description" : "The date on which the rule needs to be applied outside of the availability rule.",
+            "description" : "The date on which the rule needs to be applied outside of the availability rule",
             "items" : {
               "type" : "object",
               "description" : "The date interval to override."
             }
           }
         },
-        "description" : "The availability schedule set by the user."
+        "description" : "The availability schedule set by the user"
       },
       "InlineResponse2004Attendees" : {
         "type" : "object",
         "properties" : {
           "created" : {
             "type" : "string",
-            "description" : "This field indicates when the attendee attended this event.",
+            "description" : "This field indicates when the attendee attended this event",
             "readOnly" : true,
             "example" : "2023-12-21T06:19:23.899Z"
           },
           "attendee_id" : {
             "type" : "string",
-            "description" : "The ID of attendee.",
+            "description" : "The ID of attendee",
             "readOnly" : true,
             "example" : "z7q0q2962w8iyj87249zbi7t10",
             "x-ballerina-name" : "attendeeId"
           },
           "last_name" : {
             "type" : "string",
-            "description" : " The attendee's last name.",
+            "description" : " The attendee's last name",
             "example" : "tom",
             "x-ballerina-name" : "lastName"
           },
           "display_name" : {
             "type" : "string",
-            "description" : "The attendee's name.",
+            "description" : "The attendee's name",
             "example" : "bob",
             "x-ballerina-name" : "displayName"
           },
           "time_zone" : {
             "type" : "string",
-            "description" : "The attendee's time zone.",
+            "description" : "The attendee's time zone",
             "example" : "Asia/Shanghai",
             "x-ballerina-name" : "timeZone"
           },
           "no_show" : {
             "type" : "boolean",
-            "description" : "Whether or not to show the event.",
+            "description" : "Whether or not to show the event",
             "example" : false,
             "x-ballerina-name" : "noShow"
           },
           "booker" : {
             "type" : "boolean",
-            "description" : "Whether the attendee is the booker.",
+            "description" : "Whether the attendee is the booker",
             "readOnly" : true,
             "example" : true
           },
           "first_name" : {
             "type" : "string",
-            "description" : "The attendee's first name.",
+            "description" : "The attendee's first name",
             "example" : "green",
             "x-ballerina-name" : "firstName"
           },
           "email" : {
             "type" : "string",
-            "description" : "The attendee's email.",
+            "description" : "The attendee's email",
             "example" : "abc@zoom.us"
           }
         }
@@ -2719,7 +2719,7 @@
           "popular_schedules" : {
             "maxItems" : 5,
             "type" : "array",
-            "description" : "The most popular schedules in the given time range.",
+            "description" : "The most popular schedules in the given time range",
             "example" : {
               "Popular schedules" : [ {
                 "Test 1-1" : 5
@@ -2738,7 +2738,7 @@
           "users_with_least_events" : {
             "maxItems" : 5,
             "type" : "array",
-            "description" : "The users with the least scheduled events.",
+            "description" : "The users with the least scheduled events",
             "example" : {
               "Users with the least events" : [ {
                 "Dan Smith" : 5
@@ -2761,7 +2761,7 @@
           "popular_time_of_day" : {
             "maxItems" : 7,
             "type" : "array",
-            "description" : "The distribution of number of events scheduled in a day.",
+            "description" : "The distribution of number of events scheduled in a day",
             "example" : {
               "Popular times (hour of day)" : [ {
                 "11" : 16
@@ -2786,7 +2786,7 @@
           "event_distribution_by_duration" : {
             "maxItems" : 5,
             "type" : "array",
-            "description" : "The event distribution by duration.",
+            "description" : "The event distribution by duration",
             "items" : {
               "type" : "object",
               "properties" : { },
@@ -2806,7 +2806,7 @@
           "popular_time_of_week" : {
             "maxItems" : 24,
             "type" : "array",
-            "description" : "The distribution of number of events scheduled in a week.",
+            "description" : "The distribution of number of events scheduled in a week",
             "example" : {
               "Popular times (day of week)" : [ {
                 "Fri" : 20
@@ -2833,7 +2833,7 @@
           "users_with_most_events" : {
             "maxItems" : 5,
             "type" : "array",
-            "description" : "The users with the most scheduled events.",
+            "description" : "The users with the most scheduled events",
             "example" : {
               "Users with the most events" : [ {
                 "Dan Smith" : 65
@@ -2902,7 +2902,7 @@
             }
           }
         },
-        "description" : "The week of available time rule."
+        "description" : "The week of available time rule"
       },
       "EventseventIdBody" : {
         "type" : "object",
@@ -2916,18 +2916,18 @@
           "meeting_notes" : {
             "maxLength" : 1024,
             "type" : "string",
-            "description" : "The meeting notes of the event.",
+            "description" : "The meeting notes of the event",
             "example" : "meeting notes",
             "x-ballerina-name" : "meetingNotes"
           },
           "status" : {
             "type" : "string",
-            "description" : "The status of event: confirmed or cancelled.",
+            "description" : "The status of event: confirmed or cancelled",
             "example" : "confirmed",
             "enum" : [ "confirmed", "cancelled" ]
           }
         },
-        "description" : "The portions of the event resource."
+        "description" : "The portions of the event resource"
       },
       "AvailabilityavailabilityIdBody" : {
         "required" : [ "name", "time_zone" ],
@@ -2935,12 +2935,12 @@
         "properties" : {
           "default" : {
             "type" : "boolean",
-            "description" : "The default availability schedule in use."
+            "description" : "The default availability schedule in use"
           },
           "name" : {
             "minLength" : 1,
             "type" : "string",
-            "description" : "The name of this availability schedule.",
+            "description" : "The name of this availability schedule",
             "example" : "Working hours"
           },
           "segments_recurrence" : {
@@ -2951,19 +2951,19 @@
           },
           "time_zone" : {
             "type" : "string",
-            "description" : "The timezone for which this availability schedule originates.",
+            "description" : "The timezone for which this availability schedule originates",
             "example" : "Asia/Shanghai",
             "x-ballerina-name" : "timeZone"
           },
           "segments" : {
             "type" : "array",
-            "description" : "The date on which the rule needs to be applied outside of the availability rule.",
+            "description" : "The date on which the rule needs to be applied outside of the availability rule",
             "items" : {
               "$ref" : "#/components/schemas/ScheduleravailabilityavailabilityIdSegments"
             }
           }
         },
-        "description" : "The availability schedule set by the user."
+        "description" : "The availability schedule set by the user"
       },
       "SchedulerschedulesscheduleIdSegmentsRecurrence1" : {
         "type" : "object",
@@ -3018,31 +3018,31 @@
             }
           }
         },
-        "description" : "The week of the available time rule."
+        "description" : "The week of the available time rule"
       },
       "InlineResponse2005Creator" : {
         "type" : "object",
         "properties" : {
           "self" : {
             "type" : "boolean",
-            "description" : "This field indicates if you created the schedule. The field is read-only.",
+            "description" : "This field indicates if you created the schedule. The field is read-only",
             "readOnly" : true,
             "example" : true
           },
           "display_name" : {
             "type" : "string",
-            "description" : "This field indicates the creator of the display name.",
+            "description" : "This field indicates the creator of the display name",
             "readOnly" : true,
             "example" : "name",
             "x-ballerina-name" : "displayName"
           },
           "email" : {
             "type" : "string",
-            "description" : "This field indicates the creator's email address.",
+            "description" : "This field indicates the creator's email address",
             "example" : "easonfsxsysks3lgchitiw@scheduler.zoom.us"
           }
         },
-        "description" : "The creator of the schedule. This field is read-only."
+        "description" : "The creator of the schedule. This field is read-only"
       },
       "InlineResponse2012" : {
         "required" : [ "scheduling_url" ],
@@ -3050,7 +3050,7 @@
         "properties" : {
           "scheduling_url" : {
             "type" : "string",
-            "description" : "The scheduling link URL.",
+            "description" : "The scheduling link URL",
             "example" : "https://scheduler.zoomdev.us/manage/xu3o9skk6ygg8gk5hjvokjm2c0",
             "x-ballerina-name" : "schedulingUrl"
           }
@@ -3061,29 +3061,29 @@
         "properties" : {
           "end_date" : {
             "type" : "string",
-            "description" : "The schedule's end date.",
+            "description" : "The schedule's end date",
             "example" : "2023-12-20",
             "x-ballerina-name" : "endDate"
           },
           "color" : {
             "type" : "string",
-            "description" : "The hexadecimal color value of the event type's scheduling page.",
+            "description" : "The hexadecimal color value of the event type's scheduling page",
             "example" : "#fff200"
           },
           "description" : {
             "maxLength" : 8192,
             "type" : "string",
-            "description" : "The schedule's description.",
+            "description" : "The schedule's description",
             "example" : "15 Minute Meeting"
           },
           "secret" : {
             "type" : "boolean",
-            "description" : "This field indicates if the event type is hidden on the owner's main scheduling page.",
+            "description" : "This field indicates if the event type is hidden on the owner's main scheduling page",
             "example" : false
           },
           "availability_rules" : {
             "type" : "array",
-            "description" : "The availability of the time rule.",
+            "description" : "The availability of the time rule",
             "items" : {
               "$ref" : "#/components/schemas/InlineResponse2011AvailabilityRules"
             },
@@ -3093,12 +3093,12 @@
             "maximum" : 200,
             "minimum" : 1,
             "type" : "number",
-            "description" : "This field indicates the maximum invitees per event.",
+            "description" : "This field indicates the maximum invitees per event",
             "example" : 1
           },
           "segments" : {
             "type" : "array",
-            "description" : "The available time segments of the event.",
+            "description" : "The available time segments of the event",
             "items" : {
               "$ref" : "#/components/schemas/SchedulerschedulesSegments"
             }
@@ -3107,14 +3107,14 @@
             "maximum" : 1440,
             "minimum" : 15,
             "type" : "number",
-            "description" : "This field indicates the duration of the meeting in minutes, range: [1, 1440].",
+            "description" : "This field indicates the duration of the meeting in minutes, range: [1, 1440]",
             "example" : 30
           },
           "cushion" : {
             "maximum" : 14340,
             "minimum" : 0,
             "type" : "number",
-            "description" : "This field indicates the minimum time before a schedule starts when the attendees can book.",
+            "description" : "This field indicates the minimum time before a schedule starts when the attendees can book",
             "example" : 0
           },
           "buffer" : {
@@ -3130,32 +3130,32 @@
             "maxLength" : 256,
             "minLength" : 3,
             "type" : "string",
-            "description" : "The event portion of the event's URL that identifies a specific web page.",
+            "description" : "The event portion of the event's URL that identifies a specific web page",
             "example" : "sales"
           },
           "interval_type" : {
             "type" : "string",
-            "description" : "The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`.",
+            "description" : "The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`",
             "example" : "fixed",
             "enum" : [ "unlimited", "fixed" ],
             "x-ballerina-name" : "intervalType"
           },
           "start_date" : {
             "type" : "string",
-            "description" : "The schedule's start date.",
+            "description" : "The schedule's start date",
             "example" : "2023-12-21",
             "x-ballerina-name" : "startDate"
           },
           "add_on_type" : {
             "type" : "string",
-            "description" : "The method of the type of `addOn`, such as Zoom meeting, Zoom phone, or offline.",
+            "description" : "The method of the type of `addOn`, such as Zoom meeting, Zoom phone, or offline",
             "example" : "zoomMeeting",
             "enum" : [ "zoomMeeting", "zoomPhone", "offline" ],
             "x-ballerina-name" : "addOnType"
           },
           "scheduling_url" : {
             "type" : "string",
-            "description" : "The URL of the user’s scheduling site where invitees book this event type.",
+            "description" : "The URL of the user’s scheduling site where invitees book this event type",
             "example" : "https://scheduler.zoom.us/zoom_us/sales",
             "x-ballerina-name" : "schedulingUrl"
           },
@@ -3163,14 +3163,14 @@
             "maximum" : 720,
             "minimum" : 5,
             "type" : "number",
-            "description" : "This field sets the frequency of available time slots for invitees.",
+            "description" : "This field sets the frequency of available time slots for invitees",
             "example" : 30,
             "x-ballerina-name" : "startTimeIncrement"
           },
           "summary" : {
             "maxLength" : 256,
             "type" : "string",
-            "description" : "The event's summary.",
+            "description" : "The event's summary",
             "example" : "daily meeting"
           },
           "creator" : {
@@ -3178,14 +3178,14 @@
           },
           "schedule_type" : {
             "type" : "string",
-            "description" : "This field indicates if the schedule type is \"one\" (belongs to an individual user) or \"multiple\".",
+            "description" : "This field indicates if the schedule type is \"one\" (belongs to an individual user) or \"multiple\"",
             "example" : "one",
             "enum" : [ "one", "multiple" ],
             "x-ballerina-name" : "scheduleType"
           },
           "custom_fields" : {
             "type" : "array",
-            "description" : "This field contains the custom question.",
+            "description" : "This field contains the custom question",
             "items" : {
               "$ref" : "#/components/schemas/InlineResponse2011CustomFields"
             },
@@ -3193,14 +3193,14 @@
           },
           "active" : {
             "type" : "boolean",
-            "description" : "This field indicates if the schedule is active.",
+            "description" : "This field indicates if the schedule is active",
             "example" : true
           },
           "booking_limit" : {
             "maximum" : 96,
             "minimum" : 0,
             "type" : "number",
-            "description" : "This field sets the maximum events allowed per day.",
+            "description" : "This field sets the maximum events allowed per day",
             "example" : 0,
             "x-ballerina-name" : "bookingLimit"
           },
@@ -3216,30 +3216,30 @@
           "location" : {
             "maxLength" : 1024,
             "type" : "string",
-            "description" : "The information for a custom location.",
+            "description" : "The information for a custom location",
             "example" : "AAA office"
           },
           "schedule_id" : {
             "type" : "string",
-            "description" : "The unique identifier of schedule.",
+            "description" : "The unique identifier of schedule",
             "example" : "ygfx661g9x8dwcgeusdqhsplc0",
             "x-ballerina-name" : "scheduleId"
           },
           "updated" : {
             "type" : "string",
-            "description" : "The moment the schedule type was updated.",
+            "description" : "The moment the schedule type was updated",
             "readOnly" : true,
             "example" : "2023-12-21T06:18:32.087Z"
           },
           "availability_override" : {
             "type" : "boolean",
-            "description" : "This field indicates the use of the availability rule.",
+            "description" : "This field indicates the use of the availability rule",
             "example" : false,
             "x-ballerina-name" : "availabilityOverride"
           },
           "status" : {
             "type" : "string",
-            "description" : "The status of schedule: confirmed or cancelled.",
+            "description" : "The status of schedule: confirmed or cancelled",
             "example" : "confirmed",
             "enum" : [ "confirmed", "cancelled" ]
           }
@@ -3250,7 +3250,7 @@
         "properties" : {
           "use_custom" : {
             "type" : "boolean",
-            "description" : "This field indicates the use of custom availability instead of the rule.",
+            "description" : "This field indicates the use of custom availability instead of the rule",
             "example" : false,
             "x-ballerina-name" : "useCustom"
           },
@@ -3279,7 +3279,7 @@
           },
           "segments" : {
             "type" : "array",
-            "description" : "The available time segments of the event.",
+            "description" : "The available time segments of the event",
             "items" : {
               "$ref" : "#/components/schemas/SchedulerschedulesSegments"
             }
@@ -3291,12 +3291,12 @@
         "properties" : {
           "start" : {
             "type" : "string",
-            "description" : "The start time of this day.",
+            "description" : "The start time of this day",
             "example" : "09:00"
           },
           "end" : {
             "type" : "string",
-            "description" : "The end time of this day.",
+            "description" : "The end time of this day",
             "example" : "17:00"
           }
         }
@@ -3306,78 +3306,78 @@
         "properties" : {
           "all_host_available" : {
             "type" : "integer",
-            "description" : "The number of \"all host available\" type schedules.",
+            "description" : "The number of \"all host available\" type schedules",
             "example" : 10,
             "x-ballerina-name" : "allHostAvailable"
           },
           "scheduled_events_rescheduled" : {
             "type" : "integer",
-            "description" : "The number of rescheduled scheduled events.",
+            "description" : "The number of rescheduled scheduled events",
             "example" : 10,
             "x-ballerina-name" : "scheduledEventsRescheduled"
           },
           "scheduled_events_completed" : {
             "type" : "integer",
-            "description" : "The number of completed scheduled events.",
+            "description" : "The number of completed scheduled events",
             "example" : 10,
             "x-ballerina-name" : "scheduledEventsCompleted"
           },
           "schedules_canceled" : {
             "type" : "integer",
-            "description" : "The number of cancelled schedules.",
+            "description" : "The number of cancelled schedules",
             "example" : 10,
             "x-ballerina-name" : "schedulesCanceled"
           },
           "one_off_meeting" : {
             "type" : "integer",
-            "description" : "The number of \"one-off\" type schedules.",
+            "description" : "The number of \"one-off\" type schedules",
             "example" : 10,
             "x-ballerina-name" : "oneOffMeeting"
           },
           "meeting_poll" : {
             "type" : "integer",
-            "description" : "The number of \"meeting poll\" type schedules.",
+            "description" : "The number of \"meeting poll\" type schedules",
             "example" : 10,
             "x-ballerina-name" : "meetingPoll"
           },
           "one_to_many" : {
             "type" : "integer",
-            "description" : "The number of \"one to many\" type schedules.",
+            "description" : "The number of \"one to many\" type schedules",
             "example" : 10,
             "x-ballerina-name" : "oneToMany"
           },
           "any_host_available" : {
             "type" : "integer",
-            "description" : "The number of \"any host available\" type schedules.",
+            "description" : "The number of \"any host available\" type schedules",
             "example" : 10,
             "x-ballerina-name" : "anyHostAvailable"
           },
           "scheduled_events_canceled" : {
             "type" : "integer",
-            "description" : "The number of cancelled scheduled events.",
+            "description" : "The number of cancelled scheduled events",
             "example" : 10,
             "x-ballerina-name" : "scheduledEventsCanceled"
           },
           "one_to_one" : {
             "type" : "integer",
-            "description" : "The number of \"one to one\" type schedules.",
+            "description" : "The number of \"one to one\" type schedules",
             "example" : 10,
             "x-ballerina-name" : "oneToOne"
           },
           "scheduled_events_created" : {
             "type" : "integer",
-            "description" : "The number of created scheduled events.",
+            "description" : "The number of created scheduled events",
             "example" : 10,
             "x-ballerina-name" : "scheduledEventsCreated"
           },
           "schedules_created" : {
             "type" : "integer",
-            "description" : "The number of created schedules.",
+            "description" : "The number of created schedules",
             "example" : 10,
             "x-ballerina-name" : "schedulesCreated"
           }
         },
-        "description" : "The stats of the last N days.",
+        "description" : "The stats of the last N days",
         "example" : "\"last_n_days\":{{\"created_scheduled_events\":65},{\"completed_scheduled_events\":34},{\"created_schedules\":20},{\"cancelled_scheduled_events\":14},{\"rescheduled_scheduled_events\":8},{\"cancelled_schedules\":3},{\"one_to_one\":10},{\"any_host_available\":5},{\"one_off_meeting\":2},{\"all_host_available\":1},{\"meeting_poll\":1},{\"one_to_many\":1}}"
       },
       "SchedulerschedulesscheduleIdCustomFields" : {
@@ -3388,7 +3388,7 @@
             "maxItems" : 50,
             "minItems" : 1,
             "type" : "array",
-            "description" : "The invitee's option(s) for single_select or multi_select type of responses.",
+            "description" : "The invitee's option(s) for single_select or multi_select type of responses",
             "items" : {
               "maxLength" : 8192,
               "minLength" : 1,
@@ -3412,28 +3412,28 @@
           },
           "name" : {
             "type" : "string",
-            "description" : "The custom question that the host created for the event type.",
+            "description" : "The custom question that the host created for the event type",
             "example" : "Please share anything that will help prepare for our meeting."
           },
           "include_other" : {
             "type" : "boolean",
-            "description" : "If the custom question lets invitees record a written response, in addition to single-select or multiple-select type of responses, then it's true. Otherwise, it's false.",
+            "description" : "If the custom question lets invitees record a written response, in addition to single-select or multiple-select type of responses, then it's true. Otherwise, it's false",
             "example" : false,
             "x-ballerina-name" : "includeOther"
           },
           "position" : {
             "type" : "number",
-            "description" : "The position of this question.",
+            "description" : "The position of this question",
             "example" : 0
           },
           "enabled" : {
             "type" : "boolean",
-            "description" : "If the question created by the host is turned ON and visible on the event booking page, then it's true. If it's turned OFF and invisible on the event booking page, then it's false.",
+            "description" : "If the question created by the host is turned ON and visible on the event booking page, then it's true. If it's turned OFF and invisible on the event booking page, then it's false",
             "example" : true
           },
           "required" : {
             "type" : "boolean",
-            "description" : "If a response to the question, created by the host, is required for invitees to book the event type, then it's true. If it's not required, it's false.",
+            "description" : "If a response to the question, created by the host, is required for invitees to book the event type, then it's true. If it's not required, it's false",
             "example" : false
           }
         }
@@ -3443,12 +3443,12 @@
         "properties" : {
           "start" : {
             "type" : "string",
-            "description" : "The start date and time of the segment.",
+            "description" : "The start date and time of the segment",
             "example" : "2023-12-21T06:00:00Z"
           },
           "end" : {
             "type" : "string",
-            "description" : "The end date and time of the segment.",
+            "description" : "The end date and time of the segment",
             "example" : "2023-12-21T06:00:00Z"
           }
         }
@@ -3459,23 +3459,23 @@
         "properties" : {
           "start" : {
             "type" : "string",
-            "description" : "The start date to override.",
+            "description" : "The start date to override",
             "example" : "2024-01-07T09:00:00Z"
           },
           "end" : {
             "type" : "string",
-            "description" : "The end date to override.",
+            "description" : "The end date to override",
             "example" : "2024-01-08T09:00:00Z"
           }
         },
-        "description" : "The date interval that needs to overridden."
+        "description" : "The date interval that needs to overridden"
       },
       "InlineResponse2001" : {
         "type" : "object",
         "properties" : {
           "next_page_token" : {
             "type" : "string",
-            "description" : " The token for a later to retrieve only the entries that have changed since this result was returned. It's omitted if further results are available, in which case `nextPageToken` is provided.",
+            "description" : " The token for a later to retrieve only the entries that have changed since this result was returned. It's omitted if further results are available, in which case `nextPageToken` is provided",
             "example" : "Cj8KLwotCgsI3ujvqgYQgIXUGxIeChwKGjBzNzAyZWVtbjBzOTdlZXFhNXE1NWg4ZWJtGgwIzIPVrAYQwM3WrAPAPgE=",
             "x-ballerina-name" : "nextPageToken"
           },
@@ -3487,14 +3487,14 @@
             }
           }
         },
-        "description" : "The availability of the schedule query result of given user."
+        "description" : "The availability of the schedule query result of given user"
       },
       "InlineResponse2003" : {
         "type" : "object",
         "properties" : {
           "next_page_token" : {
             "type" : "string",
-            "description" : "The token to access the next page of this result.",
+            "description" : "The token to access the next page of this result",
             "example" : "ffffffff97c5b97f_53slvrhet2n0xkxurl5ybgde40",
             "x-ballerina-name" : "nextPageToken"
           },
@@ -3511,23 +3511,23 @@
         "properties" : {
           "owner" : {
             "type" : "string",
-            "description" : "The owner's ID.",
+            "description" : "The owner's ID",
             "readOnly" : true,
             "example" : "easonfsxsysks3lgchitiw@scheudler.zoom.us"
           },
           "default" : {
             "type" : "boolean",
-            "description" : "The default availability schedule in use.",
+            "description" : "The default availability schedule in use",
             "example" : true
           },
           "name" : {
             "type" : "string",
-            "description" : "The name of this availability schedule.",
+            "description" : "The name of this availability schedule",
             "example" : "Working hours"
           },
           "availability_id" : {
             "type" : "string",
-            "description" : "The unique ID of availability.",
+            "description" : "The unique ID of availability",
             "example" : "x3h1u4id4liffdyszsp8kpxl80",
             "x-ballerina-name" : "availabilityId"
           },
@@ -3539,19 +3539,19 @@
           },
           "time_zone" : {
             "type" : "string",
-            "description" : "The timezone for which this availability schedule originates.",
+            "description" : "The timezone for which this availability schedule originates",
             "example" : "Asia/Shanghai",
             "x-ballerina-name" : "timeZone"
           }
         },
-        "description" : "The availability schedule set by the user."
+        "description" : "The availability schedule set by the user"
       },
       "InlineResponse2005" : {
         "type" : "object",
         "properties" : {
           "next_page_token" : {
             "type" : "string",
-            "description" : "The token that accesses the next page of this result.",
+            "description" : "The token that accesses the next page of this result",
             "example" : "aec369a4fce6ae655749b00fc7260bfd",
             "x-ballerina-name" : "nextPageToken"
           },
@@ -3569,12 +3569,12 @@
           "summary" : {
             "maxLength" : 256,
             "type" : "string",
-            "description" : "The event's summary.",
+            "description" : "The event's summary",
             "example" : "daily meeting"
           },
           "attendees" : {
             "type" : "array",
-            "description" : "The attendees of the event.",
+            "description" : "The attendees of the event",
             "items" : {
               "$ref" : "#/components/schemas/InlineResponse2004Attendees"
             }
@@ -3582,31 +3582,31 @@
           "meeting_notes" : {
             "maxLength" : 1024,
             "type" : "string",
-            "description" : "The meeting notes of the event.",
+            "description" : "The meeting notes of the event",
             "example" : "meeting notes",
             "x-ballerina-name" : "meetingNotes"
           },
           "description" : {
             "maxLength" : 8192,
             "type" : "string",
-            "description" : "The event's description.",
+            "description" : "The event's description",
             "example" : "15 Minute Meeting"
           },
           "end_date_time" : {
             "type" : "string",
-            "description" : "The scheduled event's end date time.",
+            "description" : "The scheduled event's end date time",
             "example" : "2023-12-21T16:30:00+08:00",
             "x-ballerina-name" : "endDateTime"
           },
           "event_id" : {
             "type" : "string",
-            "description" : "The unique identifier of event.",
+            "description" : "The unique identifier of event",
             "example" : "woft7torlatbw8ek24bmit5k60",
             "x-ballerina-name" : "eventId"
           },
           "event_type" : {
             "type" : "string",
-            "description" : "This field indicates whether the type is default(scheduled) or a pending event.",
+            "description" : "This field indicates whether the type is default(scheduled) or a pending event",
             "readOnly" : true,
             "example" : "default",
             "enum" : [ "default", "pending" ],
@@ -3614,7 +3614,7 @@
           },
           "tracking_params" : {
             "type" : "array",
-            "description" : "The information to track the source of invitee. Only use this setting you add UTM parameters in schedule links.",
+            "description" : "The information to track the source of invitee. Only use this setting you add UTM parameters in schedule links",
             "items" : {
               "$ref" : "#/components/schemas/InlineResponse2004TrackingParams"
             },
@@ -3622,7 +3622,7 @@
           },
           "guests" : {
             "type" : "array",
-            "description" : "The guest's collection.",
+            "description" : "The guest's collection",
             "items" : {
               "type" : "string",
               "description" : "The guest's email.",
@@ -3632,28 +3632,28 @@
           "location" : {
             "maxLength" : 1024,
             "type" : "string",
-            "description" : "The information for a custom location.",
+            "description" : "The information for a custom location",
             "example" : "AAA office"
           },
           "start_date_time" : {
             "type" : "string",
-            "description" : "The scheduled event's start date time.",
+            "description" : "The scheduled event's start date time",
             "example" : "2023-12-21T16:00:00+08:00",
             "x-ballerina-name" : "startDateTime"
           },
           "schedule_id" : {
             "type" : "string",
-            "description" : "The unique identifier of schedule.",
+            "description" : "The unique identifier of schedule",
             "example" : "ygfx661g9x8dwcgeusdqhsplc0_20231220T160000Z",
             "x-ballerina-name" : "scheduleId"
           },
           "updated" : {
             "type" : "string",
-            "description" : "The moment the event was updated.",
+            "description" : "The moment the event was updated",
             "example" : "2023-12-21T06:19:28.309Z"
           },
           "external_location" : {
-            "description" : "The meeting details for when users have scheduled appointments.",
+            "description" : "The meeting details for when users have scheduled appointments",
             "readOnly" : true,
             "oneOf" : [ {
               "type" : "object",
@@ -3694,7 +3694,7 @@
           },
           "status" : {
             "type" : "string",
-            "description" : "The status of event: confirmed or cancelled.",
+            "description" : "The status of event: confirmed or cancelled",
             "example" : "confirmed",
             "enum" : [ "confirmed", "cancelled" ]
           }
@@ -3705,29 +3705,29 @@
         "properties" : {
           "end_date" : {
             "type" : "string",
-            "description" : "The schedule's end date.",
+            "description" : "The schedule's end date",
             "example" : "2023-12-28",
             "x-ballerina-name" : "endDate"
           },
           "color" : {
             "type" : "string",
-            "description" : "The hexadecimal color value of the event type's scheduling page.",
+            "description" : "The hexadecimal color value of the event type's scheduling page",
             "example" : "#fff200"
           },
           "description" : {
             "maxLength" : 8192,
             "type" : "string",
-            "description" : "The schedule's description.",
+            "description" : "The schedule's description",
             "example" : "15 Minute Meeting"
           },
           "secret" : {
             "type" : "boolean",
-            "description" : "This field indicates if the event type is hidden on the owner's main scheduling page.",
+            "description" : "This field indicates if the event type is hidden on the owner's main scheduling page",
             "example" : false
           },
           "availability_rules" : {
             "type" : "array",
-            "description" : "The availability of the time rule.",
+            "description" : "The availability of the time rule",
             "items" : {
               "$ref" : "#/components/schemas/InlineResponse2005AvailabilityRules"
             },
@@ -3737,12 +3737,12 @@
             "maximum" : 200,
             "minimum" : 1,
             "type" : "number",
-            "description" : "This field indicates the maximum invitees per event.",
+            "description" : "This field indicates the maximum invitees per event",
             "example" : 1
           },
           "segments" : {
             "type" : "array",
-            "description" : "The available time segments of the event.",
+            "description" : "The available time segments of the event",
             "items" : {
               "$ref" : "#/components/schemas/SchedulerschedulesSegments"
             }
@@ -3751,14 +3751,14 @@
             "maximum" : 1440,
             "minimum" : 15,
             "type" : "number",
-            "description" : "This field indicates the duration of the meeting in minutes, range: [1, 1440].",
+            "description" : "This field indicates the duration of the meeting in minutes, range: [1, 1440]",
             "example" : 30
           },
           "cushion" : {
             "maximum" : 14340,
             "minimum" : 0,
             "type" : "number",
-            "description" : "This field indicates the minimum time before a schedule starts when the attendees can book.",
+            "description" : "This field indicates the minimum time before a schedule starts when the attendees can book",
             "example" : 0
           },
           "buffer" : {
@@ -3774,32 +3774,32 @@
             "maxLength" : 256,
             "minLength" : 3,
             "type" : "string",
-            "description" : "The event portion of the event's URL that identifies a specific web page.",
+            "description" : "The event portion of the event's URL that identifies a specific web page",
             "example" : "sales"
           },
           "interval_type" : {
             "type" : "string",
-            "description" : "The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`.",
+            "description" : "The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`",
             "example" : "fixed",
             "enum" : [ "unlimited", "fixed" ],
             "x-ballerina-name" : "intervalType"
           },
           "start_date" : {
             "type" : "string",
-            "description" : "The schedule's start date.",
+            "description" : "The schedule's start date",
             "example" : "2023-12-21",
             "x-ballerina-name" : "startDate"
           },
           "add_on_type" : {
             "type" : "string",
-            "description" : "The method of the type of `addOn`, such as Zoom meeting, Zoom phone, or offline.",
+            "description" : "The method of the type of `addOn`, such as Zoom meeting, Zoom phone, or offline",
             "example" : "zoomMeeting",
             "enum" : [ "zoomMeeting", "zoomPhone", "offline" ],
             "x-ballerina-name" : "addOnType"
           },
           "scheduling_url" : {
             "type" : "string",
-            "description" : "The URL of the user's scheduling site where invitees book this event type.",
+            "description" : "The URL of the user's scheduling site where invitees book this event type",
             "example" : "https://scheduler.zoom.us/zoom_us/sales",
             "x-ballerina-name" : "schedulingUrl"
           },
@@ -3807,14 +3807,14 @@
             "maximum" : 720,
             "minimum" : 5,
             "type" : "number",
-            "description" : "This field sets the frequency of available time slots for invitees.",
+            "description" : "This field sets the frequency of available time slots for invitees",
             "example" : 30,
             "x-ballerina-name" : "startTimeIncrement"
           },
           "summary" : {
             "maxLength" : 256,
             "type" : "string",
-            "description" : "The event's summary.",
+            "description" : "The event's summary",
             "example" : "daily meeting"
           },
           "creator" : {
@@ -3822,14 +3822,14 @@
           },
           "schedule_type" : {
             "type" : "string",
-            "description" : "This field indicates if the schedule type is \"one\" (belongs to an individual user) or \"multiple\".",
+            "description" : "This field indicates if the schedule type is \"one\" (belongs to an individual user) or \"multiple\"",
             "example" : "one",
             "enum" : [ "one", "multiple" ],
             "x-ballerina-name" : "scheduleType"
           },
           "custom_fields" : {
             "type" : "array",
-            "description" : "This field contains the custom question.",
+            "description" : "This field contains the custom question",
             "items" : {
               "$ref" : "#/components/schemas/InlineResponse2011CustomFields"
             },
@@ -3844,7 +3844,7 @@
             "maximum" : 96,
             "minimum" : 0,
             "type" : "number",
-            "description" : "This field sets the maximum events allowed per day.",
+            "description" : "This field sets the maximum events allowed per day",
             "example" : 0,
             "x-ballerina-name" : "bookingLimit"
           },
@@ -3860,30 +3860,30 @@
           "location" : {
             "maxLength" : 1024,
             "type" : "string",
-            "description" : "The information for a custom location.",
+            "description" : "The information for a custom location",
             "example" : "AAA office"
           },
           "schedule_id" : {
             "type" : "string",
-            "description" : "The unique identifier of the schedule.",
+            "description" : "The unique identifier of the schedule",
             "example" : "ygfx661g9x8dwcgeusdqhsplc0",
             "x-ballerina-name" : "scheduleId"
           },
           "updated" : {
             "type" : "string",
-            "description" : "The moment the schedule type was updated.",
+            "description" : "The moment the schedule type was updated",
             "readOnly" : true,
             "example" : "2023-12-21T06:18:32.087Z"
           },
           "availability_override" : {
             "type" : "boolean",
-            "description" : "This field indicates the use of the availability rule.",
+            "description" : "This field indicates the use of the availability rule",
             "example" : false,
             "x-ballerina-name" : "availabilityOverride"
           },
           "status" : {
             "type" : "string",
-            "description" : "The status of schedule: confirmed or cancelled.",
+            "description" : "The status of schedule: confirmed or cancelled",
             "example" : "confirmed",
             "enum" : [ "confirmed", "cancelled" ]
           }
@@ -3894,13 +3894,13 @@
         "properties" : {
           "scheduling_url" : {
             "type" : "string",
-            "description" : "The URL of the user’s scheduling site where invitees book this event type.",
+            "description" : "The URL of the user’s scheduling site where invitees book this event type",
             "example" : "https://scheduler.zoom.us/zoom_us",
             "x-ballerina-name" : "schedulingUrl"
           },
           "logo" : {
             "type" : "string",
-            "description" : "This field enables users to upload their company's logo on Zoom.",
+            "description" : "This field enables users to upload their company's logo on Zoom",
             "example" : "user logo"
           },
           "display_name" : {
@@ -3911,51 +3911,51 @@
           },
           "time_zone" : {
             "type" : "string",
-            "description" : "The time zone to use when presenting time to the user.",
+            "description" : "The time zone to use when presenting time to the user",
             "example" : "America/New York",
             "x-ballerina-name" : "timeZone"
           },
           "slug" : {
             "type" : "string",
-            "description" : "The portion of URL for the user's scheduling page where invitees book sessions that renders in a human-readable format.",
+            "description" : "The portion of URL for the user's scheduling page where invitees book sessions that renders in a human-readable format",
             "example" : "zoom_us"
           },
           "picture" : {
             "type" : "string",
-            "description" : "This field enables users to upload their personal avatars on Zoom.",
+            "description" : "This field enables users to upload their personal avatars on Zoom",
             "example" : "base64 encoding string"
           }
         },
-        "description" : "The user's information."
+        "description" : "The user's information"
       },
       "InlineResponse2006" : {
         "type" : "object",
         "properties" : {
           "end_date" : {
             "type" : "string",
-            "description" : "The schedule's end date.",
+            "description" : "The schedule's end date",
             "example" : "2023-12-28",
             "x-ballerina-name" : "endDate"
           },
           "color" : {
             "type" : "string",
-            "description" : "The hexadecimal color value of the event type's scheduling page.",
+            "description" : "The hexadecimal color value of the event type's scheduling page",
             "example" : "#fff200"
           },
           "description" : {
             "maxLength" : 8192,
             "type" : "string",
-            "description" : "The schedule's description.",
+            "description" : "The schedule's description",
             "example" : "15 Minute Meeting"
           },
           "secret" : {
             "type" : "boolean",
-            "description" : "This field indicates if the event type is hidden on the owner's main scheduling page.",
+            "description" : "This field indicates if the event type is hidden on the owner's main scheduling page",
             "example" : false
           },
           "availability_rules" : {
             "type" : "array",
-            "description" : "The availability of the time rule.",
+            "description" : "The availability of the time rule",
             "items" : {
               "$ref" : "#/components/schemas/InlineResponse2006AvailabilityRules"
             },
@@ -3965,12 +3965,12 @@
             "maximum" : 200,
             "minimum" : 1,
             "type" : "number",
-            "description" : "This field indicates the maximum invitees per event.",
+            "description" : "This field indicates the maximum invitees per event",
             "example" : 1
           },
           "segments" : {
             "type" : "array",
-            "description" : "The available time segments of the event.",
+            "description" : "The available time segments of the event",
             "items" : {
               "$ref" : "#/components/schemas/SchedulerschedulesSegments"
             }
@@ -3979,14 +3979,14 @@
             "maximum" : 1440,
             "minimum" : 15,
             "type" : "number",
-            "description" : "This field indicates the duration of the meeting in minutes, range: [1, 1440].",
+            "description" : "This field indicates the duration of the meeting in minutes, range: [1, 1440]",
             "example" : 30
           },
           "cushion" : {
             "maximum" : 14340,
             "minimum" : 0,
             "type" : "number",
-            "description" : "This field indicates the minimum time before a schedule starts when the attendees can book.",
+            "description" : "This field indicates the minimum time before a schedule starts when the attendees can book",
             "example" : 0
           },
           "buffer" : {
@@ -4002,32 +4002,32 @@
             "maxLength" : 256,
             "minLength" : 3,
             "type" : "string",
-            "description" : "The event portion of the event's URL that identifies a specific web page.",
+            "description" : "The event portion of the event's URL that identifies a specific web page",
             "example" : "sales"
           },
           "interval_type" : {
             "type" : "string",
-            "description" : "The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`.",
+            "description" : "The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`",
             "example" : "fixed",
             "enum" : [ "unlimited", "fixed" ],
             "x-ballerina-name" : "intervalType"
           },
           "start_date" : {
             "type" : "string",
-            "description" : "The schedule's start date.",
+            "description" : "The schedule's start date",
             "example" : "2023-12-21",
             "x-ballerina-name" : "startDate"
           },
           "add_on_type" : {
             "type" : "string",
-            "description" : "The method of the type of `addOn`, such as Zoom meeting, Zoom phone, or offline.",
+            "description" : "The method of the type of `addOn`, such as Zoom meeting, Zoom phone, or offline",
             "example" : "zoomMeeting",
             "enum" : [ "zoomMeeting", "zoomPhone", "offline" ],
             "x-ballerina-name" : "addOnType"
           },
           "scheduling_url" : {
             "type" : "string",
-            "description" : "The URL of the user's scheduling site where invitees book this event type.",
+            "description" : "The URL of the user's scheduling site where invitees book this event type",
             "example" : "https://scheduler.zoom.us/zoom_us/sales",
             "x-ballerina-name" : "schedulingUrl"
           },
@@ -4035,14 +4035,14 @@
             "maximum" : 720,
             "minimum" : 5,
             "type" : "number",
-            "description" : "This field sets the frequency of available time slots for invitees.",
+            "description" : "This field sets the frequency of available time slots for invitees",
             "example" : 30,
             "x-ballerina-name" : "startTimeIncrement"
           },
           "summary" : {
             "maxLength" : 256,
             "type" : "string",
-            "description" : "The event's summary.",
+            "description" : "The event's summary",
             "example" : "daily meeting"
           },
           "creator" : {
@@ -4050,14 +4050,14 @@
           },
           "schedule_type" : {
             "type" : "string",
-            "description" : "This field indicates if the schedule type is **one** (belongs to an individual user) or **multiple**.",
+            "description" : "This field indicates if the schedule type is **one** (belongs to an individual user) or **multiple**",
             "example" : "one",
             "enum" : [ "one", "multiple" ],
             "x-ballerina-name" : "scheduleType"
           },
           "custom_fields" : {
             "type" : "array",
-            "description" : "This field contains the custom question.",
+            "description" : "This field contains the custom question",
             "items" : {
               "$ref" : "#/components/schemas/InlineResponse2011CustomFields"
             },
@@ -4065,14 +4065,14 @@
           },
           "active" : {
             "type" : "boolean",
-            "description" : "This field indicates if the schedule is active.",
+            "description" : "This field indicates if the schedule is active",
             "example" : true
           },
           "booking_limit" : {
             "maximum" : 96,
             "minimum" : 0,
             "type" : "number",
-            "description" : "This field sets the maximum events allowed per day.",
+            "description" : "This field sets the maximum events allowed per day",
             "example" : 0,
             "x-ballerina-name" : "bookingLimit"
           },
@@ -4088,30 +4088,30 @@
           "location" : {
             "maxLength" : 1024,
             "type" : "string",
-            "description" : "The information for a custom location.",
+            "description" : "The information for a custom location",
             "example" : "AAA office"
           },
           "schedule_id" : {
             "type" : "string",
-            "description" : "The unique identifier of a schedule.",
+            "description" : "The unique identifier of a schedule",
             "example" : "ygfx661g9x8dwcgeusdqhsplc0",
             "x-ballerina-name" : "scheduleId"
           },
           "updated" : {
             "type" : "string",
-            "description" : "The moment the schedule type was updated.",
+            "description" : "The moment the schedule type was updated",
             "readOnly" : true,
             "example" : "2023-12-21T06:18:32.087Z"
           },
           "availability_override" : {
             "type" : "boolean",
-            "description" : "This field indicates the use of the availability rule.",
+            "description" : "This field indicates the use of the availability rule",
             "example" : false,
             "x-ballerina-name" : "availabilityOverride"
           },
           "status" : {
             "type" : "string",
-            "description" : "The status of schedule: confirmed or cancelled.",
+            "description" : "The status of schedule: confirmed or cancelled",
             "example" : "confirmed",
             "enum" : [ "confirmed", "cancelled" ]
           }
@@ -4122,7 +4122,8 @@
       "openapi_authorization" : {
         "type" : "apiKey",
         "name" : "Authorization",
-        "in" : "header"
+        "in" : "header",
+        "x-ballerina-name" : "authorization"
       },
       "openapi_oauth" : {
         "type" : "oauth2",
