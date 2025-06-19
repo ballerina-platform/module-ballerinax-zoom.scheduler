@@ -17,42 +17,9 @@
 import ballerina/http;
 import ballerina/log;
 
-
 listener http:Listener httpListener = new (9091);
 
 http:Service mockService = service object {
-
-    # Delete availability
-    #
-    # + availabilityId - The UUID of the availability schedule.
-    # + return - returns can be any of following types
-    # http:NoContent (If successful, this method returns an empty response body.)
-    # http:Response (The request has failed.)
-    resource function delete scheduler/availability/[string availabilityId]() returns http:Response {
-        return new http:Response();
-    }
-
-    # Delete scheduled events 
-    #
-    # + eventId - The event ID
-    # + user_id - User ID query parameter
-    # + return - returns can be any of following types
-    # http:NoContent (If successful, this method returns an empty response body.)
-    # http:Response (The request has failed.)
-    resource function delete scheduler/events/[string eventId](string? user_id) returns http:Response {
-        return new http:Response();
-    }
-
-    # Delete schedules
-    #
-    # + scheduleId - The unique identifier of the schedule.
-    # + user_id - User ID query parameter
-    # + return - returns can be any of following types
-    # http:NoContent (If successful, this method returns an empty response body.)
-    # http:Response (The request has failed.)
-    resource function delete scheduler/schedules/[string scheduleId](string? user_id) returns http:Response {
-        return new http:Response();
-    }
 
     # Report analytics
     #
@@ -63,7 +30,7 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns the scheduler analytics.)
     # http:Response (The request has failed.)
-    resource function get scheduler/analytics(string? user_id, string? 'from, string? to, string? time_zone) returns json|http:Response {
+    resource function get analytics(string? user_id, string? 'from, string? to, string? time_zone) returns json|http:Response {
         return {
             "last_n_days": {
                 "scheduled_events_created": 10,
@@ -104,7 +71,7 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Ok (Successful availability of the schedule query result.)
     # http:Response (The request has failed.)
-    resource function get scheduler/availability(int? page_size, string? next_page_token, string? user_id) returns json|http:Response {
+    resource function get availability(int? page_size, string? next_page_token, string? user_id) returns json|http:Response {
         return {
             "items": [
                 {
@@ -124,12 +91,51 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns an availability resource.)
     # http:Response (The request has failed.)
-    resource function get scheduler/availability/[string availabilityId]() returns json|http:Response {
+    resource function get availability/[string availabilityId]() returns json|http:Response {
         return {
             "owner": "test-owner@example.com",
             "default": true,
             "name": "Working Hours",
             "availability_id": availabilityId,
+            "time_zone": "UTC"
+        };
+    }
+
+    # Delete availability
+    #
+    # + availabilityId - The UUID of the availability schedule.
+    # + return - returns can be any of following types
+    # http:NoContent (If successful, this method returns an empty response body.)
+    # http:Response (The request has failed.)
+    resource function delete availability/[string availabilityId]() returns http:Response {
+        http:Response response = new;
+        response.statusCode = 204;
+        return response;
+    }
+
+    # Patch availability
+    #
+    # + availabilityId - The UUID of the availability schedule.
+    # + return - returns can be any of following types
+    # http:NoContent (If successful, this method returns an empty response body.)
+    # http:Response (The request has failed.)
+    resource function patch availability/[string availabilityId](@http:Payload json payload) returns http:Response {
+        http:Response response = new;
+        response.statusCode = 204;
+        return response;
+    }
+
+    # Insert availability
+    #
+    # + return - returns can be any of following types
+    # http:Created (If successful, this method returns an availability resource.)
+    # http:Response (The request has failed.)
+    resource function post availability(@http:Payload json payload) returns json|http:Response {
+        return {
+            "owner": "test-owner@example.com",
+            "default": true,
+            "name": "New Working Hours",
+            "availability_id": "avail-new-123",
             "time_zone": "UTC"
         };
     }
@@ -149,7 +155,7 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns scheduled events.)
     # http:Response (The request has failed.)
-    resource function get scheduler/events(string? to, string? 'from, int? page_size, string? order_by, string? time_zone, string? next_page_token, boolean? show_deleted, string? event_type, string? user_id, string? search) returns json|http:Response {
+    resource function get events(string? to, string? 'from, int? page_size, string? order_by, string? time_zone, string? next_page_token, boolean? show_deleted, string? event_type, string? user_id, string? search) returns json|http:Response {
         return {
             "items": [
                 {
@@ -172,7 +178,7 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns the scheduled event resource.)
     # http:Response (The request has failed.)
-    resource function get scheduler/events/[string eventId](string? user_id) returns json|http:Response {
+    resource function get events/[string eventId](string? user_id) returns json|http:Response {
         return {
             "event_id": eventId,
             "summary": "Test Meeting",
@@ -182,6 +188,32 @@ http:Service mockService = service object {
             "status": "confirmed",
             "schedule_id": "schedule-456"
         };
+    }
+
+    # Delete scheduled events 
+    #
+    # + eventId - The event ID
+    # + user_id - User ID query parameter
+    # + return - returns can be any of following types
+    # http:NoContent (If successful, this method returns an empty response body.)
+    # http:Response (The request has failed.)
+    resource function delete events/[string eventId](string? user_id) returns http:Response {
+        http:Response response = new;
+        response.statusCode = 204;
+        return response;
+    }
+
+    # Patch scheduled events
+    #
+    # + eventId - The opaque identifier of the scheduled event.
+    # + user_id - User ID query parameter
+    # + return - returns can be any of following types
+    # http:NoContent (If successful, this method returns an event resource.)
+    # http:Response (The request has failed.)
+    resource function patch events/[string eventId](@http:Payload json payload, string? user_id) returns http:Response {
+        http:Response response = new;
+        response.statusCode = 204;
+        return response;
     }
 
     # List schedules
@@ -196,7 +228,7 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns schedules.)
     # http:Response (The request has failed.)
-    resource function get scheduler/schedules(string? to, string? 'from, int? page_size, string? next_page_token, boolean? show_deleted, string? time_zone, string? user_id) returns json|http:Response {
+    resource function get schedules(string? to, string? 'from, int? page_size, string? next_page_token, boolean? show_deleted, string? time_zone, string? user_id) returns json|http:Response {
         return {
             "items": [
                 {
@@ -213,6 +245,26 @@ http:Service mockService = service object {
         };
     }
 
+    # Insert schedules
+    #
+    # + user_id - User ID query parameter
+    # + return - returns can be any of following types
+    # http:Created (If successful, this method returns a schedule resource.)
+    # http:Response (The request has failed.)
+    resource function post schedules(@http:Payload json payload, string? user_id) returns json|http:Response {
+        json schedulePayload = payload;
+        return <json>{
+            "schedule_id": "schedule-new-789",
+            "summary": schedulePayload is map<json> && schedulePayload.hasKey("summary") ? schedulePayload["summary"] : "Default Summary",
+            "description": schedulePayload is map<json> && schedulePayload.hasKey("description") ? schedulePayload["description"] : "Default description",
+            "duration": schedulePayload is map<json> && schedulePayload.hasKey("duration") ? schedulePayload["duration"] : 30,
+            "capacity": schedulePayload is map<json> && schedulePayload.hasKey("capacity") ? schedulePayload["capacity"] : 1,
+            "active": schedulePayload is map<json> && schedulePayload.hasKey("active") ? schedulePayload["active"] : true,
+            "availability_override": schedulePayload is map<json> && schedulePayload.hasKey("availability_override") ? schedulePayload["availability_override"] : false,
+            "status": "confirmed"
+        };
+    }
+
     # Get schedules
     #
     # + scheduleId - The schedule's unique identifier.
@@ -220,7 +272,7 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns a schedule resource.)
     # http:Response (The request has failed.)
-    resource function get scheduler/schedules/[string scheduleId](string? user_id) returns json|http:Response {
+    resource function get schedules/[string scheduleId](string? user_id) returns json|http:Response {
         return {
             "schedule_id": scheduleId,
             "summary": "Test Schedule",
@@ -233,40 +285,17 @@ http:Service mockService = service object {
         };
     }
 
-    # Get user
+    # Delete schedules
     #
-    # + userId - The user ID
-    # + return - returns can be any of following types
-    # http:Ok (If successful, this method returns user information.)
-    # http:Response (The request has failed.)
-    resource function get scheduler/users/[string userId]() returns json|http:Response {
-        return {
-            "display_name": "Test User",
-            "scheduling_url": "https://scheduler.zoom.us/test-user",
-            "time_zone": "UTC",
-            "slug": "test-user"
-        };
-    }
-
-    # Patch availability
-    #
-    # + availabilityId - The UUID of the availability schedule.
+    # + scheduleId - The unique identifier of the schedule.
+    # + user_id - User ID query parameter
     # + return - returns can be any of following types
     # http:NoContent (If successful, this method returns an empty response body.)
     # http:Response (The request has failed.)
-    resource function patch scheduler/availability/[string availabilityId](@http:Payload json payload) returns http:Response {
-        return new http:Response();
-    }
-
-    # Patch scheduled events
-    #
-    # + eventId - The opaque identifier of the scheduled event.
-    # + user_id - User ID query parameter
-    # + return - returns can be any of following types
-    # http:NoContent (If successful, this method returns an event resource.)
-    # http:Response (The request has failed.)
-    resource function patch scheduler/events/[string eventId](@http:Payload json payload, string? user_id) returns http:Response {
-        return new http:Response();
+    resource function delete schedules/[string scheduleId](string? user_id) returns http:Response {
+        http:Response response = new;
+        response.statusCode = 204;
+        return response;
     }
 
     # Patch schedules
@@ -276,43 +305,10 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:NoContent (If successful, this method returns an empty response body.)
     # http:Response (The request has failed.)
-    resource function patch scheduler/schedules/[string scheduleId](@http:Payload json payload, string? user_id) returns http:Response {
-        return new http:Response();
-    }
-
-    # Insert availability
-    #
-    # + return - returns can be any of following types
-    # http:Created (If successful, this method returns an availability resource.)
-    # http:Response (The request has failed.)
-    resource function post scheduler/availability(@http:Payload json payload) returns json|http:Response {
-        return {
-            "owner": "test-owner@example.com",
-            "default": true,
-            "name": "New Working Hours",
-            "availability_id": "avail-new-123",
-            "time_zone": "UTC"
-        };
-    }
-
-    # Insert schedules
-    #
-    # + user_id - User ID query parameter
-    # + return - returns can be any of following types
-    # http:Created (If successful, this method returns a schedule resource.)
-    # http:Response (The request has failed.)
-    resource function post scheduler/schedules(@http:Payload json payload, string? user_id) returns json|http:Response {
-        json schedulePayload = payload;
-        return <json>{
-            "schedule_id": "schedule-new-789",
-            "summary": schedulePayload is map<json> && schedulePayload.hasKey("summary") ? schedulePayload["summary"] : "Default Summary",
-            "description": schedulePayload is map<json> && schedulePayload.hasKey("description") ? schedulePayload["description"] : "Default description",
-            "duration": schedulePayload is map<json> && schedulePayload.hasKey("duration") ? schedulePayload["duration"] : 30,
-            "capacity": schedulePayload is map<json> && schedulePayload.hasKey("capacity") ? schedulePayload["capacity"] : 1,
-            "active": schedulePayload is map<json> && schedulePayload.hasKey("active") ? schedulePayload["active"] : true,
-            "availability_override": schedulePayload is map<json> && schedulePayload.hasKey("availabilityOverride") ? schedulePayload["availabilityOverride"] : false,
-            "status": "confirmed"
-        };
+    resource function patch schedules/[string scheduleId](@http:Payload json payload, string? user_id) returns http:Response {
+        http:Response response = new;
+        response.statusCode = 204;
+        return response;
     }
 
     # Single use link
@@ -320,12 +316,27 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Created (If successful, this method returns a scheduling link URL.)
     # http:Response (The request has failed.)
-    resource function post scheduler/schedules/single_use_link(@http:Payload json payload) returns json|http:Response {
+    resource function post schedules/single_use_link(@http:Payload json payload) returns json|http:Response {
         json schedulePayload = payload;
         string scheduleId = schedulePayload is map<json> && schedulePayload.hasKey("schedule_id") && schedulePayload["schedule_id"] is string
             ? <string>schedulePayload["schedule_id"] : "default-id";
         return <json>{
             "scheduling_url": "https://scheduler.zoom.us/single-use/" + scheduleId
+        };
+    }
+
+    # Get user
+    #
+    # + userId - The user ID
+    # + return - returns can be any of following types
+    # http:Ok (If successful, this method returns user information.)
+    # http:Response (The request has failed.)
+    resource function get users/[string userId]() returns json|http:Response {
+        return {
+            "display_name": "Test User",
+            "scheduling_url": "https://scheduler.zoom.us/test-user",
+            "time_zone": "UTC",
+            "slug": "test-user"
         };
     }
 };

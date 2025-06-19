@@ -10,38 +10,33 @@
 // Unless required by applicable law or agreed to in writing,
 // software distributed under the License is distributed on an
 // "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-// KIND, either express or implied.  See the License for the
+// KIND, either express or implied. See the License for the
 // specific language governing permissions and limitations
 // under the License.
 
 import ballerina/os;
 import ballerina/test;
-import ballerina/time;
 
 configurable boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "true";
-configurable string userId = isLiveServer ? os:getEnv("ZOOM_USER_ID") : "test";
-configurable string token = isLiveServer ? os:getEnv("ZOOM_TOKEN") : "test";
-configurable string serviceUrl = isLiveServer ? "https://api.zoom.us/v2" : "http://localhost:9091";
+configurable string userId = isLiveServer ? os:getEnv("ZOOM_USER_ID") : "test-user-123";
+configurable string token = isLiveServer ? os:getEnv("ZOOM_TOKEN") : "test-token";
+configurable string serviceUrl = isLiveServer ? "https://api.zoom.us/v2/scheduler" : "http://localhost:9091";
 
 ConnectionConfig config = {
     auth: {
-        Authorization: "Bearer " + token
+        authorization: "Bearer " + token
     }
 };
+
 final Client zoomClient = check new Client(config, serviceUrl);
 
-final string testUserId = "test-user-123";
 final string testScheduleId = "test-schedule-456";
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
 }
 isolated function testGetSchedulerAnalytics() returns error? {
-    map<string|string[]> headers = {};
-    
-    InlineResponse200 response = check zoomClient->/scheduler/analytics.get(headers, 
-        userId = userId
-    );
+    InlineResponse200 response = check zoomClient->/analytics.get(userId = userId);
     test:assertTrue(response.lastNDays !is ());
 }
 
@@ -49,61 +44,48 @@ isolated function testGetSchedulerAnalytics() returns error? {
     groups: ["live_tests", "mock_tests"]
 }
 isolated function testGetSchedulerAvailability() returns error? {
-    map<string|string[]> headers = {};
-    
-    InlineResponse2001 response = check zoomClient->/scheduler/availability.get(headers, 
-        userId = userId
-    );
+    InlineResponse2001 response = check zoomClient->/availability.get(userId = userId);
     test:assertTrue(response.items !is ());
 }
 
+// This test is enabled only for mock server, as getting a specific user by a test ID is not feasible on the live server.
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    enable: !isLiveServer,
+    groups: ["mock_tests"]
 }
 isolated function testGetSchedulerUser() returns error? {
-    map<string|string[]> headers = {};
-
-    InlineResponse2007 response = check zoomClient->/scheduler/users/[testUserId].get(headers);
+    InlineResponse2007 response = check zoomClient->/users/[userId].get();
     test:assertTrue(response.displayName !is ());
 }
 
+// This test is enabled only for mock server, as creating arbitrary schedules may not be desirable or permissible on the live server.
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    enable: !isLiveServer,
+    groups: ["mock_tests"]
 }
 isolated function testCreateSchedule() returns error? {
-    time:Utc utc = time:utcNow();
-    string scheduleSummary = "Test Schedule at " + utc.toString();
-    
     SchedulerSchedulesBody schedulePayload = {
-        summary: scheduleSummary,
+        summary: "Test Schedule",
         duration: 30,
         capacity: 1,
-        availabilityRules: [
-            {
-                email: "test@example.com",
-                timeZone: "UTC"
-            }
-        ],
+        availabilityRules: [{
+            email: "test@example.com",
+            timeZone: "UTC"
+        }],
         availabilityOverride: false
     };
 
-    map<string|string[]> headers = {};
-    
-    InlineResponse2011 response = check zoomClient->/scheduler/schedules.post(schedulePayload, headers, 
-        userId = userId
-    );
+    InlineResponse2011 response = check zoomClient->/schedules.post(payload = schedulePayload, userId = userId);
     test:assertTrue(response.scheduleId !is ());
 }
 
+// This test is enabled only for mock server, as it relies on a hardcoded, non-existent schedule ID.
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    enable: !isLiveServer,
+    groups: ["mock_tests"]
 }
 isolated function testGetSchedule() returns error? {
-    map<string|string[]> headers = {};
-    
-    InlineResponse2006 response = check zoomClient->/scheduler/schedules/[testScheduleId].get(headers, 
-        userId = userId
-    );
+    InlineResponse2006 response = check zoomClient->/schedules/[testScheduleId].get(userId = userId);
     test:assertTrue(response.summary !is ());
 }
 
@@ -111,12 +93,7 @@ isolated function testGetSchedule() returns error? {
     groups: ["live_tests", "mock_tests"]
 }
 isolated function testListSchedules() returns error? {
-    map<string|string[]> headers = {};
-    
-    InlineResponse2005 response = check zoomClient->/scheduler/schedules.get(headers, 
-        userId = userId,
-        pageSize = 10
-    );
+    InlineResponse2005 response = check zoomClient->/schedules.get(userId = userId, pageSize = 10);
     test:assertTrue(response.items !is ());
 }
 
@@ -124,39 +101,35 @@ isolated function testListSchedules() returns error? {
     groups: ["live_tests", "mock_tests"]
 }
 isolated function testGetSchedulerAnalyticsWithDateRange() returns error? {
-    map<string|string[]> headers = {};
-    
-    InlineResponse200 response = check zoomClient->/scheduler/analytics.get(headers, 
-        userId = userId,
-        'from = "2024-01-01",
-        to = "2024-12-31"
-    );
+    string fromDate = "2024-01-01";
+    string toDate = "2024-12-31";
+
+    InlineResponse200 response = check zoomClient->/analytics.get(userId = userId, 'from = fromDate, to = toDate);
     test:assertTrue(response.lastNDays !is ());
 }
 
+// This test is enabled only for mock server, as it uses a fake pagination token.
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    enable: !isLiveServer,
+    groups: ["mock_tests"]
 }
 isolated function testListSchedulesWithPagination() returns error? {
-    map<string|string[]> headers = {};
-    
-    InlineResponse2005 response = check zoomClient->/scheduler/schedules.get(headers, 
+    InlineResponse2005 response = check zoomClient->/schedules.get(
         userId = userId,
         pageSize = 5,
-        nextPageToken = "test-token"
+        nextPageToken = "test-pagination-token"
     );
     test:assertTrue(response.items !is ());
 }
 
+// This test is enabled only for mock server to validate complex payload structures.
 @test:Config {
-    groups: ["live_tests", "mock_tests"]
+    enable: !isLiveServer,
+    groups: ["mock_tests"]
 }
 isolated function testCreateScheduleWithComplexRules() returns error? {
-    time:Utc utc = time:utcNow();
-    string scheduleSummary = "Complex Schedule at " + utc.toString();
-    
     SchedulerSchedulesBody schedulePayload = {
-        summary: scheduleSummary,
+        summary: "Complex Schedule",
         duration: 60,
         capacity: 5,
         availabilityRules: [
@@ -165,17 +138,21 @@ isolated function testCreateScheduleWithComplexRules() returns error? {
                 timeZone: "UTC"
             },
             {
-                email: "user2@example.com", 
+                email: "user2@example.com",
                 timeZone: "America/Los_Angeles"
             }
         ],
-        availabilityOverride: true
+        availabilityOverride: false
     };
 
-    map<string|string[]> headers = {};
-    
-    InlineResponse2011 response = check zoomClient->/scheduler/schedules.post(schedulePayload, headers, 
-        userId = userId
-    );
+    InlineResponse2011 response = check zoomClient->/schedules.post(payload = schedulePayload, userId = userId);
     test:assertTrue(response.scheduleId !is ());
+}
+
+@test:Config {
+    groups: ["live_tests", "mock_tests"]
+}
+isolated function testListScheduledEvents() returns error? {
+    InlineResponse2003 response = check zoomClient->/events.get(userId = userId, pageSize = 10);
+    test:assertTrue(response.items !is ());
 }
