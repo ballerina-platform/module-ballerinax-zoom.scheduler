@@ -24,7 +24,7 @@ configurable string serviceUrl = isLiveServer ? "https://api.zoom.us/v2/schedule
 
 ConnectionConfig config = {
     auth: {
-        authorization: "Bearer " + token
+        token
     }
 };
 

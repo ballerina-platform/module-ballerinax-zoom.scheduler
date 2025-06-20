@@ -103,7 +103,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:read", "scheduler:read:admin", "scheduler:read:analytics", "scheduler:read:analytics:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -184,7 +184,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:read:admin", "scheduler:read", "scheduler:read:list_availability", "scheduler:read:list_availability:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -236,7 +236,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:write:admin", "scheduler:write", "scheduler:write:availability", "scheduler:write:availability:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -295,7 +295,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:read:admin", "scheduler:read", "scheduler:read:availability", "scheduler:read:availability:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -336,7 +336,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:write:admin", "scheduler:write", "scheduler:delete:availability", "scheduler:delete:availability:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -396,7 +396,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:write:admin", "scheduler:write", "scheduler:update:availability", "scheduler:update:availability:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -553,7 +553,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:read:admin", "scheduler:read", "scheduler:read:list_scheduled_events", "scheduler:read:list_scheduled_events:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -616,7 +616,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:read:admin", "scheduler:read", "scheduler:read:scheduled_event", "scheduler:read:scheduled_event:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -673,7 +673,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:write:admin", "scheduler:write", "scheduler:delete:scheduled_event", "scheduler:delete:scheduled_event:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -739,7 +739,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:write:admin", "scheduler:write", "scheduler:update:scheduled_event", "scheduler:update:scheduled_event:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -863,7 +863,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:read:admin", "scheduler:read", "scheduler:read:list_schedule", "scheduler:read:list_schedule:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -925,7 +925,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:write:admin", "scheduler:write", "scheduler:write:insert_schedule", "scheduler:write:insert_schedule:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -990,7 +990,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:read:admin", "scheduler:read", "scheduler:read:get_schedule", "scheduler:read:get_schedule:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -1049,7 +1049,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:write:admin", "scheduler:write", "scheduler:delete:delete_schedule", "scheduler:delete:delete_schedule:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -1118,7 +1118,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:write:admin", "scheduler:write", "scheduler:update:patch_schedule", "scheduler:update:patch_schedule:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -1171,7 +1171,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:write:admin", "scheduler:write", "scheduler:write:single_use_link", "scheduler:write:single_use_link:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -1225,7 +1225,7 @@
         },
         "security" : [ {
           "openapi_oauth" : [ "scheduler:read:admin", "scheduler:read", "scheduler:read:user", "scheduler:read:user:admin" ],
-          "openapi_authorization" : [ ]
+          "bearer_token" : [ ]
         } ],
         "x-extensions" : {
           "x-permissions" : [ ],
@@ -4119,11 +4119,9 @@
       }
     },
     "securitySchemes" : {
-      "openapi_authorization" : {
-        "type" : "apiKey",
-        "name" : "Authorization",
-        "in" : "header",
-        "x-ballerina-name" : "authorization"
+      "bearer_token" : {
+        "type" : "http",
+        "scheme" : "bearer"
       },
       "openapi_oauth" : {
         "type" : "oauth2",
