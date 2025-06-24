@@ -19,12 +19,20 @@ import ballerina/test;
 
 configurable boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "true";
 configurable string userId = isLiveServer ? os:getEnv("ZOOM_USER_ID") : "test-user-123";
-configurable string token = isLiveServer ? os:getEnv("ZOOM_TOKEN") : "test-token";
-configurable string serviceUrl = isLiveServer ? "https://api.zoom.us/v2/scheduler" : "http://localhost:9091";
+configurable string serviceUrl = isLiveServer ? "https://api.zoom.us/v2/scheduler" : "http://localhost:9090";
+
+configurable string clientId = isLiveServer ? os:getEnv("ZOOM_CLIENT_ID") : "test-client-id";
+configurable string clientSecret = isLiveServer ? os:getEnv("ZOOM_CLIENT_SECRET") : "test-client-secret";
+configurable string refreshToken = isLiveServer ? os:getEnv("ZOOM_REFRESH_TOKEN") : "test-refresh-token";
+configurable string refreshUrl = isLiveServer ? os:getEnv("ZOOM_REFRESH_URL") : "https://zoom.us/oauth/token";
+
 
 ConnectionConfig config = {
     auth: {
-        token
+        clientId,
+        clientSecret,
+        refreshUrl,
+        refreshToken
     }
 };
 
