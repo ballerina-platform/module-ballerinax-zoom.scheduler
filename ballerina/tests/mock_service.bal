@@ -17,7 +17,7 @@
 import ballerina/http;
 import ballerina/log;
 
-listener http:Listener httpListener = new (9091);
+listener http:Listener httpListener = new (9090);
 
 http:Service mockService = service object {
 
