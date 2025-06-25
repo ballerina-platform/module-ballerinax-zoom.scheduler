@@ -26,7 +26,6 @@ configurable string clientSecret = isLiveServer ? os:getEnv("ZOOM_CLIENT_SECRET"
 configurable string refreshToken = isLiveServer ? os:getEnv("ZOOM_REFRESH_TOKEN") : "test-refresh-token";
 configurable string refreshUrl = isLiveServer ? os:getEnv("ZOOM_REFRESH_URL") : "https://zoom.us/oauth/token";
 
-
 ConnectionConfig config = {
     auth: {
         clientId,

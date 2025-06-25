@@ -4,7 +4,6 @@
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-zoom.scheduler.svg)](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/commits/master)
 [![GitHub Issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-library/module/zoom.scheduler.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-library/labels/module%zoom.scheduler)
 
-
 ## Overview
 
 [Zoom](https://www.zoom.com/) is a video communications platform that enables users to schedule, host, and join virtual meetings, webinars, and conferences.
@@ -14,7 +13,7 @@ The `ballerinax/zoom.scheduler` package offers APIs to connect ant interract wit
 
 ## Setup guide
 
-To use the Zoom scheduler connector, you must have access to the Zoom API through [Zoom Marketplace](https://marketplace.zoom.us/) and a project under it. If you do not have a Zoom account, you can sign up for one [here](https://zoom.us/signup#/signup).
+To use the `ballerinax/zoom.scheduler` connector, you must have access to the Zoom API through [Zoom Marketplace](https://marketplace.zoom.us/) and a project under it. If you do not have a Zoom account, you can sign up for one [here](https://zoom.us/signup#/signup).
 
 ### Step 1: Create a new app
 
@@ -22,11 +21,10 @@ To use the Zoom scheduler connector, you must have access to the Zoom API throug
 
 2. Click "Develop" → "Build App"
 
-    <img src="docs/setup/resources/zoom-marketplace.png" alt="Zoom marketplace" style="width: 70%;">
-
+     ![Zoom marketplace](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/zoom-marketplace.png)   
 3. Choose **"General App"** app type (for user authorization with refresh tokens)
 
-   <img src="docs/setup/resources/app-type.png" alt="App Type" style="width: 70%;">
+   ![App Type](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/app-type.png)
 
 4. Fill in basic information
 
@@ -36,15 +34,15 @@ To use the Zoom scheduler connector, you must have access to the Zoom API throug
    * Client ID
    * Client Secret
 
-   <img src="docs/setup/resources/app-credentials.png" alt="App Credentials" style="width: 70%;">
+   ![App Credentials](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/app-credentials.png)
 
 2. **Set Redirect URI**: Add your application's redirect URI (e.g., `http://localhost:8080/callback`)
-      <img src="docs/setup/resources/redirect-URI.png" alt="Scope" style="width: 70%;">
+      ![Redirect URI](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/redirect-URI.png)
 
 3. **Add Scopes**: Make sure your Zoom app has the necessary scopes for the Scheduler API:
    * Add `scheduler:read`, `scheduler:write` and `user:read` in the scope
 
-   <img src="docs/setup/resources/zoom-scopes.png" alt="Scope" style="width: 70%;">
+   ![Zoom Scopes](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/zoom-scopes.png)
 
 
 ### Step 3: Activate the App
@@ -52,7 +50,7 @@ To use the Zoom scheduler connector, you must have access to the Zoom API throug
 1. Complete all required information
 2. Activate the app
 
-   <img src="docs/setup/resources/activate-app.png" alt="Activate App" style="width: 70%;">
+   ![Activate App](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/activate-app.png)
 
 ### Step 4: Get User Authorization
 
@@ -85,55 +83,9 @@ curl -X GET "https://api.zoom.us/v2/users/me" \
 ```
 This will give you the user ID needed for API calls.
 
-### Step 6: Configure the Connector
-
-#### Option 1: Use Config.toml (Recommended)
-
-```toml
-isLiveServer = true
-clientId = "your_client_id"
-clientSecret = "your_client_secret"
-refreshToken = "user_refresh_token_from_step4"
-refreshUrl = "https://zoom.us/oauth/token"
-userId = "user_id_from_step5"
-```
-
-#### Option 2: Use Environment Variables
-```bash
-export IS_LIVE_SERVER="true"
-export ZOOM_CLIENT_ID="your_client_id"
-export ZOOM_CLIENT_SECRET="your_client_secret"  
-export ZOOM_REFRESH_TOKEN="user_refresh_token_from_step4"
-export ZOOM_USER_ID="user_id_from_step5"
-```
-
-### Benefits of This Setup
-
-**Long-lived tokens** - Refresh tokens don't expire like Server-to-Server tokens  
-**Automatic refresh** - Connector handles token refresh automatically  
-**User consent** - Users explicitly authorize your app  
-**Secure** - Follows OAuth2 best practices
-
-### Alternative: Server-to-Server OAuth
-
-If you prefer automated access without user interaction (tokens expire hourly):
-
-1. Choose **"Server-to-Server OAuth"** in Step 1
-2. Use account credentials grant:
-```curl
-curl -X POST https://zoom.us/oauth/token \
-  -H "Authorization: Basic $(echo -n 'CLIENT_ID:CLIENT_SECRET' | base64)" \
-  -d "grant_type=account_credentials&account_id=ACCOUNT_ID"
-```
-3. Configure with bearer token:
-```toml
-isLiveServer = true
-token = "your_access_token"
-userId = "your_user_id"
-```
 ## Quickstart
 
-To use the `Zoom` connector in your Ballerina application, update the `.bal` file as follows:
+To use the `ballerinax/zoom.scheduler` connector in your Ballerina application, update the `.bal` file as follows:
 
 ### Step 1: Import the module
 
@@ -166,10 +118,19 @@ final zoom.scheduler:Client zoom.scheduler = check new({
 
 Now, utilize the available connector operations.
 
-#### Schedule a meeting
+#### Create a schedule
 
 ```ballerina
-<!-- to do -->
+public function main() returns error? {
+    zoom.scheduler:InlineResponse2011 schedule = check zoom.scheduler->/schedules.post(
+        payload = {
+            summary: "Team Meeting",
+            description: "Weekly team sync",
+            duration: 60
+        }
+    );
+    io:println("Schedule created with ID: ", schedule.scheduleId);
+}
 ```
 
 ### Step 4: Run the Ballerina application
