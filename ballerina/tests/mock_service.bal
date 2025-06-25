@@ -30,35 +30,35 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns the scheduler analytics.)
     # http:Response (The request has failed.)
-    resource function get analytics(string? user_id, string? 'from, string? to, string? time_zone) returns json|http:Response {
+    resource function get analytics(string? user_id, string? 'from, string? to, string? time_zone) returns InlineResponse200|http:Response {
         return {
-            "last_n_days": {
-                "scheduled_events_created": 10,
-                "scheduled_events_completed": 7,
-                "scheduled_events_canceled": 1,
-                "scheduled_events_rescheduled": 1,
-                "schedules_created": 5,
-                "schedules_canceled": 0,
-                "one_to_one": 3,
-                "one_to_many": 2,
-                "any_host_available": 5,
-                "all_host_available": 3,
-                "one_off_meeting": 1,
-                "meeting_poll": 0
+            lastNDays: {
+                scheduledEventsCreated: 10,
+                scheduledEventsCompleted: 7,
+                scheduledEventsCanceled: 1,
+                scheduledEventsRescheduled: 1,
+                schedulesCreated: 5,
+                schedulesCanceled: 0,
+                oneToOne: 3,
+                oneToMany: 2,
+                anyHostAvailable: 5,
+                allHostAvailable: 3,
+                oneOffMeeting: 1,
+                meetingPoll: 0
             },
-            "previous_period": {
-                "scheduled_events_created": 8,
-                "scheduled_events_completed": 6,
-                "scheduled_events_canceled": 0,
-                "scheduled_events_rescheduled": 2,
-                "schedules_created": 3,
-                "schedules_canceled": 1,
-                "one_to_one": 6,
-                "one_to_many": 2,
-                "any_host_available": 4,
-                "all_host_available": 2,
-                "one_off_meeting": 0,
-                "meeting_poll": 1
+            previousPeriod: {
+                scheduledEventsCreated: 8,
+                scheduledEventsCompleted: 6,
+                scheduledEventsCanceled: 0,
+                scheduledEventsRescheduled: 2,
+                schedulesCreated: 3,
+                schedulesCanceled: 1,
+                oneToOne: 6,
+                oneToMany: 2,
+                anyHostAvailable: 4,
+                allHostAvailable: 2,
+                oneOffMeeting: 0,
+                meetingPoll: 1
             }
         };
     }
@@ -71,15 +71,15 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Ok (Successful availability of the schedule query result.)
     # http:Response (The request has failed.)
-    resource function get availability(int? page_size, string? next_page_token, string? user_id) returns json|http:Response {
+    resource function get availability(int? page_size, string? next_page_token, string? user_id) returns InlineResponse2001|http:Response {
         return {
-            "items": [
+            items: [
                 {
-                    "owner": "test-owner@example.com",
-                    "default": true,
-                    "name": "Working Hours",
-                    "availability_id": "avail-123",
-                    "time_zone": "UTC"
+                    owner: "test-owner@example.com",
+                    default: true,
+                    name: "Working Hours",
+                    availabilityId: "avail-123",
+                    timeZone: "UTC"
                 }
             ]
         };
@@ -91,13 +91,13 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns an availability resource.)
     # http:Response (The request has failed.)
-    resource function get availability/[string availabilityId]() returns json|http:Response {
+    resource function get availability/[string availabilityId]() returns InlineResponse2002|http:Response {
         return {
-            "owner": "test-owner@example.com",
-            "default": true,
-            "name": "Working Hours",
-            "availability_id": availabilityId,
-            "time_zone": "UTC"
+            owner: "test-owner@example.com",
+            default: true,
+            name: "Working Hours",
+            availabilityId: availabilityId,
+            timeZone: "UTC"
         };
     }
 
@@ -119,7 +119,7 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:NoContent (If successful, this method returns an empty response body.)
     # http:Response (The request has failed.)
-    resource function patch availability/[string availabilityId](@http:Payload json payload) returns http:Response {
+    resource function patch availability/[string availabilityId](@http:Payload AvailabilityavailabilityIdBody payload) returns http:Response {
         http:Response response = new;
         response.statusCode = 204;
         return response;
@@ -130,13 +130,13 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Created (If successful, this method returns an availability resource.)
     # http:Response (The request has failed.)
-    resource function post availability(@http:Payload json payload) returns json|http:Response {
+    resource function post availability(@http:Payload SchedulerAvailabilityBody payload) returns InlineResponse201|http:Response {
         return {
-            "owner": "test-owner@example.com",
-            "default": true,
-            "name": "New Working Hours",
-            "availability_id": "avail-new-123",
-            "time_zone": "UTC"
+            owner: "test-owner@example.com",
+            default: true,
+            name: "New Working Hours",
+            availabilityId: "avail-new-123",
+            timeZone: "UTC"
         };
     }
 
@@ -155,17 +155,17 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns scheduled events.)
     # http:Response (The request has failed.)
-    resource function get events(string? to, string? 'from, int? page_size, string? order_by, string? time_zone, string? next_page_token, boolean? show_deleted, string? event_type, string? user_id, string? search) returns json|http:Response {
+    resource function get events(string? to, string? 'from, int? page_size, string? order_by, string? time_zone, string? next_page_token, boolean? show_deleted, string? event_type, string? user_id, string? search) returns InlineResponse2003|http:Response {
         return {
-            "items": [
+            items: [
                 {
-                    "event_id": "event-123",
-                    "summary": "Test Meeting",
-                    "description": "A test meeting",
-                    "start_date_time": "2024-06-15T10:00:00Z",
-                    "end_date_time": "2024-06-15T11:00:00Z",
-                    "status": "confirmed",
-                    "schedule_id": "schedule-456"
+                    eventId: "event-123",
+                    summary: "Test Meeting",
+                    description: "A test meeting",
+                    startDateTime: "2024-06-15T10:00:00Z",
+                    endDateTime: "2024-06-15T11:00:00Z",
+                    status: "confirmed",
+                    scheduleId: "schedule-456"
                 }
             ]
         };
@@ -178,15 +178,15 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns the scheduled event resource.)
     # http:Response (The request has failed.)
-    resource function get events/[string eventId](string? user_id) returns json|http:Response {
+    resource function get events/[string eventId](string? user_id) returns InlineResponse2004|http:Response {
         return {
-            "event_id": eventId,
-            "summary": "Test Meeting",
-            "description": "A test meeting",
-            "start_date_time": "2024-06-15T10:00:00Z",
-            "end_date_time": "2024-06-15T11:00:00Z",
-            "status": "confirmed",
-            "schedule_id": "schedule-456"
+            eventId: eventId,
+            summary: "Test Meeting",
+            description: "A test meeting",
+            startDateTime: "2024-06-15T10:00:00Z",
+            endDateTime: "2024-06-15T11:00:00Z",
+            status: "confirmed",
+            scheduleId: "schedule-456"
         };
     }
 
@@ -210,7 +210,7 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:NoContent (If successful, this method returns an event resource.)
     # http:Response (The request has failed.)
-    resource function patch events/[string eventId](@http:Payload json payload, string? user_id) returns http:Response {
+    resource function patch events/[string eventId](@http:Payload EventseventIdBody payload, string? user_id) returns http:Response {
         http:Response response = new;
         response.statusCode = 204;
         return response;
@@ -228,18 +228,18 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns schedules.)
     # http:Response (The request has failed.)
-    resource function get schedules(string? to, string? 'from, int? page_size, string? next_page_token, boolean? show_deleted, string? time_zone, string? user_id) returns json|http:Response {
+    resource function get schedules(string? to, string? 'from, int? page_size, string? next_page_token, boolean? show_deleted, string? time_zone, string? user_id) returns InlineResponse2005|http:Response {
         return {
-            "items": [
+            items: [
                 {
-                    "schedule_id": "schedule-456",
-                    "summary": "Test Schedule",
-                    "description": "A test schedule",
-                    "duration": 30,
-                    "capacity": 1,
-                    "active": true,
-                    "status": "confirmed",
-                    "availability_override": false
+                    scheduleId: "schedule-456",
+                    summary: "Test Schedule",
+                    description: "A test schedule",
+                    duration: 30,
+                    capacity: 1,
+                    active: true,
+                    status: "confirmed",
+                    availabilityOverride: false
                 }
             ]
         };
@@ -251,17 +251,16 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Created (If successful, this method returns a schedule resource.)
     # http:Response (The request has failed.)
-    resource function post schedules(@http:Payload json payload, string? user_id) returns json|http:Response {
-        json schedulePayload = payload;
-        return <json>{
-            "schedule_id": "schedule-new-789",
-            "summary": schedulePayload is map<json> && schedulePayload.hasKey("summary") ? schedulePayload["summary"] : "Default Summary",
-            "description": schedulePayload is map<json> && schedulePayload.hasKey("description") ? schedulePayload["description"] : "Default description",
-            "duration": schedulePayload is map<json> && schedulePayload.hasKey("duration") ? schedulePayload["duration"] : 30,
-            "capacity": schedulePayload is map<json> && schedulePayload.hasKey("capacity") ? schedulePayload["capacity"] : 1,
-            "active": schedulePayload is map<json> && schedulePayload.hasKey("active") ? schedulePayload["active"] : true,
-            "availability_override": schedulePayload is map<json> && schedulePayload.hasKey("availability_override") ? schedulePayload["availability_override"] : false,
-            "status": "confirmed"
+    resource function post schedules(@http:Payload SchedulerSchedulesBody payload, string? user_id) returns InlineResponse2011|http:Response {
+        return {
+            scheduleId: "schedule-new-789",
+            summary: payload.summary ?: "Default Summary",
+            description: payload.description ?: "Default description",
+            duration: payload.duration ?: 30,
+            capacity: payload.capacity,
+            active: payload.active ?: true,
+            availabilityOverride: payload.availabilityOverride,
+            status: "confirmed"
         };
     }
 
@@ -272,16 +271,16 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns a schedule resource.)
     # http:Response (The request has failed.)
-    resource function get schedules/[string scheduleId](string? user_id) returns json|http:Response {
+    resource function get schedules/[string scheduleId](string? user_id) returns InlineResponse2006|http:Response {
         return {
-            "schedule_id": scheduleId,
-            "summary": "Test Schedule",
-            "description": "A test schedule",
-            "duration": 30,
-            "capacity": 1,
-            "active": true,
-            "status": "confirmed",
-            "availability_override": false
+            scheduleId: scheduleId,
+            summary: "Test Schedule",
+            description: "A test schedule",
+            duration: 30,
+            capacity: 1,
+            active: true,
+            status: "confirmed",
+            availabilityOverride: false
         };
     }
 
@@ -305,7 +304,7 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:NoContent (If successful, this method returns an empty response body.)
     # http:Response (The request has failed.)
-    resource function patch schedules/[string scheduleId](@http:Payload json payload, string? user_id) returns http:Response {
+    resource function patch schedules/[string scheduleId](@http:Payload SchedulesscheduleIdBody payload, string? user_id) returns http:Response {
         http:Response response = new;
         response.statusCode = 204;
         return response;
@@ -316,12 +315,9 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Created (If successful, this method returns a scheduling link URL.)
     # http:Response (The request has failed.)
-    resource function post schedules/single_use_link(@http:Payload json payload) returns json|http:Response {
-        json schedulePayload = payload;
-        string scheduleId = schedulePayload is map<json> && schedulePayload.hasKey("schedule_id") && schedulePayload["schedule_id"] is string
-            ? <string>schedulePayload["schedule_id"] : "default-id";
-        return <json>{
-            "scheduling_url": "https://scheduler.zoom.us/single-use/" + scheduleId
+    resource function post schedules/single_use_link(@http:Payload SchedulesSingleUseLinkBody payload) returns InlineResponse2012|http:Response {
+        return {
+            schedulingUrl: "https://scheduler.zoom.us/single-use/" + payload.scheduleId
         };
     }
 
@@ -331,12 +327,12 @@ http:Service mockService = service object {
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns user information.)
     # http:Response (The request has failed.)
-    resource function get users/[string userId]() returns json|http:Response {
+    resource function get users/[string userId]() returns InlineResponse2007|http:Response {
         return {
-            "display_name": "Test User",
-            "scheduling_url": "https://scheduler.zoom.us/test-user",
-            "time_zone": "UTC",
-            "slug": "test-user"
+            displayName: "Test User",
+            schedulingUrl: "https://scheduler.zoom.us/test-user",
+            timeZone: "UTC",
+            slug: "test-user"
         };
     }
 };
