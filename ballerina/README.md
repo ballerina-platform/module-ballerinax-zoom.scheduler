@@ -4,9 +4,7 @@
 
 The `ballerinax/zoom.scheduler` package offers APIs to connect ant interract with [Zoom Scheduler](https://developers.zoom.us/docs/api/scheduler) endpoints. specifically based on Zoom API v2.
 
-
 ## Setup guide
-
 
 To use the Zoom scheduler connector, you must have access to the Zoom API through [Zoom Marketplace](https://marketplace.zoom.us/) and a project under it. If you do not have a Zoom account, you can sign up for one [here](https://zoom.us/signup#/signup).
 
@@ -40,7 +38,6 @@ To use the Zoom scheduler connector, you must have access to the Zoom API throug
 
    <img src="docs/setup/resources/zoom-scopes.png" alt="Scope" style="width: 70%;">
 
-
 ### Step 3: Activate the App
 
 1. Complete all required information
@@ -58,6 +55,7 @@ https://zoom.us/oauth/authorize?response_type=code&client_id=YOUR_CLIENT_ID&redi
 2. **User authorizes the app** and gets redirected to your callback URL with an authorization code
 
 3. **Exchange authorization code for tokens**:
+
 ```curl
 curl -X POST https://zoom.us/oauth/token \
   -H "Authorization: Basic $(echo -n 'CLIENT_ID:CLIENT_SECRET' | base64)" \
@@ -73,62 +71,16 @@ This returns both `access_token` and `refresh_token`.
    * `YOUR_REDIRECT_URI` with your configured redirect URI
 
 ### Step 5: Verify Your Setup
+
 ```curl
 curl -X GET "https://api.zoom.us/v2/users/me" \
   -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 This will give you the user ID needed for API calls.
 
-### Step 6: Configure the Connector
-
-#### Option 1: Use Config.toml (Recommended)
-
-```toml
-isLiveServer = true
-clientId = "your_client_id"
-clientSecret = "your_client_secret"
-refreshToken = "user_refresh_token_from_step4"
-refreshUrl = "https://zoom.us/oauth/token"
-userId = "user_id_from_step5"
-```
-
-#### Option 2: Use Environment Variables
-```bash
-export IS_LIVE_SERVER="true"
-export ZOOM_CLIENT_ID="your_client_id"
-export ZOOM_CLIENT_SECRET="your_client_secret"  
-export ZOOM_REFRESH_TOKEN="user_refresh_token_from_step4"
-export ZOOM_USER_ID="user_id_from_step5"
-```
-
-### Benefits of This Setup
-
-**Long-lived tokens** - Refresh tokens don't expire like Server-to-Server tokens  
-**Automatic refresh** - Connector handles token refresh automatically  
-**User consent** - Users explicitly authorize your app  
-**Secure** - Follows OAuth2 best practices
-
-### Alternative: Server-to-Server OAuth
-
-If you prefer automated access without user interaction (tokens expire hourly):
-
-1. Choose **"Server-to-Server OAuth"** in Step 1
-2. Use account credentials grant:
-```curl
-curl -X POST https://zoom.us/oauth/token \
-  -H "Authorization: Basic $(echo -n 'CLIENT_ID:CLIENT_SECRET' | base64)" \
-  -d "grant_type=account_credentials&account_id=ACCOUNT_ID"
-```
-3. Configure with bearer token:
-```toml
-isLiveServer = true
-token = "your_access_token"
-userId = "your_user_id"
-```
-
 ## Quickstart
 
-To use the `Zoom` connector in your Ballerina application, update the `.bal` file as follows:
+To use the `ballerinax/zoom.scheduler` connector in your Ballerina application, update the `.bal` file as follows:
 
 ### Step 1: Import the module
 
@@ -157,14 +109,24 @@ final zoom.scheduler:Client zoom.scheduler = check new({
     }
 });
 ```
+
 ### Step 3: Invoke the connector operation
 
 Now, utilize the available connector operations.
 
-#### Schedule a meeting
+#### Create a schedule
 
 ```ballerina
-<!-- to do -->
+public function main() returns error? {
+    zoom.scheduler:InlineResponse2011 schedule = check zoom.scheduler->/schedules.post(
+        payload = {
+            summary: "Team Meeting",
+            description: "Weekly team sync",
+            duration: 60
+        }
+    );
+    io:println("Schedule created with ID: ", schedule.scheduleId);
+}
 ```
 
 ### Step 4: Run the Ballerina application
