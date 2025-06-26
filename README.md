@@ -100,7 +100,10 @@ import ballerinax/zoom.scheduler;
 1. Create a `Config.toml` file and, configure the obtained credentials in the above steps as follows:
 
 ```bash
-token = "<Refresh Token>"
+clientId = "<Client ID>"
+clientSecret = "<ClientS Secret>"
+refreshToken = "<Refresh Token>"
+userId = "<Zoom User ID>"
 ```
 
 2. Create a `zoom.scheduler:ConnectionConfig` with the obtained access token and initialize the connector with it.
