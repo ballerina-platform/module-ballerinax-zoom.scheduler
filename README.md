@@ -20,7 +20,8 @@ To use the `ballerinax/zoom.scheduler` connector, you must have access to the Zo
 
 2. Click "Develop" → "Build App"
 
-     ![Zoom marketplace](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/zoom-marketplace.png)   
+   ![Zoom marketplace](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/zoom-marketplace.png)   
+
 3. Choose **"General App"** app type (for user authorization with refresh tokens)
 
    ![App Type](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/app-type.png)
@@ -36,7 +37,8 @@ To use the `ballerinax/zoom.scheduler` connector, you must have access to the Zo
    ![App Credentials](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/app-credentials.png)
 
 2. **Set Redirect URI**: Add your application's redirect URI (e.g., `http://localhost:8080/callback`)
-      ![Redirect URI](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/redirect-URI.png)
+   
+   ![Redirect URI](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/redirect-URI.png)
 
 3. **Add Scopes**: Make sure your Zoom app has the necessary scopes for the Scheduler API:
    * Add `scheduler:read`, `scheduler:write` and `user:read` in the scope
@@ -98,17 +100,23 @@ import ballerinax/zoom.scheduler;
 1. Create a `Config.toml` file and, configure the obtained credentials in the above steps as follows:
 
 ```bash
-token = "<Access Token>"
+token = "<Refresh Token>"
 ```
 
 2. Create a `zoom.scheduler:ConnectionConfig` with the obtained access token and initialize the connector with it.
 
 ```ballerina
-configurable string token = ?;
+configurable string clientId = ?;
+configurable string clientSecret = ?;
+configurable string refreshToken = ?;
+configurable string userId = ?;
 
-final zoom.scheduler:Client zoom.scheduler = check new({
+final scheduler:Client zoomClient = check new ({
     auth: {
-        token
+        clientId,
+        clientSecret,
+        refreshUrl: "https://zoom.us/oauth/token",
+        refreshToken
     }
 });
 ```

@@ -14,7 +14,7 @@ To use the Zoom scheduler connector, you must have access to the Zoom API throug
 
 2. Click "Develop" → "Build App"
 
-    ![Zoom marketplace](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/zoom-marketplace.png)
+   ![Zoom marketplace](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/zoom-marketplace.png)
 
 3. Choose **"General App"** app type (for user authorization with refresh tokens)
 
@@ -24,14 +24,15 @@ To use the Zoom scheduler connector, you must have access to the Zoom API throug
 
 ### Step 2: Configure OAuth Settings
 
-3. **Note down your credentials**:
-   * Client ID
-   * Client Secret
-
-   ![App Credentials](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/app-credentials.png)
+1. **Note down your credentials**:
+   * Client ID/main/docs/setup/resources/app-credentials.png)
 
 2. **Set Redirect URI**: Add your application's redirect URI (e.g., `http://localhost:8080/callback`)
-      ![Redirect URI](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/redirect-URI.png)
+
+   ![Redirect URI](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/hea
+   * Client Secret
+
+   ![App Credentials](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/headsds/main/docs/setup/resources/redirect-URI.png)
 
 3. **Add Scopes**: Make sure your Zoom app has the necessary scopes for the Scheduler API:
    * Add `scheduler:read`, `scheduler:write` and `user:read` in the scope
@@ -64,11 +65,11 @@ curl -X POST https://zoom.us/oauth/token \
 
 This returns both `access_token` and `refresh_token`.
 
-* Replace:
-   * `CLIENT_ID` with your app's Client ID
-   * `CLIENT_SECRET` with your app's Client Secret
-   * `AUTHORIZATION_CODE` with the code received from the callback
-   * `YOUR_REDIRECT_URI` with your configured redirect URI
+Replace:
+* `CLIENT_ID` with your app's Client ID
+* `CLIENT_SECRET` with your app's Client Secret
+* `AUTHORIZATION_CODE` with the code received from the callback
+* `YOUR_REDIRECT_URI` with your configured redirect URI
 
 ### Step 5: Verify Your Setup
 
@@ -95,17 +96,23 @@ import ballerinax/zoom.scheduler;
 1. Create a `Config.toml` file and, configure the obtained credentials in the above steps as follows:
 
 ```bash
-token = "<Access Token>"
+token = "<Refresh Token>"
 ```
 
 2. Create a `zoom.scheduler:ConnectionConfig` with the obtained access token and initialize the connector with it.
 
 ```ballerina
-configurable string token = ?;
+configurable string clientId = ?;
+configurable string clientSecret = ?;
+configurable string refreshToken = ?;
+configurable string userId = ?;
 
-final zoom.scheduler:Client zoom.scheduler = check new({
+final scheduler:Client zoomClient = check new ({
     auth: {
-        token
+        clientId,
+        clientSecret,
+        refreshUrl: "https://zoom.us/oauth/token",
+        refreshToken
     }
 });
 ```

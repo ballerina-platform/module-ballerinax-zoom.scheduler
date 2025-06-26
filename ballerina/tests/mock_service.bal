@@ -29,8 +29,8 @@ http:Service mockService = service object {
     # + time_zone - The time zone in the response
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns the scheduler analytics.)
-    # http:Response (The request has failed.)
-    resource function get analytics(string? user_id, string? 'from, string? to, string? time_zone) returns InlineResponse200|http:Response {
+    # error (The request has failed.)
+    resource function get analytics(string? user_id, string? 'from, string? to, string? time_zone) returns InlineResponse200|error {
         return {
             lastNDays: {
                 scheduledEventsCreated: 10,
@@ -70,8 +70,8 @@ http:Service mockService = service object {
     # + user_id - The return of the specific user's availability
     # + return - returns can be any of following types
     # http:Ok (Successful availability of the schedule query result.)
-    # http:Response (The request has failed.)
-    resource function get availability(int? page_size, string? next_page_token, string? user_id) returns InlineResponse2001|http:Response {
+    # error (The request has failed.)
+    resource function get availability(int? page_size, string? next_page_token, string? user_id) returns InlineResponse2001|error {
         return {
             items: [
                 {
@@ -90,8 +90,8 @@ http:Service mockService = service object {
     # + availabilityId - The UUID of the availability schedule.
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns an availability resource.)
-    # http:Response (The request has failed.)
-    resource function get availability/[string availabilityId]() returns InlineResponse2002|http:Response {
+    # error (The request has failed.)
+    resource function get availability/[string availabilityId]() returns InlineResponse2002|error {
         return {
             owner: "test-owner@example.com",
             default: true,
@@ -106,11 +106,9 @@ http:Service mockService = service object {
     # + availabilityId - The UUID of the availability schedule.
     # + return - returns can be any of following types
     # http:NoContent (If successful, this method returns an empty response body.)
-    # http:Response (The request has failed.)
-    resource function delete availability/[string availabilityId]() returns http:Response {
-        http:Response response = new;
-        response.statusCode = 204;
-        return response;
+    # error (The request has failed.)
+    resource function delete availability/[string availabilityId]() returns error? {
+        return;
     }
 
     # Patch availability
@@ -118,19 +116,17 @@ http:Service mockService = service object {
     # + availabilityId - The UUID of the availability schedule.
     # + return - returns can be any of following types
     # http:NoContent (If successful, this method returns an empty response body.)
-    # http:Response (The request has failed.)
-    resource function patch availability/[string availabilityId](@http:Payload AvailabilityavailabilityIdBody payload) returns http:Response {
-        http:Response response = new;
-        response.statusCode = 204;
-        return response;
+    # error (The request has failed.)
+    resource function patch availability/[string availabilityId](@http:Payload AvailabilityavailabilityIdBody payload) returns error? {
+        return;
     }
 
     # Insert availability
     #
     # + return - returns can be any of following types
     # http:Created (If successful, this method returns an availability resource.)
-    # http:Response (The request has failed.)
-    resource function post availability(@http:Payload SchedulerAvailabilityBody payload) returns InlineResponse201|http:Response {
+    # error (The request has failed.)
+    resource function post availability(@http:Payload SchedulerAvailabilityBody payload) returns InlineResponse201|error {
         return {
             owner: "test-owner@example.com",
             default: true,
@@ -154,8 +150,8 @@ http:Service mockService = service object {
     # + search - Search term
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns scheduled events.)
-    # http:Response (The request has failed.)
-    resource function get events(string? to, string? 'from, int? page_size, string? order_by, string? time_zone, string? next_page_token, boolean? show_deleted, string? event_type, string? user_id, string? search) returns InlineResponse2003|http:Response {
+    # error (The request has failed.)
+    resource function get events(string? to, string? 'from, int? page_size, string? order_by, string? time_zone, string? next_page_token, boolean? show_deleted, string? event_type, string? user_id, string? search) returns InlineResponse2003|error {
         return {
             items: [
                 {
@@ -177,8 +173,8 @@ http:Service mockService = service object {
     # + user_id - User ID query parameter
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns the scheduled event resource.)
-    # http:Response (The request has failed.)
-    resource function get events/[string eventId](string? user_id) returns InlineResponse2004|http:Response {
+    # error (The request has failed.)
+    resource function get events/[string eventId](string? user_id) returns InlineResponse2004|error {
         return {
             eventId: eventId,
             summary: "Test Meeting",
@@ -196,11 +192,9 @@ http:Service mockService = service object {
     # + user_id - User ID query parameter
     # + return - returns can be any of following types
     # http:NoContent (If successful, this method returns an empty response body.)
-    # http:Response (The request has failed.)
-    resource function delete events/[string eventId](string? user_id) returns http:Response {
-        http:Response response = new;
-        response.statusCode = 204;
-        return response;
+    # error (The request has failed.)
+    resource function delete events/[string eventId](string? user_id) returns error? {
+        return;
     }
 
     # Patch scheduled events
@@ -209,11 +203,9 @@ http:Service mockService = service object {
     # + user_id - User ID query parameter
     # + return - returns can be any of following types
     # http:NoContent (If successful, this method returns an event resource.)
-    # http:Response (The request has failed.)
-    resource function patch events/[string eventId](@http:Payload EventseventIdBody payload, string? user_id) returns http:Response {
-        http:Response response = new;
-        response.statusCode = 204;
-        return response;
+    # error (The request has failed.)
+    resource function patch events/[string eventId](@http:Payload EventseventIdBody payload, string? user_id) returns error? {
+        return;
     }
 
     # List schedules
@@ -227,8 +219,8 @@ http:Service mockService = service object {
     # + user_id - The specific user's schedules
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns schedules.)
-    # http:Response (The request has failed.)
-    resource function get schedules(string? to, string? 'from, int? page_size, string? next_page_token, boolean? show_deleted, string? time_zone, string? user_id) returns InlineResponse2005|http:Response {
+    # error (The request has failed.)
+    resource function get schedules(string? to, string? 'from, int? page_size, string? next_page_token, boolean? show_deleted, string? time_zone, string? user_id) returns InlineResponse2005|error {
         return {
             items: [
                 {
@@ -250,8 +242,8 @@ http:Service mockService = service object {
     # + user_id - User ID query parameter
     # + return - returns can be any of following types
     # http:Created (If successful, this method returns a schedule resource.)
-    # http:Response (The request has failed.)
-    resource function post schedules(@http:Payload SchedulerSchedulesBody payload, string? user_id) returns InlineResponse2011|http:Response {
+    # error (The request has failed.)
+    resource function post schedules(@http:Payload SchedulerSchedulesBody payload, string? user_id) returns InlineResponse2011|error {
         return {
             scheduleId: "schedule-new-789",
             summary: payload.summary ?: "Default Summary",
@@ -270,8 +262,8 @@ http:Service mockService = service object {
     # + user_id - User ID query parameter
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns a schedule resource.)
-    # http:Response (The request has failed.)
-    resource function get schedules/[string scheduleId](string? user_id) returns InlineResponse2006|http:Response {
+    # error (The request has failed.)
+    resource function get schedules/[string scheduleId](string? user_id) returns InlineResponse2006|error {
         return {
             scheduleId: scheduleId,
             summary: "Test Schedule",
@@ -290,11 +282,9 @@ http:Service mockService = service object {
     # + user_id - User ID query parameter
     # + return - returns can be any of following types
     # http:NoContent (If successful, this method returns an empty response body.)
-    # http:Response (The request has failed.)
-    resource function delete schedules/[string scheduleId](string? user_id) returns http:Response {
-        http:Response response = new;
-        response.statusCode = 204;
-        return response;
+    # error (The request has failed.)
+    resource function delete schedules/[string scheduleId](string? user_id) returns error? {
+        return;
     }
 
     # Patch schedules
@@ -303,19 +293,17 @@ http:Service mockService = service object {
     # + user_id - User ID query parameter
     # + return - returns can be any of following types
     # http:NoContent (If successful, this method returns an empty response body.)
-    # http:Response (The request has failed.)
-    resource function patch schedules/[string scheduleId](@http:Payload SchedulesscheduleIdBody payload, string? user_id) returns http:Response {
-        http:Response response = new;
-        response.statusCode = 204;
-        return response;
+    # error (The request has failed.)
+    resource function patch schedules/[string scheduleId](@http:Payload SchedulesscheduleIdBody payload, string? user_id) returns error? {
+        return;
     }
 
     # Single use link
     #
     # + return - returns can be any of following types
     # http:Created (If successful, this method returns a scheduling link URL.)
-    # http:Response (The request has failed.)
-    resource function post schedules/single_use_link(@http:Payload SchedulesSingleUseLinkBody payload) returns InlineResponse2012|http:Response {
+    # error (The request has failed.)
+    resource function post schedules/single_use_link(@http:Payload SchedulesSingleUseLinkBody payload) returns InlineResponse2012|error {
         return {
             schedulingUrl: "https://scheduler.zoom.us/single-use/" + payload.scheduleId
         };
@@ -326,8 +314,8 @@ http:Service mockService = service object {
     # + userId - The user ID
     # + return - returns can be any of following types
     # http:Ok (If successful, this method returns user information.)
-    # http:Response (The request has failed.)
-    resource function get users/[string userId]() returns InlineResponse2007|http:Response {
+    # error (The request has failed.)
+    resource function get users/[string userId]() returns InlineResponse2007|error {
         return {
             displayName: "Test User",
             schedulingUrl: "https://scheduler.zoom.us/test-user",
