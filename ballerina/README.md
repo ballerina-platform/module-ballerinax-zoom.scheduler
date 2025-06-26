@@ -14,11 +14,11 @@ To use the Zoom scheduler connector, you must have access to the Zoom API throug
 
 2. Click "Develop" → "Build App"
 
-    <img src="docs/setup/resources/zoom-marketplace.png" alt="Zoom marketplace" style="width: 70%;">
+    ![Zoom marketplace](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/zoom-marketplace.png)
 
 3. Choose **"General App"** app type (for user authorization with refresh tokens)
 
-   <img src="docs/setup/resources/app-type.png" alt="App Type" style="width: 70%;">
+   ![App Type](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/app-type.png)
 
 4. Fill in basic information
 
@@ -28,22 +28,22 @@ To use the Zoom scheduler connector, you must have access to the Zoom API throug
    * Client ID
    * Client Secret
 
-   <img src="docs/setup/resources/app-credentials.png" alt="App Credentials" style="width: 70%;">
+   ![App Credentials](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/app-credentials.png)
 
 2. **Set Redirect URI**: Add your application's redirect URI (e.g., `http://localhost:8080/callback`)
-      <img src="docs/setup/resources/redirect-URI.png" alt="Scope" style="width: 70%;">
+      ![Redirect URI](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/redirect-URI.png)
 
 3. **Add Scopes**: Make sure your Zoom app has the necessary scopes for the Scheduler API:
    * Add `scheduler:read`, `scheduler:write` and `user:read` in the scope
 
-   <img src="docs/setup/resources/zoom-scopes.png" alt="Scope" style="width: 70%;">
+   ![Zoom Scopes](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/zoom-scopes.png)
 
 ### Step 3: Activate the App
 
 1. Complete all required information
 2. Activate the app
 
-   <img src="docs/setup/resources/activate-app.png" alt="Activate App" style="width: 70%;">
+   ![Activate App](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/activate-app.png)
 
 ### Step 4: Get User Authorization
 

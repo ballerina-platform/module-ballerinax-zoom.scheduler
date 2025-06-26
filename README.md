@@ -43,7 +43,6 @@ To use the `ballerinax/zoom.scheduler` connector, you must have access to the Zo
 
    ![Zoom Scopes](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/zoom-scopes.png)
 
-
 ### Step 3: Activate the App
 
 1. Complete all required information
