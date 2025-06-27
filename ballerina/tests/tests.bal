@@ -14,17 +14,16 @@
 // specific language governing permissions and limitations
 // under the License.
 
-import ballerina/os;
 import ballerina/test;
 
-configurable boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "true";
-configurable string userId = isLiveServer ? os:getEnv("ZOOM_USER_ID") : "test-user-123";
-configurable string serviceUrl = isLiveServer ? "https://api.zoom.us/v2/scheduler" : "http://localhost:9090";
+configurable boolean isLiveServer = false;
+configurable string userId = "test-user-123";
+configurable string serviceUrl = "http://localhost:9090";
 
-configurable string clientId = isLiveServer ? os:getEnv("ZOOM_CLIENT_ID") : "test-client-id";
-configurable string clientSecret = isLiveServer ? os:getEnv("ZOOM_CLIENT_SECRET") : "test-client-secret";
-configurable string refreshToken = isLiveServer ? os:getEnv("ZOOM_REFRESH_TOKEN") : "test-refresh-token";
-configurable string refreshUrl = isLiveServer ? os:getEnv("ZOOM_REFRESH_URL") : "https://zoom.us/oauth/token";
+configurable string clientId = "test-client-id";
+configurable string clientSecret = "test-client-secret";
+configurable string refreshToken = "test-refresh-token";
+configurable string refreshUrl = "http://localhost:9444/token";
 
 ConnectionConfig config = {
     auth: {
@@ -35,42 +34,69 @@ ConnectionConfig config = {
     }
 };
 
-final Client zoomClient = check new Client(config, serviceUrl);
+Client? zoomClient = ();
+
+@test:BeforeSuite
+function startMockServices() returns error? {
+    if !isLiveServer {
+        _ = check stsListener.attach(sts, "/");
+        check stsListener.'start();
+    }
+    
+    zoomClient = check new Client(config, serviceUrl);
+}
+
+@test:AfterSuite
+function stopMockServices() returns error? {
+    if !isLiveServer {
+        check stsListener.gracefulStop();
+    }
+}
 
 final string testScheduleId = "test-schedule-456";
+
+function getClient() returns Client|error {
+    Client? clientInstance = zoomClient;
+    if clientInstance is () {
+        return error("Client not initialized");
+    }
+    return clientInstance;
+}
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
 }
-isolated function testGetSchedulerAnalytics() returns error? {
-    InlineResponse200 response = check zoomClient->/analytics.get(userId = userId);
+function testGetSchedulerAnalytics() returns error? {
+    Client zoomClientInstance = check getClient();
+    InlineResponse200 response = check zoomClientInstance->/analytics.get(userId = userId);
     test:assertTrue(response.lastNDays !is ());
 }
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
 }
-isolated function testGetSchedulerAvailability() returns error? {
-    InlineResponse2001 response = check zoomClient->/availability.get(userId = userId);
+function testGetSchedulerAvailability() returns error? {
+    Client zoomClientInstance = check getClient();
+    InlineResponse2001 response = check zoomClientInstance->/availability.get(userId = userId);
     test:assertTrue(response.items !is ());
 }
 
-// This test is enabled only for mock server, as getting a specific user by a test ID is not feasible on the live server.
 @test:Config {
     enable: !isLiveServer,
     groups: ["mock_tests"]
 }
-isolated function testGetSchedulerUser() returns error? {
-    InlineResponse2007 response = check zoomClient->/users/[userId].get();
+function testGetSchedulerUser() returns error? {
+    Client zoomClientInstance = check getClient();
+    InlineResponse2007 response = check zoomClientInstance->/users/[userId].get();
     test:assertTrue(response.displayName !is ());
 }
 
-// This test is enabled only for mock server, as creating arbitrary schedules may not be desirable or permissible on the live server.
 @test:Config {
     enable: !isLiveServer,
     groups: ["mock_tests"]
 }
-isolated function testCreateSchedule() returns error? {
+function testCreateSchedule() returns error? {
+    Client zoomClientInstance = check getClient();
     SchedulerSchedulesBody schedulePayload = {
         summary: "Test Schedule",
         duration: 30,
@@ -82,46 +108,48 @@ isolated function testCreateSchedule() returns error? {
         availabilityOverride: false
     };
 
-    InlineResponse2011 response = check zoomClient->/schedules.post(payload = schedulePayload, userId = userId);
+    InlineResponse2011 response = check zoomClientInstance->/schedules.post(payload = schedulePayload, userId = userId);
     test:assertTrue(response.scheduleId !is ());
 }
 
-// This test is enabled only for mock server, as it relies on a hardcoded, non-existent schedule ID.
 @test:Config {
     enable: !isLiveServer,
     groups: ["mock_tests"]
 }
-isolated function testGetSchedule() returns error? {
-    InlineResponse2006 response = check zoomClient->/schedules/[testScheduleId].get(userId = userId);
+function testGetSchedule() returns error? {
+    Client zoomClientInstance = check getClient();
+    InlineResponse2006 response = check zoomClientInstance->/schedules/[testScheduleId].get(userId = userId);
     test:assertTrue(response.summary !is ());
 }
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
 }
-isolated function testListSchedules() returns error? {
-    InlineResponse2005 response = check zoomClient->/schedules.get(userId = userId, pageSize = 10);
+function testListSchedules() returns error? {
+    Client zoomClientInstance = check getClient();
+    InlineResponse2005 response = check zoomClientInstance->/schedules.get(userId = userId, pageSize = 10);
     test:assertTrue(response.items !is ());
 }
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
 }
-isolated function testGetSchedulerAnalyticsWithDateRange() returns error? {
+function testGetSchedulerAnalyticsWithDateRange() returns error? {
+    Client zoomClientInstance = check getClient();
     string fromDate = "2024-01-01";
     string toDate = "2024-12-31";
 
-    InlineResponse200 response = check zoomClient->/analytics.get(userId = userId, 'from = fromDate, to = toDate);
+    InlineResponse200 response = check zoomClientInstance->/analytics.get(userId = userId, 'from = fromDate, to = toDate);
     test:assertTrue(response.lastNDays !is ());
 }
 
-// This test is enabled only for mock server, as it uses a fake pagination token.
 @test:Config {
     enable: !isLiveServer,
     groups: ["mock_tests"]
 }
-isolated function testListSchedulesWithPagination() returns error? {
-    InlineResponse2005 response = check zoomClient->/schedules.get(
+function testListSchedulesWithPagination() returns error? {
+    Client zoomClientInstance = check getClient();
+    InlineResponse2005 response = check zoomClientInstance->/schedules.get(
         userId = userId,
         pageSize = 5,
         nextPageToken = "test-pagination-token"
@@ -129,12 +157,12 @@ isolated function testListSchedulesWithPagination() returns error? {
     test:assertTrue(response.items !is ());
 }
 
-// This test is enabled only for mock server to validate complex payload structures.
 @test:Config {
     enable: !isLiveServer,
     groups: ["mock_tests"]
 }
-isolated function testCreateScheduleWithComplexRules() returns error? {
+function testCreateScheduleWithComplexRules() returns error? {
+    Client zoomClientInstance = check getClient();
     SchedulerSchedulesBody schedulePayload = {
         summary: "Complex Schedule",
         duration: 60,
@@ -152,14 +180,15 @@ isolated function testCreateScheduleWithComplexRules() returns error? {
         availabilityOverride: false
     };
 
-    InlineResponse2011 response = check zoomClient->/schedules.post(payload = schedulePayload, userId = userId);
+    InlineResponse2011 response = check zoomClientInstance->/schedules.post(payload = schedulePayload, userId = userId);
     test:assertTrue(response.scheduleId !is ());
 }
 
 @test:Config {
     groups: ["live_tests", "mock_tests"]
 }
-isolated function testListScheduledEvents() returns error? {
-    InlineResponse2003 response = check zoomClient->/events.get(userId = userId, pageSize = 10);
+function testListScheduledEvents() returns error? {
+    Client zoomClientInstance = check getClient();
+    InlineResponse2003 response = check zoomClientInstance->/events.get(userId = userId, pageSize = 10);
     test:assertTrue(response.items !is ());
 }
