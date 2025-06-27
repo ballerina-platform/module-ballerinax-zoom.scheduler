@@ -1,12 +1,15 @@
 # Running Tests
 
 ## Prerequisites
-You need a Access token from Zoom developer account.
+You need an access token from a Zoom developer account.
 
 To do this, refer to [Ballerina Zoom Connector](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/blob/main/ballerina/README.md).
 
-And You need Find Your User ID For run some of the tests.
-Via This Website you can find it.
+And You need Find Your User ID to run some of the tests by running this curl command.
+```curl
+curl -X GET "https://api.zoom.us/v2/users/me" \
+-H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+```
 
 # Running Tests
 
@@ -16,7 +19,7 @@ You can run the tests in either of these environments and each has its own compa
 
  Test Groups | Environment                                       
 -------------|---------------------------------------------------
- mock_tests  | Mock server for Zoom API (Defualt Environment) 
+ mock_tests  | Mock server for Zoom API (Default Environment) 
  live_tests  | Zoom API                                       
 
 ## Running Tests in the Mock Server
@@ -36,11 +39,12 @@ isLiveServer = false
 #### Using Environment Variables
 
 Alternatively, you can set your authentication credentials as environment variables:
-If you are using linux or mac, you can use following method:
+
+If you are using Linux or Mac, you can use the following method:
 ```bash
    export IS_LIVE_SERVER=false
 ```
-If you are using Windows you can use following method:
+If you are using Windows, you can use the following method:
 ```bash
    setx IS_LIVE_SERVER false
 ```
@@ -54,7 +58,7 @@ Then, run the following command to run the tests:
 
 #### Using a Config.toml File
 
-Create a `Config.toml` file in the tests directory and add your authentication credentials a
+Create a `Config.toml` file in the tests directory and add your authentication credentials as follows:
 
 ```toml
    isLiveServer = true
@@ -68,7 +72,8 @@ Create a `Config.toml` file in the tests directory and add your authentication c
 #### Using Environment Variables
 
 Alternatively, you can set your authentication credentials as environment variables:
-If you are using linux or mac, you can use following method:
+
+If you are using Linux or Mac, you can use the following method:
 ```bash
    export IS_LIVE_SERVER="true"
    export ZOOM_CLIENT_ID="your_client_id"
@@ -77,7 +82,7 @@ If you are using linux or mac, you can use following method:
    export ZOOM_USER_ID="user_id_from_step5"
 ```
 
-If you are using Windows you can use following method:
+If you are using Windows, you can use the following method:
 ```bash
    setx IS_LIVE_SERVER true
    setx ZOOM_CLIENT_ID "your_client_id"

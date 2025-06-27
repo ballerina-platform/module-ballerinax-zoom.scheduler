@@ -2,7 +2,7 @@
 
 [Zoom](https://www.zoom.com/) is a video communications platform that enables users to schedule, host, and join virtual meetings, webinars, and conferences.
 
-The `ballerinax/zoom.scheduler` package offers APIs to connect ant interract with [Zoom Scheduler](https://developers.zoom.us/docs/api/scheduler) endpoints. specifically based on Zoom API v2.
+The `ballerinax/zoom.scheduler` package offers APIs to connect and interact with [Zoom Scheduler](https://developers.zoom.us/docs/api/scheduler) endpoints, specifically based on Zoom API v2.
 
 ## Setup guide
 
@@ -25,14 +25,14 @@ To use the Zoom scheduler connector, you must have access to the Zoom API throug
 ### Step 2: Configure OAuth Settings
 
 1. **Note down your credentials**:
-   * Client ID/main/docs/setup/resources/app-credentials.png)
+   * Client ID
+   * Client Secret
+
+   ![App Credentials](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/app-credentials.png)
 
 2. **Set Redirect URI**: Add your application's redirect URI (e.g., `http://localhost:8080/callback`)
 
-   ![Redirect URI](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/hea
-   * Client Secret
-
-   ![App Credentials](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/headsds/main/docs/setup/resources/redirect-URI.png)
+   ![Redirect URI](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/redirect-URI.png)
 
 3. **Add Scopes**: Make sure your Zoom app has the necessary scopes for the Scheduler API:
    * Add `scheduler:read`, `scheduler:write` and `user:read` in the scope
@@ -97,9 +97,9 @@ import ballerinax/zoom.scheduler;
 
 ```bash
 clientId = "<Client ID>"
-clientSecret = "<ClientS Secret>"
+clientSecret = "<Client Secret>"
 refreshToken = "<Refresh Token>"
-userId = "<Zoom_User ID>"
+userId = "<Zoom User ID>"
 ```
 
 2. Create a `zoom.scheduler:ConnectionConfig` with the obtained access token and initialize the connector with it.

@@ -8,7 +8,7 @@
 
 [Zoom](https://www.zoom.com/) is a video communications platform that enables users to schedule, host, and join virtual meetings, webinars, and conferences.
 
-The `ballerinax/zoom.scheduler` package offers APIs to connect ant interract with [Zoom Scheduler](https://developers.zoom.us/docs/api/scheduler) endpoints. specifically based on Zoom API v2.
+The `ballerinax/zoom.scheduler` package offers APIs to connect and interact with [Zoom Scheduler](https://developers.zoom.us/docs/api/scheduler) endpoints, specifically based on Zoom API v2.
 
 ## Setup guide
 
@@ -30,7 +30,7 @@ To use the `ballerinax/zoom.scheduler` connector, you must have access to the Zo
 
 ### Step 2: Configure OAuth Settings
 
-3. **Note down your credentials**:
+1. **Note down your credentials**:
    * Client ID
    * Client Secret
 
@@ -70,11 +70,11 @@ curl -X POST https://zoom.us/oauth/token \
 
 This returns both `access_token` and `refresh_token`.
 
-* Replace:
-   * `CLIENT_ID` with your app's Client ID
-   * `CLIENT_SECRET` with your app's Client Secret
-   * `AUTHORIZATION_CODE` with the code received from the callback
-   * `YOUR_REDIRECT_URI` with your configured redirect URI
+Replace:
+* `CLIENT_ID` with your app's Client ID
+* `CLIENT_SECRET` with your app's Client Secret
+* `AUTHORIZATION_CODE` with the code received from the callback
+* `YOUR_REDIRECT_URI` with your configured redirect URI
 
 ### Step 5: Verify Your Setup
 ```curl
@@ -101,7 +101,7 @@ import ballerinax/zoom.scheduler;
 
 ```bash
 clientId = "<Client ID>"
-clientSecret = "<ClientS Secret>"
+clientSecret = "<Client Secret>"
 refreshToken = "<Refresh Token>"
 userId = "<Zoom User ID>"
 ```
