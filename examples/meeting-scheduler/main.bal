@@ -150,13 +150,11 @@ public function main() returns error? {
         if scheduledEvents.items is scheduler:InlineResponse2003Items[] {
             scheduler:InlineResponse2003Items[] events = <scheduler:InlineResponse2003Items[]>scheduledEvents.items;
             
-            if events.length() > 0 {
-                foreach int i in 0..<events.length() {
-                    scheduler:InlineResponse2003Items event = events[i];
-                    io:println("- Event ", event.eventId ?: "Unknown", " (", event.status ?: "Unknown", ")");
-                }
-            } else {
+            if events.length() == 0 {
                 io:println("No scheduled events found yet.");
+            }
+            foreach scheduler:InlineResponse2003Items event in events {
+                io:println("- Event ", event.eventId ?: "Unknown", " (", event.status ?: "Unknown", ")");
             }
         }
     } else {
