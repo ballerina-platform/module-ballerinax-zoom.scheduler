@@ -2,13 +2,23 @@
 
 The `ballerinax/zoom.scheduler` connector provides practical examples illustrating usage in various scenarios.
 
-[//]: # (TODO: Add examples)
-1. 
-2. 
+1. **[Meeting Scheduler](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/tree/main/examples/meeting-scheduler)** - Create scheduled meetings, generate single-use scheduling links, and manage team meeting schedules with automated booking capabilities.
+
+2. **[Availability Manager](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/tree/main/examples/availability-manager)** - Configure availability schedules, analyze scheduler analytics, and manage working hours for different time zones and business requirements. 
 
 ## Prerequisites
 
-[//]: # (TODO: Add prerequisites)
+1. Generate Zoom credentials to authenticate the connector as described in the [Setup guide](https://central.ballerina.io/ballerinax/zoom.scheduler/latest#setup-guide).
+
+2. For each example, create a Config.toml file the related configuration. Here's an example of how your Config.toml file should look:
+
+```toml
+   isLiveServer = true
+   clientId = "your_client_id"
+   clientSecret = "your_client_secret"
+   refreshToken = "user_refresh_token_from_step"
+   userId = "user_id_from_step5"
+```
 
 ## Running an example
 
