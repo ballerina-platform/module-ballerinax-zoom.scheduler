@@ -87,34 +87,13 @@ public function main() returns error? {
             end: "2025-06-27T02:00:00Z"
         }],
         segmentsRecurrence: {
-            sun: [{
-                end: "17:00",
-                'start: "09:00"
-            }],
-            mon: [{
-                end: "17:00",
-                'start: "09:00"
-            }],
-            tue: [{
-                end: "17:00",
-                'start: "09:00"
-            }],
-            wed: [{
-                end: "17:00",
-                'start: "09:00"
-            }],
-            thu: [{
-                end: "17:00",
-                'start: "09:00"
-            }],
-            fri: [{
-                end: "17:00",
-                'start: "09:00"
-            }],
-            sat: [{
-                end: "17:00",
-                'start: "09:00"
-            }]
+            sun: weekdaySchedule,
+            mon: weekdaySchedule,
+            tue: weekdaySchedule,
+            wed: weekdaySchedule,
+            thu: weekdaySchedule,
+            fri: weekdaySchedule,
+            sat: weekdaySchedule
         },
         timeZone: "Asia/Shanghai",
         location: "AAA office",
