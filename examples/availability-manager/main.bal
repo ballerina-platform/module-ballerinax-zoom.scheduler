@@ -15,7 +15,7 @@
 // under the License.
 
 import ballerina/io;
-import ballerinax/zoom.scheduler;
+import ballerinax/zoom.scheduler as zoom;
 
 configurable string clientId = ?;
 configurable string clientSecret = ?;

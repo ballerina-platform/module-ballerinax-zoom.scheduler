@@ -27,4 +27,5 @@ userId = "<User ID>"
 Execute the following command to run the example:
 
 ```bash
-bal
+bal run
+```

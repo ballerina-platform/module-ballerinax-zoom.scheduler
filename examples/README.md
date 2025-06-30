@@ -13,7 +13,6 @@ The `ballerinax/zoom.scheduler` connector provides practical examples illustrati
 2. For each example, create a Config.toml file the related configuration. Here's an example of how your Config.toml file should look:
 
 ```toml
-   isLiveServer = true
    clientId = "your_client_id"
    clientSecret = "your_client_secret"
    refreshToken = "user_refresh_token_from_step"
