@@ -22,7 +22,7 @@ To use the Zoom scheduler connector, you must have access to the Zoom API throug
 
 4. Fill in basic information
 
-### Step 2: Configure OAuth Settings
+### Step 2: Configure OAuth settings
 
 1. **Note down your credentials**:
    * Client ID
@@ -30,23 +30,23 @@ To use the Zoom scheduler connector, you must have access to the Zoom API throug
 
    ![App Credentials](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/app-credentials.png)
 
-2. **Set Redirect URI**: Add your application's redirect URI (e.g., `http://localhost:8080/callback`)
+2. **Set redirect URI**: Add your application's redirect URI (e.g., `http://localhost:8080/callback`)
 
    ![Redirect URI](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/redirect-URI.png)
 
-3. **Add Scopes**: Make sure your Zoom app has the necessary scopes for the Scheduler API:
+3. **Add scopes**: Make sure your Zoom app has the necessary scopes for the Scheduler API:
    * Add `scheduler:read`, `scheduler:write` and `user:read` in the scope
 
    ![Zoom Scopes](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/zoom-scopes.png)
 
-### Step 3: Activate the App
+### Step 3: Activate the app
 
 1. Complete all required information
 2. Activate the app
 
    ![Activate App](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-zoom.scheduler/refs/heads/main/docs/setup/resources/activate-app.png)
 
-### Step 4: Get User Authorization
+### Step 4: Get user authorization
 
 1. **Direct users to authorization URL** (replace `YOUR_CLIENT_ID` and `YOUR_REDIRECT_URI`):
 ```
@@ -71,7 +71,7 @@ Replace:
 * `AUTHORIZATION_CODE` with the code received from the callback
 * `YOUR_REDIRECT_URI` with your configured redirect URI
 
-### Step 5: Verify Your Setup
+### Step 5: Verify your setup
 
 ```curl
 curl -X GET "https://api.zoom.us/v2/users/me" \
@@ -88,7 +88,7 @@ To use the `ballerinax/zoom.scheduler` connector in your Ballerina application, 
 Import the `zoom.scheduler` module.
 
 ```ballerina
-import ballerinax/zoom.scheduler;
+import ballerinax/zoom.scheduler as zoom;
 ```
 
 ### Step 2: Instantiate a new connector
