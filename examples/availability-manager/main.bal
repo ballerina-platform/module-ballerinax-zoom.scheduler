@@ -22,7 +22,7 @@ configurable string clientSecret = ?;
 configurable string refreshToken = ?;
 configurable string userId = ?;
 
-final scheduler:Client zoomClient = check new ({
+final zoom:Client zoomClient = check new ({
     auth: {
         clientId,
         clientSecret,
@@ -32,40 +32,40 @@ final scheduler:Client zoomClient = check new ({
 });
 
 public function main() returns error? {
-    scheduler:InlineResponse2007 userInfo = check zoomClient->/users/[userId].get();
+    zoom:InlineResponse2007 userInfo = check zoomClient->/users/[userId].get();
     io:println("User: ", userInfo.displayName, " | Timezone: ", userInfo.timeZone);
-    scheduler:InlineResponse200 analytics = check zoomClient->/analytics.get(
+    zoom:InlineResponse200 analytics = check zoomClient->/analytics.get(
         userId = userId,
         'from = "2025-01-01",
         to = "2025-12-31"
     );
     
-    if analytics.lastNDays is scheduler:InlineResponse200LastNDays {
-        scheduler:InlineResponse200LastNDays stats = <scheduler:InlineResponse200LastNDays>analytics.lastNDays;
+    if analytics.lastNDays is zoom:InlineResponse200LastNDays {
+        zoom:InlineResponse200LastNDays stats = <zoom:InlineResponse200LastNDays>analytics.lastNDays;
         io:println("Analytics - Events Created: ", stats.scheduledEventsCreated ?: 0, 
                   " | Completed: ", stats.scheduledEventsCompleted ?: 0,
                   " | Canceled: ", stats.scheduledEventsCanceled ?: 0);
     }
     
-    scheduler:InlineResponse2001 availabilityResponse = check zoomClient->/availability.get(
+    zoom:InlineResponse2001 availabilityResponse = check zoomClient->/availability.get(
         userId = userId,
         pageSize = 10
     );
     
-    if availabilityResponse.items is scheduler:InlineResponse2001Items[] {
-        scheduler:InlineResponse2001Items[] availabilities = <scheduler:InlineResponse2001Items[]>availabilityResponse.items;
+    if availabilityResponse.items is zoom:InlineResponse2001Items[] {
+        zoom:InlineResponse2001Items[] availabilities = <zoom:InlineResponse2001Items[]>availabilityResponse.items;
         io:println("Availability Schedules: ", availabilities.length());
-        foreach scheduler:InlineResponse2001Items availability in availabilities {
+        foreach zoom:InlineResponse2001Items availability in availabilities {
             io:println("- ", availability.name, " (", availability.timeZone, "), ID: ", availability.availabilityId);
             io:println("Owner: ", availability.owner ?: "Unknown");
         }
     }
 
     boolean shouldCreateNew = true;
-    if availabilityResponse.items is scheduler:InlineResponse2001Items[] {
-        scheduler:InlineResponse2001Items[] availabilities = <scheduler:InlineResponse2001Items[]>availabilityResponse.items;
+    if availabilityResponse.items is zoom:InlineResponse2001Items[] {
+        zoom:InlineResponse2001Items[] availabilities = <zoom:InlineResponse2001Items[]>availabilityResponse.items;
         int extendedHoursCount = 0;
-        foreach scheduler:InlineResponse2001Items availability in availabilities {
+        foreach zoom:InlineResponse2001Items availability in availabilities {
             if availability.name == "Extended Office Hours" {
                 extendedHoursCount += 1;
             }
@@ -77,7 +77,7 @@ public function main() returns error? {
     }
     
     if shouldCreateNew {
-        scheduler:SchedulerAvailabilityBody newAvailability = {
+        zoom:SchedulerAvailabilityBody newAvailability = {
             name: "Extended Office Hours",
             timeZone: "America/New_York",
             segmentsRecurrence: {
@@ -103,25 +103,25 @@ public function main() returns error? {
                 }]
             }
         };
-        
-        scheduler:InlineResponse201 createdAvailability = check zoomClient->/availability.post(
+
+        zoom:InlineResponse201 createdAvailability = check zoomClient->/availability.post(
             payload = newAvailability
-        
+        );
         io:println("Created new availability: ", createdAvailability.name, " (", createdAvailability.availabilityId, ")");
     }
     
-    scheduler:InlineResponse2005|error allSchedulesResult = zoomClient->/schedules.get(
+    zoom:InlineResponse2005|error allSchedulesResult = zoomClient->/schedules.get(
         userId = userId,
         pageSize = 5,
         showDeleted = false
     );
     
-    if allSchedulesResult is scheduler:InlineResponse2005 {
-        scheduler:InlineResponse2005 allSchedules = allSchedulesResult;
-        if allSchedules.items is scheduler:InlineResponse2005Items[] {
-            scheduler:InlineResponse2005Items[] schedules = <scheduler:InlineResponse2005Items[]>allSchedules.items;
+    if allSchedulesResult is zoom:InlineResponse2005 {
+        zoom:InlineResponse2005 allSchedules = allSchedulesResult;
+        if allSchedules.items is zoom:InlineResponse2005Items[] {
+            zoom:InlineResponse2005Items[] schedules = <zoom:InlineResponse2005Items[]>allSchedules.items;
             io:println("Active Schedules: ", schedules.length());
-            foreach scheduler:InlineResponse2005Items schedule in schedules {
+            foreach zoom:InlineResponse2005Items schedule in schedules {
                 io:println("- ", schedule.summary, " (", schedule.duration, "min, ", schedule.capacity, " attendees)");
             }
         } else {

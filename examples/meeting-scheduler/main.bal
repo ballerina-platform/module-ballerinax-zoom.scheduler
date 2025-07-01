@@ -22,7 +22,7 @@ configurable string clientSecret = ?;
 configurable string refreshToken = ?;
 configurable string userId = ?;
 
-final scheduler:Client zoomClient = check new ({
+final zoom:Client zoomClient = check new ({
     auth: {
         clientId,
         clientSecret,
@@ -32,14 +32,14 @@ final scheduler:Client zoomClient = check new ({
 });
 
 public function main() returns error? {
-    scheduler:InlineResponse2007 userInfo = check zoomClient->/users/[userId].get();
+    zoom:InlineResponse2007 userInfo = check zoomClient->/users/[userId].get();
     io:println("Meeting Scheduler for ", userInfo.displayName ?: "User");
     io:println("Time Zone: ", userInfo.timeZone ?: "UTC");
-    
-    scheduler:ScheduleravailabilitySegmentsRecurrenceSun weekdaySchedule = [{'start: "09:00", end: "17:00"}];
-    scheduler:ScheduleravailabilitySegmentsRecurrenceSun weekendSchedule = [{'start: "09:00", end: "12:00"}];
-    
-    scheduler:SchedulerSchedulesBody newSchedule = {
+
+    zoom:ScheduleravailabilitySegmentsRecurrenceSun[] weekdaySchedule = [{'start: "09:00", end: "17:00"}];
+    zoom:ScheduleravailabilitySegmentsRecurrenceSun[] weekendSchedule = [{'start: "09:00", end: "12:00"}];
+
+    zoom:SchedulerSchedulesBody newSchedule = {
         addOnType: "zoomMeeting",
         availabilityOverride: false,
         availabilityRules: [{
@@ -107,26 +107,26 @@ public function main() returns error? {
         active: true
     };
     
-    scheduler:InlineResponse2011 createdSchedule = check zoomClient->/schedules.post(
+    zoom:InlineResponse2011 createdSchedule = check zoomClient->/schedules.post(
         payload = newSchedule
     );
     
     io:println("Created: ", createdSchedule.summary, " (", createdSchedule.scheduleId, ")");
     
-    scheduler:InlineResponse2005|error allSchedulesResult = zoomClient->/schedules.get(
+    zoom:InlineResponse2005|error allSchedulesResult = zoomClient->/schedules.get(
         userId = userId,
         pageSize = 10,
         showDeleted = false
     );
     
-    if allSchedulesResult is scheduler:InlineResponse2005 {
-        scheduler:InlineResponse2005 allSchedules = allSchedulesResult;
-        if allSchedules.items is scheduler:InlineResponse2005Items[] {
-            scheduler:InlineResponse2005Items[] schedules = <scheduler:InlineResponse2005Items[]>allSchedules.items;
+    if allSchedulesResult is zoom:InlineResponse2005 {
+        zoom:InlineResponse2005 allSchedules = allSchedulesResult;
+        if allSchedules.items is zoom:InlineResponse2005Items[] {
+            zoom:InlineResponse2005Items[] schedules = <zoom:InlineResponse2005Items[]>allSchedules.items;
             io:println("Total Schedules: ", schedules.length());
             if schedules.length() > 0 {
                 foreach int i in 0..<schedules.length() {
-                    scheduler:InlineResponse2005Items schedule = schedules[i];
+                    zoom:InlineResponse2005Items schedule = schedules[i];
                     io:println("- ", schedule.summary ?: "Unnamed Schedule", " (", schedule.duration ?: 0, "min)");
                 }
             } else {
@@ -139,21 +139,21 @@ public function main() returns error? {
         io:println("Continuing with event fetching...");
     }
     
-    scheduler:InlineResponse2003|error scheduledEventsResult = zoomClient->/events.get(
+    zoom:InlineResponse2003|error scheduledEventsResult = zoomClient->/events.get(
         userId = userId,
         pageSize = 2
     );
-    
-    if scheduledEventsResult is scheduler:InlineResponse2003 {
-        scheduler:InlineResponse2003 scheduledEvents = scheduledEventsResult;
-        io:println("Total Events: ", scheduledEvents["totalRecords"] ?: 0);        
-        if scheduledEvents.items is scheduler:InlineResponse2003Items[] {
-            scheduler:InlineResponse2003Items[] events = <scheduler:InlineResponse2003Items[]>scheduledEvents.items;
-            
+
+    if scheduledEventsResult is zoom:InlineResponse2003 {
+        zoom:InlineResponse2003 scheduledEvents = scheduledEventsResult;
+        io:println("Total Events: ", scheduledEvents["totalRecords"] ?: 0);
+        if scheduledEvents.items is zoom:InlineResponse2003Items[] {
+            zoom:InlineResponse2003Items[] events = <zoom:InlineResponse2003Items[]>scheduledEvents.items;
+
             if events.length() == 0 {
                 io:println("No scheduled events found yet.");
             }
-            foreach scheduler:InlineResponse2003Items event in events {
+            foreach zoom:InlineResponse2003Items event in events {
                 io:println("- Event ", event.eventId ?: "Unknown", " (", event.status ?: "Unknown", ")");
             }
         }
