@@ -114,7 +114,7 @@ configurable string clientSecret = ?;
 configurable string refreshToken = ?;
 configurable string userId = ?;
 
-final scheduler:Client zoomClient = check new ({
+final zoom:Client zoomClient = check new ({
     auth: {
         clientId,
         clientSecret,
@@ -131,7 +131,7 @@ Now, utilize the available connector operations.
 
 ```ballerina
 public function main() returns error? {
-    zoom.scheduler:InlineResponse2011 schedule = check zoom.scheduler->/schedules.post(
+    zoom:InlineResponse2011 schedule = check zoomClient->/schedules.post(
         payload = {
             summary: "Team Meeting",
             description: "Weekly team sync",
