@@ -5,7 +5,7 @@ name = "zoom.scheduler"
 version = "@toml.version@"
 license = ["Apache-2.0"]
 authors = ["Ballerina"]
-keywords = ["Zoom", "Video Conference", "Scheduling", "Calendar"] 
+keywords = ["Video Conference", "Scheduling", "Calendar", "Vendor/Zoom", "Area/Communication", "Type/Connector"]
 icon = "icon.png" 
 repository = "https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler"
 
