@@ -1,8 +1,15 @@
 ## Overview
 
-[Zoom](https://www.zoom.com/) is a video communications platform that enables users to schedule, host, and join virtual meetings, webinars, and conferences.
+[Zoom](https://www.zoom.com/) is a video communications platform that enables users to schedule, host, and join virtual meetings, webinars, and conferences. it provides an integrated platform for reliable video and audio collaboration.
 
-The `ballerinax/zoom.scheduler` package offers APIs to connect and interact with [Zoom Scheduler](https://developers.zoom.us/docs/api/scheduler) endpoints, specifically based on Zoom API v2.
+The Zoom Scheduler connector offers APIs to connect and interact with Zoom Scheduler endpoints, specifically based on Zoom API v2.
+
+### Key Features
+
+- Programmatically schedule and manage Zoom meetings
+- Access and update scheduling preferences and calendars
+- Support for Zoom Scheduler API endpoints
+- Secure integration with Zoom platform via OAuth2
 
 ## Setup guide
 
