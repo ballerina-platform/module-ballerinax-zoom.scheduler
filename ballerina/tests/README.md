@@ -22,7 +22,7 @@ There are two test environments. The default is a mock server for the Zoom Sched
 
 ## Running tests against the mock server
 
-No configuration is needed. With no `Config.toml`, or with `isLiveServer = false`, the tests run against the mock server on port `9090` and the mock token endpoint on port `9444`.
+No configuration is needed. When `IS_LIVE_SERVER` is not set to `true`, the tests run against the mock server on port `9090` and the mock token endpoint on port `9444`.
 
 ```bash
 ./gradlew clean test
@@ -30,27 +30,27 @@ No configuration is needed. With no `Config.toml`, or with `isLiveServer = false
 
 ## Running tests against the live Zoom API
 
-Create a `Config.toml` file in the `ballerina/tests` directory with the following content:
+Set the following environment variables, then run the tests.
 
-```toml
-isLiveServer = true
-clientId = "<your-client-id>"
-clientSecret = "<your-client-secret>"
-refreshToken = "<your-refresh-token>"
-refreshUrl = "https://zoom.us/oauth/token"
-userId = "<your-user-id>"
-scheduleId = "<an-existing-schedule-id>"
-availabilityId = "<an-existing-availability-id>"
-eventId = "<an-existing-scheduled-event-id>"
-attendeeId = "<an-attendee-id-of-that-event>"
-routingFormId = "<a-routing-form-id>"
-routingResponseId = "<a-response-id-of-that-form>"
+| Variable | Description |
+|---|---|
+| `IS_LIVE_SERVER` | Set to `true` to target `https://api.zoom.us/v2/scheduler` instead of the mock server |
+| `ZOOM_CLIENT_ID` | OAuth app client ID |
+| `ZOOM_CLIENT_SECRET` | OAuth app client secret |
+| `ZOOM_REFRESH_TOKEN` | OAuth 2.0 refresh token |
+| `ZOOM_USER_ID` | ID of your Zoom user |
+| `ZOOM_SCHEDULE_ID` | ID of an existing schedule |
+| `ZOOM_AVAILABILITY_ID` | ID of an existing availability |
+| `ZOOM_EVENT_ID` | ID of an existing scheduled event |
+| `ZOOM_ATTENDEE_ID` | ID of an attendee of that event |
+| `ZOOM_ROUTING_FORM_ID` | ID of a routing form |
+| `ZOOM_ROUTING_RESPONSE_ID` | ID of a response to that form |
+
+```bash
+export IS_LIVE_SERVER=true
+export ZOOM_CLIENT_ID=<your-client-id>
+# ... and the remaining variables above
+./gradlew clean test
 ```
 
 The create, update and delete tests change data in your Zoom account. Each delete test creates the availability, schedule or booking it deletes, so no existing data is removed.
-
-Then run:
-
-```bash
-./gradlew clean test
-```

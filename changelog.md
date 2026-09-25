@@ -5,9 +5,9 @@ This file contains all the notable changes done to the Ballerina Zoom Scheduler 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0]
+## [Unreleased]
 
-### Breaking changes
+### Changed
 
 - The client now exposes **remote methods** instead of resource methods. Every 1.x call site changes, as listed below.
   Query parameters are still passed as named arguments, and request payloads are passed as the first argument after
@@ -59,6 +59,6 @@ zoom:ScheduleList schedules = check zoomClient->listSchedules(userId = userId, p
 - `listTeams` — list the Scheduler teams of a user.
 - `createSingleUseLink` accepts an optional `teamId` query parameter.
 
-## [1.0.2]
+## [1.0.2] - 2026.03.26
 
 - Last 1.x release: 17 Zoom Scheduler operations exposed as resource methods.

@@ -14,21 +14,22 @@
 // specific language governing permissions and limitations
 // under the License.
 
+import ballerina/os;
 import ballerina/test;
 
-configurable boolean isLiveServer = false;
-configurable string serviceUrl = isLiveServer ? "https://api.zoom.us/v2/scheduler" : "http://localhost:9090";
-configurable string userId = "test-user-123";
-configurable string clientId = "test-client-id";
-configurable string clientSecret = "test-client-secret";
-configurable string refreshToken = "test-refresh-token";
-configurable string refreshUrl = "http://localhost:9444/token";
-configurable string scheduleId = "jh3hnu6tzs1spm4p8i3pnwwbd4";
-configurable string availabilityId = "x3h1u4id4liffdyszsp8kpxl80";
-configurable string eventId = "7b5sfk4nb2p8ruetuqihpbc6el";
-configurable string attendeeId = "3nqf8ct4pw5ng2v9r8wbh9sq1a";
-configurable string routingFormId = "f1a3c5e7g9i1k3m5o7q9s1u3w5";
-configurable string routingResponseId = "r8k2m4n6p8q0s2u4w6y8a0c2e4";
+final boolean isLiveServer = os:getEnv("IS_LIVE_SERVER") == "true";
+final string serviceUrl = isLiveServer ? "https://api.zoom.us/v2/scheduler" : "http://localhost:9090";
+final string refreshUrl = isLiveServer ? "https://zoom.us/oauth/token" : "http://localhost:9444/token";
+final string clientId = isLiveServer ? os:getEnv("ZOOM_CLIENT_ID") : "test-client-id";
+final string clientSecret = isLiveServer ? os:getEnv("ZOOM_CLIENT_SECRET") : "test-client-secret";
+final string refreshToken = isLiveServer ? os:getEnv("ZOOM_REFRESH_TOKEN") : "test-refresh-token";
+final string userId = isLiveServer ? os:getEnv("ZOOM_USER_ID") : "test-user-123";
+final string scheduleId = isLiveServer ? os:getEnv("ZOOM_SCHEDULE_ID") : "jh3hnu6tzs1spm4p8i3pnwwbd4";
+final string availabilityId = isLiveServer ? os:getEnv("ZOOM_AVAILABILITY_ID") : "x3h1u4id4liffdyszsp8kpxl80";
+final string eventId = isLiveServer ? os:getEnv("ZOOM_EVENT_ID") : "7b5sfk4nb2p8ruetuqihpbc6el";
+final string attendeeId = isLiveServer ? os:getEnv("ZOOM_ATTENDEE_ID") : "3nqf8ct4pw5ng2v9r8wbh9sq1a";
+final string routingFormId = isLiveServer ? os:getEnv("ZOOM_ROUTING_FORM_ID") : "f1a3c5e7g9i1k3m5o7q9s1u3w5";
+final string routingResponseId = isLiveServer ? os:getEnv("ZOOM_ROUTING_RESPONSE_ID") : "r8k2m4n6p8q0s2u4w6y8a0c2e4";
 
 // The refresh-token grant fetches a token when the client is constructed, so the client is
 // created only after the mock token service has started.
