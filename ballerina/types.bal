@@ -21,110 +21,7 @@ import ballerina/constraint;
 import ballerina/data.jsondata;
 import ballerina/http;
 
-# The week of available time rule
-public type InlineResponse2006SegmentsRecurrence record {
-    # Thursday
-    ScheduleravailabilitySegmentsRecurrenceSun[] thu?;
-    # Tuesday
-    ScheduleravailabilitySegmentsRecurrenceSun[] tue?;
-    # Wednesday
-    ScheduleravailabilitySegmentsRecurrenceSun[] wed?;
-    # Saturday
-    ScheduleravailabilitySegmentsRecurrenceSun[] sat?;
-    # Friday 
-    ScheduleravailabilitySegmentsRecurrenceSun[] fri?;
-    # Sundays
-    ScheduleravailabilitySegmentsRecurrenceSun[] sun?;
-    # Monday
-    ScheduleravailabilitySegmentsRecurrenceSun[] mon?;
-};
-
-# The availability schedule set by the user
-public type SchedulerAvailabilityBody record {
-    # the owner's ID
-    string owner?;
-    # The default availability schedule in use
-    boolean default?;
-    # The name of this availability schedule
-    @constraint:String {minLength: 1}
-    string name;
-    # The unique ID of availability
-    @jsondata:Name {value: "availability_id"}
-    string availabilityId?;
-    @jsondata:Name {value: "segments_recurrence"}
-    ScheduleravailabilitySegmentsRecurrence segmentsRecurrence?;
-    # The timezone for which this availability schedule originates
-    @jsondata:Name {value: "time_zone"}
-    string timeZone;
-    # The date on which the rule needs to be applied outside of the availability rule
-    ScheduleravailabilitySegments[] segments?;
-};
-
-# The creator of the schedule. The field is read-only
-public type InlineResponse2011Creator record {
-    # This field indicates if you created the schedule. The field is read-only
-    boolean self?;
-    # This field indicates the creator of the display name
-    @jsondata:Name {value: "display_name"}
-    string displayName?;
-    # This field indicates the creator's email address
-    string email?;
-};
-
-public type InlineResponse2005AvailabilityRules record {
-    # This field indicates the use of custom availability instead of the rule
-    @jsondata:Name {value: "use_custom"}
-    boolean useCustom?;
-    # The ID of this availability rule. 
-    @jsondata:Name {value: "availability_id"}
-    string availabilityId?;
-    @jsondata:Name {value: "segments_recurrence"}
-    SchedulerschedulesscheduleIdSegmentsRecurrence1 segmentsRecurrence?;
-    # The timezone of this availability rule. 
-    @jsondata:Name {value: "time_zone"}
-    string timeZone?;
-    # The owner of this availability rule. 
-    string email?;
-    # The available time segments of the event
-    SchedulerschedulesSegments[] segments?;
-};
-
-public type SchedulesSingleUseLinkBody record {
-    # The unique identifier of a schedule
-    @jsondata:Name {value: "schedule_id"}
-    string scheduleId;
-};
-
-public type SchedulerschedulesCustomFields record {
-    # The invitee's option(s) for `single_select` or `multi_select` type of responses
-    @jsondata:Name {value: "answer_choices"}
-    SchedulerschedulesCustomFieldsAnswerchoicesItemsString[] answerChoices?;
-    # The ID of this question
-    @jsondata:Name {value: "custom_field_id"}
-    string customFieldId?;
-    # The type of response that the invitee provides to the custom question. It can be one or multiple lines of text, a phone number, or single- or multiple-select.[`string text phone_number single_select multi_select`]
-    "text"|"string"|"phone_number"|"choices_one"|"choices_many"|"select" format;
-    # The custom question the host created for the event type
-    string name;
-    # This field is true if the custom question allows invitees to record a written response in addition to single-select or multiple-select type of responses. This field is false if the custom question does not allow invitees to record a written response
-    @jsondata:Name {value: "include_other"}
-    boolean includeOther;
-    # The position of this question
-    decimal position;
-    # This field is true if the question the host creates is ON and visible on the event booking page. This field is false if it's OFF and invisible on the event booking page
-    boolean enabled;
-    # This field is true if a response to the question created by the host is required for invitees to book the event type. This field is false if a response to the question created by the host is not required for invitees to book the event type
-    boolean required;
-};
-
-# Represents the Queries record for the operation: get_scheduled_events
-public type GetScheduledEventsQueries record {
-    # This field indicates whether the admin handles certain users. It's only for admin
-    @http:Query {name: "user_id"}
-    string userId?;
-};
-
-public type SchedulesscheduleIdBody record {
+public type UpdateScheduleRequest record {
     # The method of `addOn`, such as Zoom meeting, Zoom phone, and offline
     @jsondata:Name {value: "add_on_type"}
     "zoomMeeting"|"zoomPhone"|"offline" addOnType?;
@@ -141,7 +38,7 @@ public type SchedulesscheduleIdBody record {
     string color?;
     # The custom question
     @jsondata:Name {value: "custom_fields"}
-    SchedulerschedulesscheduleIdCustomFields[] customFields?;
+    UpdateScheduleCustomField[] customFields?;
     # The schedule's description
     @constraint:String {maxLength: 8192}
     string description?;
@@ -157,12 +54,12 @@ public type SchedulesscheduleIdBody record {
     string timeZone?;
     # The availability time rule
     @jsondata:Name {value: "availability_rules"}
-    SchedulerschedulesscheduleIdAvailabilityRules[] availabilityRules?;
+    UpdateScheduleAvailabilityRule[] availabilityRules?;
     # The maximum invitees per event
     @constraint:Number {minValue: 1, maxValue: 200}
     decimal capacity?;
     # The available time segments of the event
-    SchedulerschedulesSegments[] segments?;
+    DateSegment[] segments?;
     # The duration of meeting in minutes, range: [1, 1440]
     @constraint:Number {minValue: 15, maxValue: 1440}
     decimal duration?;
@@ -173,9 +70,10 @@ public type SchedulesscheduleIdBody record {
     @constraint:String {maxLength: 1024}
     string location?;
     # The extra time before or after booked schedule
-    SchedulerschedulesscheduleIdBuffer buffer?;
+    UpdateScheduleBuffer buffer?;
+    # Weekly recurring availability segments, keyed by day of the week
     @jsondata:Name {value: "segments_recurrence"}
-    SchedulerschedulesscheduleIdSegmentsRecurrence1 segmentsRecurrence?;
+    ScheduleWeeklyRecurrence segmentsRecurrence?;
     # The event portion of the event's URL that identifies a specific web page
     @constraint:String {maxLength: 256, minLength: 3}
     string slug?;
@@ -192,98 +90,237 @@ public type SchedulesscheduleIdBody record {
     "confirmed"|"cancelled" status?;
 };
 
-public type InlineResponse2003Items record {
-    # The event's summary
-    @constraint:String {maxLength: 256}
-    string summary?;
-    # The attendees of the event
-    InlineResponse2003Attendees[] attendees?;
-    # The meeting notes of the event
-    @jsondata:Name {value: "meeting_notes"}
-    string meetingNotes?;
-    # The event's description
-    @constraint:String {maxLength: 8192}
-    string description?;
-    # The scheduled event end date time
-    @jsondata:Name {value: "end_date_time"}
-    string endDateTime?;
-    # The unique identifier of event
-    @jsondata:Name {value: "event_id"}
-    string eventId?;
-    # This field indicates the type is default(scheduled) or pending event
-    @jsondata:Name {value: "event_type"}
-    "default"|"pending" eventType?;
-    # The information to track the source of invitee. This occurs when you add UTM parameters in schedule links
-    @jsondata:Name {value: "tracking_params"}
-    InlineResponse2003TrackingParams[] trackingParams?;
-    # The guest's collection
-    string[] guests?;
-    # The information for a custom location
-    @constraint:String {maxLength: 1024}
-    string location?;
-    # The scheduled event start date time
-    @jsondata:Name {value: "start_date_time"}
-    string startDateTime?;
-    # The unique identifier of schedule
-    @jsondata:Name {value: "schedule_id"}
-    string scheduleId?;
-    # The moment the event was updated
-    string updated?;
-    # The meeting details for when users have scheduled appointments
-    @jsondata:Name {value: "external_location"}
-    record {string kind?; string meeting_id?; string personal_meeting_id?; string meeting_passcode?; string meeting_description?; string meeting_join_url?;} externalLocation?;
-    # The status of event: confirmed or cancelled
-    "confirmed"|"cancelled" status?;
+public type ScheduledEventSummaryTrackingParam record {
+    # The scheduler tags that correspond to UTM parameters one by one
+    string label?;
+    # The value of UTM parameters set in schedule links by host
+    string value?;
+    # The UTM parameters in the schedule links
+    string 'key?;
 };
 
-public type InlineResponse2011CustomFields record {
-    # The invitee's option(s) for single_select or multi_select type of responses
-    @jsondata:Name {value: "answer_choices"}
-    InlineResponse2011CustomFieldsAnswerchoicesItemsString[] answerChoices?;
-    # The ID of this question
-    @jsondata:Name {value: "custom_field_id"}
-    string customFieldId?;
-    # The type of response that the invitee provides to the custom question. It can be one or multiple lines of text, a phone number, or single- or multiple-select.[`string text phone_number single_select multi_select`]
-    "text"|"string"|"phone_number"|"choices_one"|"choices_many"|"select" format;
-    # The custom question the host created for the event type
-    string name;
-    # This field is true if the custom question allows invitees to record a written response in addition to single-select or multiple-select type of responses. This field is false if the custom question does not allow invitees to record a written response
-    @jsondata:Name {value: "include_other"}
-    boolean includeOther;
-    # The position of this question
-    decimal position;
-    # This field is true if the question the host creates is ON and visible on the event booking page. This field is false if it's OFF and invisible on the event booking page
-    boolean enabled;
-    # This field is true if a response to the question created by the host is required for invitees to book the event type. This field is false if a response to the question created by the host is not required for invitees to book the event type
-    boolean required;
-};
-
-public type InlineResponse2006AvailabilityRules record {
+public type CreateScheduleAvailabilityRule record {
     # This field indicates the use of custom availability instead of the rule
     @jsondata:Name {value: "use_custom"}
     boolean useCustom?;
     # The ID of this availability rule. 
     @jsondata:Name {value: "availability_id"}
     string availabilityId?;
+    # Weekly recurring availability segments, keyed by day of the week
     @jsondata:Name {value: "segments_recurrence"}
-    InlineResponse2006SegmentsRecurrence segmentsRecurrence?;
-    # The timezone of this availability rule. 
+    WeeklyRecurrence segmentsRecurrence?;
+    # the timezone of this availability rule. 
     @jsondata:Name {value: "time_zone"}
     string timeZone?;
     # The owner of this availability rule. 
     string email?;
     # The available time segments of the event
-    SchedulerschedulesSegments[] segments?;
+    DateSegment[] segments?;
 };
 
-# Represents the Queries record for the operation: get_schedule
+# The information of the person making the booking, also known as the invitee
+public type Booker record {
+    # The booker's preferred time display format
+    @jsondata:Name {value: "time_format"}
+    "12h"|"24h" timeFormat?;
+    # The booker's last name
+    @jsondata:Name {value: "last_name"}
+    string lastName;
+    # The booker's phone number for SMS reminders. Must be a valid phone number (for example, `+1 888-888-8888`)
+    @jsondata:Name {value: "phone_number"}
+    string phoneNumber?;
+    # The booker's first name
+    @jsondata:Name {value: "first_name"}
+    string firstName;
+    # The booker's email address
+    string email;
+};
+
+public type AnalyticsReport record {
+    # The most popular schedules in the given time range
+    @jsondata:Name {value: "popular_schedules"}
+    record {}[] popularSchedules?;
+    # The users with the least scheduled events
+    @jsondata:Name {value: "users_with_least_events"}
+    record {}[] usersWithLeastEvents?;
+    # Analytics totals for the requested last N days
+    @jsondata:Name {value: "last_n_days"}
+    AnalyticsLastNDays lastNDays?;
+    # The distribution of number of events scheduled in a day
+    @jsondata:Name {value: "popular_time_of_day"}
+    record {}[] popularTimeOfDay?;
+    # Analytics totals for the equivalent previous period, for comparison
+    @jsondata:Name {value: "previous_period"}
+    AnalyticsPreviousPeriod previousPeriod?;
+    # The event distribution by duration
+    @jsondata:Name {value: "event_distribution_by_duration"}
+    record {}[] eventDistributionByDuration?;
+    # The distribution of number of events scheduled in a week
+    @jsondata:Name {value: "popular_time_of_week"}
+    record {}[] popularTimeOfWeek?;
+    # The users with the most scheduled events
+    @jsondata:Name {value: "users_with_most_events"}
+    record {}[] usersWithMostEvents?;
+};
+
+public type TimeSegment record {
+    # The start time of this day
+    string 'start?;
+    # The end time of this day
+    string end?;
+};
+
+# The organizer of the schedule. This field is read-only
+public type ScheduleOrganizer record {
+    # This field indicates if this user is the organizer. This field is read-only
+    boolean self?;
+    # The organizer's display name
+    @jsondata:Name {value: "display_name"}
+    string displayName?;
+    # The organizer's email address
+    string email?;
+};
+
+public type AvailableSpot record {
+    # The start time of this slot in ISO 8601 format with the host's timezone offset (for example, `-07:00` for `America/Los_Angeles`). The meeting would run from `start_time` to `start_time` plus `duration` minutes
+    @jsondata:Name {value: "start_time"}
+    string startTime?;
+    # The number of remaining bookable seats for this slot. Typically `1` for one-on-one schedules. Can be greater than `1` for group events
+    @jsondata:Name {value: "available_number"}
+    int availableNumber?;
+    # Slot-level availability. `available` means this specific time slot is open and bookable. `unavailable` means this slot is already taken, blocked, or outside working hours
+    "available"|"unavailable" status?;
+};
+
+public type CreateShareRequest record {
+    # The schedule's end date
+    @jsondata:Name {value: "end_date"}
+    string endDate?;
+    # This field indicates the duration of the meeting in minutes, range: [1, 1440]
+    @constraint:Number {minValue: 15, maxValue: 1440}
+    decimal duration?;
+    # Weekly recurring availability segments, keyed by day of the week
+    @jsondata:Name {value: "segments_recurrence"}
+    WeeklyRecurrence segmentsRecurrence?;
+    # The timezone of this availability rule. 
+    @jsondata:Name {value: "time_zone"}
+    string timeZone?;
+    # The unique identifier of a schedule
+    @jsondata:Name {value: "schedule_id"}
+    string scheduleId;
+    # The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`
+    @jsondata:Name {value: "interval_type"}
+    "unlimited"|"fixed" intervalType?;
+    # The schedule's start date
+    @jsondata:Name {value: "start_date"}
+    string startDate?;
+    # The available time segments of the event
+    DateSegment[] segments?;
+};
+
+# The availability schedule set by the user
+public type CreatedAvailability record {
+    # An URI reference to a user
+    string owner?;
+    # The default availability schedule in use
+    boolean default?;
+    # The name of this availability schedule
+    string name?;
+    # The unique ID of the availability
+    @jsondata:Name {value: "availability_id"}
+    string availabilityId?;
+    # Weekly recurring availability segments, keyed by day of the week
+    @jsondata:Name {value: "segments_recurrence"}
+    AvailabilityWeeklyRecurrence segmentsRecurrence?;
+    # The timezone for which this availability schedule originates
+    @jsondata:Name {value: "time_zone"}
+    string timeZone?;
+    # The date on which the rule needs to be applied outside of the availability rule
+    record {}[] segments?;
+};
+
+# The location or meeting method configuration for this specific booking. This overrides or specifies the meeting location details
+public type BookingLocationConfiguration record {
+    # Additional information about the meeting location
+    @jsondata:Name {value: "additonal_info"}
+    string additonalInfo?;
+    # The type of meeting location or method
+    string kind?;
+    # The physical location or address for offline meetings. Leave empty for virtual meetings
+    @constraint:String {maxLength: 1024}
+    string location?;
+    # The phone number for Zoom Phone meetings. Leave empty for non-phone meetings
+    @jsondata:Name {value: "phone_number"}
+    string phoneNumber?;
+};
+
+# Represents the Queries record for the operation: deleteSchedule
+public type DeleteScheduleQueries record {
+    # This field indicates that the admin handles certain users. This setting is only for admin
+    @http:Query {name: "user_id"}
+    string userId?;
+};
+
+public type ScheduleCustomFieldAnswerchoicesItemsString string;
+
+# Represents the Queries record for the operation: getSchedule
 public type GetScheduleQueries record {
     # This field indicates that admins handle certain users. This setting is only for admin
     @http:Query {name: "user_id"}
     string userId?;
 };
 
-public type InlineResponse2011CustomFieldsAnswerchoicesItemsString string;
+public type ScheduleSummaryAvailabilityRule record {
+    # This field indicates the use of custom availability instead of the rule
+    @jsondata:Name {value: "use_custom"}
+    boolean useCustom?;
+    # The ID of this availability rule. 
+    @jsondata:Name {value: "availability_id"}
+    string availabilityId?;
+    # Weekly recurring availability segments, keyed by day of the week
+    @jsondata:Name {value: "segments_recurrence"}
+    ScheduleWeeklyRecurrence segmentsRecurrence?;
+    # The timezone of this availability rule. 
+    @jsondata:Name {value: "time_zone"}
+    string timeZone?;
+    # The owner of this availability rule. 
+    string email?;
+    # The available time segments of the event
+    DateSegment[] segments?;
+};
+
+# The user's information
+public type SchedulerUser record {
+    # The URL of the user’s scheduling site where invitees book this event type
+    @jsondata:Name {value: "scheduling_url"}
+    string schedulingUrl?;
+    # This field enables users to upload their company's logo on Zoom
+    string logo?;
+    # The user's name
+    @jsondata:Name {value: "display_name"}
+    string displayName?;
+    # The time zone to use when presenting time to the user
+    @jsondata:Name {value: "time_zone"}
+    string timeZone?;
+    # The portion of URL for the user's scheduling page where invitees book sessions that renders in a human-readable format
+    string slug?;
+    # This field enables users to upload their personal avatars on Zoom
+    string picture?;
+};
+
+# Represents the Queries record for the operation: listTeams
+public type ListTeamsQueries record {
+    # This field specifies teams that include a specific user
+    @http:Query {name: "user_id"}
+    string userId?;
+};
+
+# Represents the Queries record for the operation: deleteScheduledEvent
+public type DeleteScheduledEventQueries record {
+    # This field indicates whether the admin handles certain users. It's only for admin
+    @http:Query {name: "user_id"}
+    string userId?;
+};
 
 # Provides a set of configurations for controlling the behaviours when communicating with a remote HTTP endpoint.
 @display {label: "Connection Config"}
@@ -329,154 +366,415 @@ public type ConnectionConfig record {|
     boolean laxDataBinding = true;
 |};
 
-public type InlineResponse2011AvailabilityRules record {
+# The availability schedule set by the user
+public type Availability record {
+    # The owner's ID
+    string owner?;
+    # The default availability schedule in use
+    boolean default?;
+    # The name of this availability schedule
+    string name?;
+    # The unique ID of availability
+    @jsondata:Name {value: "availability_id"}
+    string availabilityId?;
+    # Weekly recurring availability segments, keyed by day of the week
+    @jsondata:Name {value: "segments_recurrence"}
+    AvailabilityWeeklyRecurrence segmentsRecurrence?;
+    # The timezone for which this availability schedule originates
+    @jsondata:Name {value: "time_zone"}
+    string timeZone?;
+};
+
+public type CreateBookingRequest record {
+    # The duration of the booking in minutes
+    @constraint:Int {minValue: 1, maxValue: 720}
+    int duration;
+    # The booker's questions and answers
+    @jsondata:Name {value: "questions_and_answers"}
+    BookingQuestionAnswer[] questionsAndAnswers?;
+    # Location configuration for the booked meeting
+    @jsondata:Name {value: "location_configuration"}
+    BookingLocationConfiguration locationConfiguration?;
+    # The start date and time of the booking in ISO 8601 format. For example, `YYYY-MM-DDTHH:mm:ss.sssZ`
+    @jsondata:Name {value: "start_date_time"}
+    string startDateTime;
+    # The time zone identifier of the user or location, represented in the IANA Time Zone Database format (for example, `America/Los_Angeles`)
+    @jsondata:Name {value: "time_zone"}
+    string timeZone?;
+    # The unique identifier of the schedule or scheduling page on which to create the booking
+    @jsondata:Name {value: "schedule_id"}
+    string scheduleId;
+    # The information of the person making the booking, also known as the invitee
+    Booker booker;
+    # Optional tracking parameters for analytics or attribution purposes, such as UTM parameters or custom tracking data
+    BookingTracking tracking?;
+};
+
+public type ScheduleAvailabilityRule record {
     # This field indicates the use of custom availability instead of the rule
     @jsondata:Name {value: "use_custom"}
     boolean useCustom?;
     # The ID of this availability rule. 
     @jsondata:Name {value: "availability_id"}
     string availabilityId?;
+    # Weekly recurring availability segments, keyed by day of the week
     @jsondata:Name {value: "segments_recurrence"}
-    SchedulerschedulesSegmentsRecurrence segmentsRecurrence?;
+    ScheduleAvailabilityRuleRecurrence segmentsRecurrence?;
     # The timezone of this availability rule. 
     @jsondata:Name {value: "time_zone"}
     string timeZone?;
     # The owner of this availability rule. 
     string email?;
     # The available time segments of the event
-    SchedulerschedulesSegments[] segments?;
+    DateSegment[] segments?;
 };
 
-# The organizer of the schedule. This field is read-only
-public type InlineResponse2011Organizer record {
-    # This field indicates if this user is the organizer. This field is read-only
+public type AvailabilitySummaryRecurrence record {
+    # Available time segments on Thursday
+    TimeSegment[] thu?;
+    # Available time segments on Tuesday
+    TimeSegment[] tue?;
+    # Available time segments on Wednesday
+    TimeSegment[] wed?;
+    # Available time segments on Saturday
+    TimeSegment[] sat?;
+    # Available time segments on Friday
+    TimeSegment[] fri?;
+    # Available time segments on Sunday
+    TimeSegment[] sun?;
+    # Available time segments on Monday
+    TimeSegment[] mon?;
+};
+
+# Represents the Queries record for the operation: createSchedule
+public type CreateScheduleQueries record {
+    # This field indicates that the admin handles certain users. This setting is only for admin
+    @http:Query {name: "user_id"}
+    string userId?;
+};
+
+public type AvailableTimes record {
+    # The duration of each bookable time slot in minutes. For example, `30` means each slot is a 30-minute meeting. The end time of a slot equals `start_time` plus `duration`
+    int duration;
+    # List of days within the queried time range. Each day contains its overall availability status and individual time spots. This is the primary data to use when presenting available slots to the user
+    AvailableDay[] days;
+    # The unique identifier of the schedule. Matches the `schedule_id` in the request path
+    @jsondata:Name {value: "schedule_id"}
+    string scheduleId;
+};
+
+# The creator of the schedule. The field is read-only
+public type ScheduleCreator record {
+    # This field indicates if you created the schedule. The field is read-only
     boolean self?;
-    # The organizer's display name
+    # This field indicates the creator of the display name
     @jsondata:Name {value: "display_name"}
     string displayName?;
-    # The organizer's email address
+    # This field indicates the creator's email address
     string email?;
 };
 
-public type SchedulerschedulesscheduleIdAvailabilityRules record {
+public type Booking record {
+    # The name or title of the schedule that was booked
+    string summary?;
+    # The list of attendees, bookers, or invitees for this booking
+    BookingAttendee[] attendees?;
+    # The schedule type. `one` for individual or `multiple` for multi-host
+    "one"|"multiple" 'type?;
+    # The tracking fields returned from the request body
+    BookingTrackingParam[] tracking?;
+    # The maximum number of invitees per slot for this schedule
+    decimal capacity?;
+    # The duration of the booking in minutes
+    decimal duration?;
+    # The end date and time in ISO 8601 format
+    @jsondata:Name {value: "end_date_time"}
+    string endDateTime?;
+    # The unique identifier of the created scheduled event
+    @jsondata:Name {value: "event_id"}
+    string eventId?;
+    # The meeting location or physical address for offline meetings. Empty for virtual meetings
+    string location?;
+    # The type of meeting location or method for this booking
+    @jsondata:Name {value: "location_kind"}
+    string locationKind?;
+    # The start date and time in ISO 8601 format
+    @jsondata:Name {value: "start_date_time"}
+    string startDateTime?;
+    # Additional information about the meeting location
+    @jsondata:Name {value: "location_additional_info"}
+    string locationAdditionalInfo?;
+    # The unique identifier of the schedule or scheduling page this booking belongs to
+    @jsondata:Name {value: "schedule_id"}
+    string scheduleId?;
+    # The status of the booking
+    "confirmed"|"cancelled" status?;
+    # The list of host display names assigned to this booking. For individual schedules, this contains the single host. For round-robin or multi-host schedules, it contains the assigned hosts
+    @jsondata:Name {value: "assigned_to"}
+    string[] assignedTo?;
+};
+
+public type UpdateScheduleAvailabilityRule record {
     # This field indicates whether to use the custom availability instead of the rule
     @jsondata:Name {value: "use_custom"}
     boolean useCustom?;
     # The ID of this availability rule. 
     @jsondata:Name {value: "availability_id"}
     string availabilityId?;
+    # Weekly recurring availability segments, keyed by day of the week
     @jsondata:Name {value: "segments_recurrence"}
-    SchedulerschedulesscheduleIdSegmentsRecurrence segmentsRecurrence?;
+    UpdateScheduleRuleRecurrence segmentsRecurrence?;
     # The timezone of this availability rule. 
     @jsondata:Name {value: "time_zone"}
     string timeZone?;
     # The owner of this availability rule. 
     string email?;
     # The available time segments of the event
-    SchedulerschedulesscheduleIdSegments[] segments?;
+    UpdateScheduleDateSegment[] segments?;
 };
 
-# Represents the Queries record for the operation: insert_schedule
-public type InsertScheduleQueries record {
+# Represents the Queries record for the operation: listAvailabilities
+public type ListAvailabilitiesQueries record {
+    # The token that specifies which result page to return
+    @http:Query {name: "next_page_token"}
+    string nextPageToken?;
+    # The return of the specific user's availability
+    @http:Query {name: "user_id"}
+    string userId?;
+    # The maximum number of availability returned on one result page
+    @http:Query {name: "page_size"}
+    int pageSize?;
+};
+
+# Represents the Queries record for the operation: updateSchedule
+public type UpdateScheduleQueries record {
     # This field indicates that the admin handles certain users. This setting is only for admin
     @http:Query {name: "user_id"}
     string userId?;
 };
 
-# The date interval to override
-public type ScheduleravailabilitySegments record {
-    # This field indicates the start date to override
-    string 'start;
-    # This field indicates the end date to override
-    string end;
+# Represents the Queries record for the operation: listAvailableTimes
+public type ListAvailableTimesQueries record {
+    # The minimum time boundary (start time) for querying available slots. Must be in ISO 8601 / RFC 3339 format in UTC
+    string 'from;
+    # The maximum time boundary (end time) for querying available slots. Must be in ISO 8601 / RFC 3339 format in UTC. Must be strictly after `from`
+    string to;
+    # The timezone identifier of the user or location, represented in the IANA Time Zone Database format (e.g., "America/Los_Angeles")
+    @http:Query {name: "time_zone"}
+    string timeZone?;
+    # The user slug identifier to filter available time slots for a specific host or team member. Format: `t/` followed by the user identifier, for example `t/x0ghart`. Required if the schedule object contains a `user` field — pass the exact value from that field. Omit if the schedule has no `user` field
+    string user?;
 };
 
-public type InlineResponse2004TrackingParams record {
-    # The scheduler tags that correspond to UTM parameters one by one
-    string label?;
-    # The value of UTM parameters set in schedule links by host
-    string value?;
-    # The UTM parameters in schedule links
-    string 'key?;
+# The week of the available time rule
+public type ScheduleWeeklyRecurrence record {
+    # Available time segments on Thursday
+    TimeSegment[] thu?;
+    # Available time segments on Tuesday
+    TimeSegment[] tue?;
+    # Available time segments on Wednesday
+    TimeSegment[] wed?;
+    # Available time segments on Saturday
+    TimeSegment[] sat?;
+    # Available time segments on Friday
+    TimeSegment[] fri?;
+    # Available time segments on Sunday
+    TimeSegment[] sun?;
+    # Available time segments on Monday
+    TimeSegment[] mon?;
 };
 
-public type InlineResponse2001Items record {
-    # The owner's ID
-    string owner?;
-    boolean default?;
-    string name?;
-    @jsondata:Name {value: "availability_id"}
-    string availabilityId?;
+public type CreateScheduleCustomFieldAnswerchoicesItemsString string;
+
+# Represents the Queries record for the operation: updateScheduledEvent
+public type UpdateScheduledEventQueries record {
+    # This field indicates whether the admin handles certain users. It's only for admin
+    @http:Query {name: "user_id"}
+    string userId?;
+};
+
+public type AvailableDay record {
+    # The date in `YYYY-MM-DD` format
+    string date?;
+    # List of individual time slots within this day. Each spot represents one bookable unit of `duration` minutes. Only spots with status `available` can be booked
+    AvailableSpot[] spots?;
+    # Day-level availability summary. `available` means at least one spot on this day is bookable. `unavailable` means all spots on this day are taken or blocked — skip this day entirely when presenting options
+    "available"|"unavailable" status?;
+};
+
+public type CreateSingleUseLinkRequest record {
+    # The unique identifier of a schedule
+    @jsondata:Name {value: "schedule_id"}
+    string scheduleId;
+};
+
+public type RoutingQuestionAnswer record {
+    # This field could be text, email address, single choice or multiple choices, depending on questions types. All values are stored as string
+    @constraint:Array {maxLength: 100}
+    string[] answers?;
+    # The question content asked in the form
+    @jsondata:Name {value: "question_content"}
+    string questionContent?;
+    # The question ID
+    @jsondata:Name {value: "question_id"}
+    string questionId?;
+};
+
+public type ScheduledEventSummary record {
+    # The event's summary
+    @constraint:String {maxLength: 256}
+    string summary?;
+    # The attendees of the event
+    ScheduledEventSummaryAttendee[] attendees?;
+    # The meeting notes of the event
+    @jsondata:Name {value: "meeting_notes"}
+    string meetingNotes?;
+    # The event's description
+    @constraint:String {maxLength: 8192}
+    string description?;
+    # The scheduled event end date time
+    @jsondata:Name {value: "end_date_time"}
+    string endDateTime?;
+    # The unique identifier of event
+    @jsondata:Name {value: "event_id"}
+    string eventId?;
+    # This field indicates the type is default(scheduled) or pending event
+    @jsondata:Name {value: "event_type"}
+    "default"|"pending" eventType?;
+    # The information to track the source of invitee. This occurs when you add UTM parameters in schedule links
+    @jsondata:Name {value: "tracking_params"}
+    ScheduledEventSummaryTrackingParam[] trackingParams?;
+    # The guest's collection
+    string[] guests?;
+    # The information for a custom location
+    @constraint:String {maxLength: 1024}
+    string location?;
+    # The scheduled event start date time
+    @jsondata:Name {value: "start_date_time"}
+    string startDateTime?;
+    # The unique identifier of schedule
+    @jsondata:Name {value: "schedule_id"}
+    string scheduleId?;
+    # The moment the event was updated
+    string updated?;
+    # The meeting details for when users have scheduled appointments
+    @jsondata:Name {value: "external_location"}
+    record {string kind?; string meeting_id?; string personal_meeting_id?; string meeting_passcode?; string meeting_description?; string meeting_join_url?;} externalLocation?;
+    # The status of event: confirmed or cancelled
+    "confirmed"|"cancelled" status?;
+};
+
+public type ScheduledEventList record {
+    # The token to access the next page of this result
+    @jsondata:Name {value: "next_page_token"}
+    string nextPageToken?;
+    # The event collection
+    ScheduledEventSummary[] items?;
+};
+
+# Represents the Queries record for the operation: createSingleUseLink
+public type CreateSingleUseLinkQueries record {
+    # This field identifies the specific team. If this parameter exists, the link will be created for the team to which the user belongs
+    @http:Query {name: "team_id"}
+    string teamId?;
+};
+
+@constraint:String {maxLength: 1024, minLength: 1}
+public type ScheduledEventAttendeeCustomValueValuesItemsString string;
+
+public type CreatedSchedule record {
+    # The schedule's end date
+    @jsondata:Name {value: "end_date"}
+    string endDate?;
+    # The hexadecimal color value of the event type's scheduling page
+    string color?;
+    # The schedule's description
+    @constraint:String {maxLength: 8192}
+    string description?;
+    # This field indicates if the event type is hidden on the owner's main scheduling page
+    boolean secret?;
+    # The availability of the time rule
+    @jsondata:Name {value: "availability_rules"}
+    CreatedScheduleAvailabilityRule[] availabilityRules?;
+    # This field indicates the maximum invitees per event
+    @constraint:Number {minValue: 1, maxValue: 200}
+    decimal capacity?;
+    # The available time segments of the event
+    DateSegment[] segments?;
+    # This field indicates the duration of the meeting in minutes, range: [1, 1440]
+    @constraint:Number {minValue: 15, maxValue: 1440}
+    decimal duration?;
+    # This field indicates the minimum time before a schedule starts when the attendees can book
+    @constraint:Number {minValue: 0, maxValue: 14340}
+    decimal cushion?;
+    # This field indicates the extra time before or after the booked schedule
+    ScheduleBuffer buffer?;
+    # Weekly recurring availability segments, keyed by day of the week
     @jsondata:Name {value: "segments_recurrence"}
-    InlineResponse2001SegmentsRecurrence segmentsRecurrence?;
+    WeeklyRecurrence segmentsRecurrence?;
+    # The event portion of the event's URL that identifies a specific web page
+    @constraint:String {maxLength: 256, minLength: 3}
+    string slug?;
+    # The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`
+    @jsondata:Name {value: "interval_type"}
+    "unlimited"|"fixed" intervalType?;
+    # The schedule's start date
+    @jsondata:Name {value: "start_date"}
+    string startDate?;
+    # The method of the type of `addOn`, such as Zoom meeting, Zoom phone, or offline
+    @jsondata:Name {value: "add_on_type"}
+    "zoomMeeting"|"zoomPhone"|"offline" addOnType?;
+    # The URL of the user’s scheduling site where invitees book this event type
+    @jsondata:Name {value: "scheduling_url"}
+    string schedulingUrl?;
+    # This field sets the frequency of available time slots for invitees
+    @jsondata:Name {value: "start_time_increment"}
+    decimal startTimeIncrement?;
+    # The event's summary
+    @constraint:String {maxLength: 256}
+    string summary?;
+    # The creator of the schedule. The field is read-only
+    ScheduleCreator creator?;
+    # This field indicates if the schedule type is "one" (belongs to an individual user) or "multiple"
+    @jsondata:Name {value: "schedule_type"}
+    "one"|"multiple" scheduleType?;
+    # This field contains the custom question
+    @jsondata:Name {value: "custom_fields"}
+    ScheduleCustomField[] customFields?;
+    # This field indicates if the schedule is active
+    boolean active?;
+    # This field sets the maximum events allowed per day
+    @jsondata:Name {value: "booking_limit"}
+    decimal bookingLimit?;
+    # the timezone of this availability rule. 
     @jsondata:Name {value: "time_zone"}
     string timeZone?;
+    # The organizer of the schedule. This field is read-only
+    ScheduleOrganizer organizer?;
+    # The information for a custom location
+    @constraint:String {maxLength: 1024}
+    string location?;
+    # The unique identifier of schedule
+    @jsondata:Name {value: "schedule_id"}
+    string scheduleId?;
+    # The moment the schedule type was updated
+    string updated?;
+    # This field indicates the use of the availability rule
+    @jsondata:Name {value: "availability_override"}
+    boolean availabilityOverride?;
+    # The status of schedule: confirmed or cancelled
+    "confirmed"|"cancelled" status?;
 };
 
-# The rules of this availability schedule
-public type ScheduleravailabilitySegmentsRecurrence record {
-    # Thursday
-    ScheduleravailabilitySegmentsRecurrenceSun[] thu?;
-    # Tuesday
-    ScheduleravailabilitySegmentsRecurrenceSun[] tue?;
-    # Wednesday
-    ScheduleravailabilitySegmentsRecurrenceSun[] wed?;
-    # Saturday
-    ScheduleravailabilitySegmentsRecurrenceSun[] sat?;
-    # Friday 
-    ScheduleravailabilitySegmentsRecurrenceSun[] fri?;
-    # Sundays
-    ScheduleravailabilitySegmentsRecurrenceSun[] sun?;
-    # Monday
-    ScheduleravailabilitySegmentsRecurrenceSun[] mon?;
-};
-
-public type InlineResponse2003Attendees record {
-    # This field indicates when the attendee attended this event
-    string created?;
-    # The ID of attendee
-    @jsondata:Name {value: "attendee_id"}
-    string attendeeId?;
-    #  The attendee's last name
-    @jsondata:Name {value: "last_name"}
-    string lastName?;
-    # The attendee's name
-    @jsondata:Name {value: "display_name"}
-    string displayName?;
-    # The attendee's time zone
-    @jsondata:Name {value: "time_zone"}
-    string timeZone?;
-    # Whether to show events or not
-    @jsondata:Name {value: "no_show"}
-    boolean noShow?;
-    # Whether the attendee is the booker
-    boolean booker?;
-    # The attendee's first name
-    @jsondata:Name {value: "first_name"}
-    string firstName?;
-    # The attendee's email
-    string email?;
-};
-
-public type InlineResponse2001SegmentsRecurrence record {
-    # Thursday
-    ScheduleravailabilitySegmentsRecurrenceSun[] thu?;
-    # Tuesday
-    ScheduleravailabilitySegmentsRecurrenceSun[] tue?;
-    # Wednesday
-    ScheduleravailabilitySegmentsRecurrenceSun[] wed?;
-    # Saturday
-    ScheduleravailabilitySegmentsRecurrenceSun[] sat?;
-    # Friday 
-    ScheduleravailabilitySegmentsRecurrenceSun[] fri?;
-    # Sunday
-    ScheduleravailabilitySegmentsRecurrenceSun[] sun?;
-    # Monday
-    ScheduleravailabilitySegmentsRecurrenceSun[] mon?;
+public type UpdateScheduleDateSegment record {
+    # The start date-time of the segment
+    string 'start?;
+    # The end date-time of the segment
+    string end?;
 };
 
 # the stats of the previous period with a length of also N. Last N day is counting from today and backtrace N days. Previous period is counting from N days ago and back tracking another N days
-public type InlineResponse200PreviousPeriod record {
+public type AnalyticsPreviousPeriod record {
     # The number of "all host available" type schedules
     @jsondata:Name {value: "all_host_available"}
     int allHostAvailable?;
@@ -515,36 +813,168 @@ public type InlineResponse200PreviousPeriod record {
     int schedulesCreated?;
 };
 
-public type SchedulereventseventIdAttendees record {
+public type ScheduleSummary record {
+    # The schedule's end date
+    @jsondata:Name {value: "end_date"}
+    string endDate?;
+    # The hexadecimal color value of the event type's scheduling page
+    string color?;
+    # The schedule's description
+    @constraint:String {maxLength: 8192}
+    string description?;
+    # This field indicates if the event type is hidden on the owner's main scheduling page
+    boolean secret?;
+    # The availability of the time rule
+    @jsondata:Name {value: "availability_rules"}
+    ScheduleSummaryAvailabilityRule[] availabilityRules?;
+    # This field indicates the maximum invitees per event
+    @constraint:Number {minValue: 1, maxValue: 200}
+    decimal capacity?;
+    # The available time segments of the event
+    DateSegment[] segments?;
+    # This field indicates the duration of the meeting in minutes, range: [1, 1440]
+    @constraint:Number {minValue: 15, maxValue: 1440}
+    decimal duration?;
+    # This field indicates the minimum time before a schedule starts when the attendees can book
+    @constraint:Number {minValue: 0, maxValue: 14340}
+    decimal cushion?;
+    # This field indicates the extra time before or after the booked schedule
+    ScheduleBuffer buffer?;
+    # Weekly recurring availability segments, keyed by day of the week
+    @jsondata:Name {value: "segments_recurrence"}
+    ScheduleWeeklyRecurrence segmentsRecurrence?;
+    # The event portion of the event's URL that identifies a specific web page
+    @constraint:String {maxLength: 256, minLength: 3}
+    string slug?;
+    # The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`
+    @jsondata:Name {value: "interval_type"}
+    "unlimited"|"fixed" intervalType?;
+    # The schedule's start date
+    @jsondata:Name {value: "start_date"}
+    string startDate?;
+    # The method of the type of `addOn`, such as Zoom meeting, Zoom phone, or offline
+    @jsondata:Name {value: "add_on_type"}
+    "zoomMeeting"|"zoomPhone"|"offline" addOnType?;
+    # The URL of the user's scheduling site where invitees book this event type
+    @jsondata:Name {value: "scheduling_url"}
+    string schedulingUrl?;
+    # This field sets the frequency of available time slots for invitees
+    @jsondata:Name {value: "start_time_increment"}
+    decimal startTimeIncrement?;
+    # The event's summary
+    @constraint:String {maxLength: 256}
+    string summary?;
+    # The creator of the schedule. This field is read-only
+    ScheduleSummaryCreator creator?;
+    # This field indicates if the schedule type is "one" (belongs to an individual user) or "multiple"
+    @jsondata:Name {value: "schedule_type"}
+    "one"|"multiple" scheduleType?;
+    # This field contains the custom question
+    @jsondata:Name {value: "custom_fields"}
+    ScheduleCustomField[] customFields?;
+    # The moment the schedule type was created
+    string created?;
+    # This field indicates if the schedule is active
+    boolean active?;
+    # This field sets the maximum events allowed per day
+    @jsondata:Name {value: "booking_limit"}
+    decimal bookingLimit?;
+    # the timezone of this availability rule. 
+    @jsondata:Name {value: "time_zone"}
+    string timeZone?;
+    # The organizer of the schedule. This field is read-only
+    ScheduleOrganizer organizer?;
+    # The information for a custom location
+    @constraint:String {maxLength: 1024}
+    string location?;
+    # The unique identifier of the schedule
+    @jsondata:Name {value: "schedule_id"}
+    string scheduleId?;
+    # The moment the schedule type was updated
+    string updated?;
+    # This field indicates the use of the availability rule
+    @jsondata:Name {value: "availability_override"}
+    boolean availabilityOverride?;
+    # The status of schedule: confirmed or cancelled
+    "confirmed"|"cancelled" status?;
+};
+
+# The attendee collection
+public type ScheduledEventSummaryAttendee record {
+    # This field indicates when the attendee attended this event
+    string created?;
     # The ID of attendee
     @jsondata:Name {value: "attendee_id"}
     string attendeeId?;
-    # This field inidcates the attendee if shown in the scheduled event
+    #  The attendee's last name
+    @jsondata:Name {value: "last_name"}
+    string lastName?;
+    # The attendee's name
+    @jsondata:Name {value: "display_name"}
+    string displayName?;
+    # The attendee's time zone
+    @jsondata:Name {value: "time_zone"}
+    string timeZone?;
+    # Whether to show events or not
     @jsondata:Name {value: "no_show"}
     boolean noShow?;
+    # Whether the attendee is the booker
+    boolean booker?;
+    # The attendee's first name
+    @jsondata:Name {value: "first_name"}
+    string firstName?;
     # The attendee's email
     string email?;
+    # The answers to the booking page questions
+    AttendeeCustomValue[] customValues?;
 };
 
-# The week of the available time rule
-public type SchedulerschedulesSegmentsRecurrence record {
-    # Thursday
-    ScheduleravailabilitySegmentsRecurrenceSun[] thu?;
-    # Tuesday
-    ScheduleravailabilitySegmentsRecurrenceSun[] tue?;
-    # Wednesday
-    ScheduleravailabilitySegmentsRecurrenceSun[] wed?;
-    # Saturday
-    ScheduleravailabilitySegmentsRecurrenceSun[] sat?;
-    # Friday 
-    ScheduleravailabilitySegmentsRecurrenceSun[] fri?;
-    # Sundays
-    ScheduleravailabilitySegmentsRecurrenceSun[] sun?;
-    # Monday
-    ScheduleravailabilitySegmentsRecurrenceSun[] mon?;
+# The date interval to override
+public type AvailabilityDateOverride record {
+    # This field indicates the start date to override
+    string 'start;
+    # This field indicates the end date to override
+    string end;
 };
 
-public type SchedulerSchedulesBody record {
+public type AttendeeCustomValue record {
+    # The answers to the question
+    string[] values?;
+    # The name of the question
+    string name?;
+    # The position of the question
+    int position?;
+};
+
+public type CreateScheduleCustomField record {
+    # The invitee's option(s) for `single_select` or `multi_select` type of responses
+    @jsondata:Name {value: "answer_choices"}
+    CreateScheduleCustomFieldAnswerchoicesItemsString[] answerChoices?;
+    # The ID of this question
+    @jsondata:Name {value: "custom_field_id"}
+    string customFieldId?;
+    # The type of response that the invitee provides to the custom question. It can be one or multiple lines of text, a phone number, or single- or multiple-select.[`string text phone_number single_select multi_select`]
+    "text"|"string"|"phone_number"|"choices_one"|"choices_many"|"select" format;
+    # The custom question the host created for the event type
+    string name;
+    # This field is true if the custom question allows invitees to record a written response in addition to single-select or multiple-select type of responses. This field is false if the custom question does not allow invitees to record a written response
+    @jsondata:Name {value: "include_other"}
+    boolean includeOther;
+    # The position of this question
+    decimal position;
+    # This field is true if the question the host creates is ON and visible on the event booking page. This field is false if it's OFF and invisible on the event booking page
+    boolean enabled;
+    # This field is true if a response to the question created by the host is required for invitees to book the event type. This field is false if a response to the question created by the host is not required for invitees to book the event type
+    boolean required;
+};
+
+# Represents the Queries record for the operation: createBooking
+public type CreateBookingQueries record {
+    # The user slug identifier to filter available time slots for a specific host or team member. Format: `t/` followed by the user identifier, for example `t/x0ghart`. **Required** if the schedule object contains a `user` field — pass the exact value from that field. Omit if the schedule has no `user` field
+    string user?;
+};
+
+public type CreateScheduleRequest record {
     # The method of the type of `addOn`, such as Zoom meeting, Zoom phone, or offline
     @jsondata:Name {value: "add_on_type"}
     "zoomMeeting"|"zoomPhone"|"offline" addOnType?;
@@ -564,7 +994,7 @@ public type SchedulerSchedulesBody record {
     string color?;
     # This field contains the custom question
     @jsondata:Name {value: "custom_fields"}
-    SchedulerschedulesCustomFields[] customFields?;
+    CreateScheduleCustomField[] customFields?;
     # The schedule's description
     @constraint:String {maxLength: 8192}
     string description?;
@@ -580,12 +1010,12 @@ public type SchedulerSchedulesBody record {
     string timeZone?;
     # The availability of the time rule
     @jsondata:Name {value: "availability_rules"}
-    SchedulerschedulesAvailabilityRules[] availabilityRules;
+    CreateScheduleAvailabilityRule[] availabilityRules;
     # This field indicates the maximum invitees per event
     @constraint:Number {minValue: 1, maxValue: 200}
     decimal capacity;
     # The available time segments of the event
-    SchedulerschedulesSegments[] segments?;
+    DateSegment[] segments?;
     # This field indicates the duration of the meeting in minutes, range: [1, 1440]
     @constraint:Number {minValue: 15, maxValue: 1440}
     decimal duration?;
@@ -596,9 +1026,10 @@ public type SchedulerSchedulesBody record {
     @constraint:String {maxLength: 1024}
     string location?;
     # This field indicates the extra time before or after the booked schedule
-    SchedulerschedulesBuffer buffer?;
+    ScheduleBuffer buffer?;
+    # Weekly recurring availability segments, keyed by day of the week
     @jsondata:Name {value: "segments_recurrence"}
-    SchedulerschedulesSegmentsRecurrence segmentsRecurrence?;
+    WeeklyRecurrence segmentsRecurrence?;
     # The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`
     @jsondata:Name {value: "interval_type"}
     "unlimited"|"fixed" intervalType?;
@@ -613,70 +1044,44 @@ public type SchedulerSchedulesBody record {
     string startDate?;
 };
 
-# Represents the Queries record for the operation: patch_scheduled_events
-public type PatchScheduledEventsQueries record {
-    # This field indicates whether the admin handles certain users. It's only for admin
-    @http:Query {name: "user_id"}
-    string userId?;
+public type BookingTrackingParam record {
+    # Corresponds one-to-one with the field values under the `tracking` field in the request body
+    @jsondata:Name {value: "tracking_value"}
+    string trackingValue?;
+    # Corresponds one-to-one with the field names under the `tracking` field in the request body
+    @jsondata:Name {value: "tracking_key"}
+    string trackingKey?;
 };
 
-public type InlineResponse2003TrackingParams record {
-    # The scheduler tags that correspond to UTM parameters one by one
-    string label?;
-    # The value of UTM parameters set in schedule links by host
-    string value?;
-    # The UTM parameters in the schedule links
-    string 'key?;
-};
-
-# This field indicates the extra time before or after the booked schedule
-public type SchedulerschedulesBuffer record {
-    # This field adds the time after the booked schedule
-    @constraint:Number {minValue: 0, maxValue: 240}
-    decimal before?;
-    # This field adds the time before the booked schedule
-    @constraint:Number {minValue: 0, maxValue: 240}
-    decimal after?;
-};
-
-# The extra time before or after booked schedule
-public type SchedulerschedulesscheduleIdBuffer record {
-    # This field adds time after the booked schedule
-    @constraint:Number {minValue: 0, maxValue: 240}
-    decimal before?;
-    # This field adds time before the booked schedule
-    @constraint:Number {minValue: 0, maxValue: 240}
-    decimal after?;
-};
-
-public type SchedulerschedulesscheduleIdSegments record {
-    # The start date-time of the segment
+public type DateSegment record {
+    # The start date and time of the segment
     string 'start?;
-    # The end date-time of the segment
+    # The end date and time of the segment
     string end?;
 };
 
-# The availability schedule set by the user
-public type InlineResponse201 record {
-    # An URI reference to a user
-    string owner?;
-    # The default availability schedule in use
-    boolean default?;
-    # The name of this availability schedule
-    string name?;
-    # The unique ID of the availability
-    @jsondata:Name {value: "availability_id"}
-    string availabilityId?;
-    @jsondata:Name {value: "segments_recurrence"}
-    ScheduleravailabilitySegmentsRecurrence segmentsRecurrence?;
-    # The timezone for which this availability schedule originates
-    @jsondata:Name {value: "time_zone"}
-    string timeZone?;
-    # The date on which the rule needs to be applied outside of the availability rule
-    record {}[] segments?;
+# The week of available time rule
+public type ScheduleAvailabilityRuleRecurrence record {
+    # Available time segments on Thursday
+    TimeSegment[] thu?;
+    # Available time segments on Tuesday
+    TimeSegment[] tue?;
+    # Available time segments on Wednesday
+    TimeSegment[] wed?;
+    # Available time segments on Saturday
+    TimeSegment[] sat?;
+    # Available time segments on Friday
+    TimeSegment[] fri?;
+    # Available time segments on Sunday
+    TimeSegment[] sun?;
+    # Available time segments on Monday
+    TimeSegment[] mon?;
 };
 
-public type InlineResponse2004Attendees record {
+public type ScheduledEventAttendeeInfo record {
+    # The answers to the booking page questions
+    @jsondata:Name {value: "custom_values"}
+    AttendeeCustomValue[] customValues?;
     # This field indicates when the attendee attended this event
     string created?;
     # The ID of attendee
@@ -703,143 +1108,199 @@ public type InlineResponse2004Attendees record {
     string email?;
 };
 
-public type InlineResponse200 record {
-    # The most popular schedules in the given time range
-    @jsondata:Name {value: "popular_schedules"}
-    record {}[] popularSchedules?;
-    # The users with the least scheduled events
-    @jsondata:Name {value: "users_with_least_events"}
-    record {}[] usersWithLeastEvents?;
-    @jsondata:Name {value: "last_n_days"}
-    InlineResponse200LastNDays lastNDays?;
-    # The distribution of number of events scheduled in a day
-    @jsondata:Name {value: "popular_time_of_day"}
-    record {}[] popularTimeOfDay?;
-    @jsondata:Name {value: "previous_period"}
-    InlineResponse200PreviousPeriod previousPeriod?;
-    # The event distribution by duration
-    @jsondata:Name {value: "event_distribution_by_duration"}
-    record {}[] eventDistributionByDuration?;
-    # The distribution of number of events scheduled in a week
-    @jsondata:Name {value: "popular_time_of_week"}
-    record {}[] popularTimeOfWeek?;
-    # The users with the most scheduled events
-    @jsondata:Name {value: "users_with_most_events"}
-    record {}[] usersWithMostEvents?;
+public type RoutingResponse record {
+    # The time that the response was submitted
+    @jsondata:Name {value: "created_time"}
+    string createdTime?;
+    # The type of result returned after submitting the response
+    @jsondata:Name {value: "result_type"}
+    "event"|"text"|"url" resultType?;
+    # Indicating whether a final booking was made after submitting the response
+    boolean booked?;
+    # The booking link that the returned as the result of submitting the form. It could be empty because result type could be URL or text
+    @jsondata:Name {value: "booking_link"}
+    string bookingLink?;
+    # The creator of the response
+    @jsondata:Name {value: "creator_email"}
+    string creatorEmail?;
+    # The response ID
+    @jsondata:Name {value: "response_id"}
+    string responseId?;
+    # The routing form ID that this response belongs to
+    @jsondata:Name {value: "form_id"}
+    string formId?;
+    # The value of result returned after submitting this response. It could be a booking schedule or a URL or a text
+    @jsondata:Name {value: "result_value"}
+    string resultValue?;
+    # The questions and answers in the response
+    @jsondata:Name {value: "questions_and_answers"}
+    RoutingQuestionAnswer[] questionsAndAnswers?;
+    # The name of routing form
+    @jsondata:Name {value: "form_name"}
+    string formName?;
 };
 
-# The week of available time rule
-public type SchedulerschedulesscheduleIdSegmentsRecurrence record {
-    # Thursday
-    ScheduleravailabilitySegmentsRecurrenceSun[] thu?;
-    # Tuesday
-    ScheduleravailabilitySegmentsRecurrenceSun[] tue?;
-    # Wednesday
-    ScheduleravailabilitySegmentsRecurrenceSun[] wed?;
-    # Saturday
-    ScheduleravailabilitySegmentsRecurrenceSun[] sat?;
-    # Friday 
-    ScheduleravailabilitySegmentsRecurrenceSun[] fri?;
-    # Sunday
-    ScheduleravailabilitySegmentsRecurrenceSun[] sun?;
-    # Monday
-    ScheduleravailabilitySegmentsRecurrenceSun[] mon?;
+# The date interval that needs to overridden
+public type AvailabilityDateOverrideUpdate record {
+    # The start date to override
+    string 'start;
+    # The end date to override
+    string end;
 };
 
-# Represents the Queries record for the operation: delete_schedules
-public type DeleteSchedulesQueries record {
-    # This field indicates that the admin handles certain users. This setting is only for admin
-    @http:Query {name: "user_id"}
-    string userId?;
+# The extra time before or after booked schedule
+public type UpdateScheduleBuffer record {
+    # This field adds time after the booked schedule
+    @constraint:Number {minValue: 0, maxValue: 240}
+    decimal before?;
+    # This field adds time before the booked schedule
+    @constraint:Number {minValue: 0, maxValue: 240}
+    decimal after?;
 };
 
-# Represents the Queries record for the operation: delete_scheduled_events
-public type DeleteScheduledEventsQueries record {
-    # This field indicates whether the admin handles certain users. It's only for admin
-    @http:Query {name: "user_id"}
-    string userId?;
-};
-
-# Represents the Queries record for the operation: patch_schedule
-public type PatchScheduleQueries record {
-    # This field indicates that the admin handles certain users. This setting is only for admin
-    @http:Query {name: "user_id"}
-    string userId?;
-};
-
-# Represents the Queries record for the operation: list_availability
-public type ListAvailabilityQueries record {
-    # The token that specifies which result page to return
-    @http:Query {name: "next_page_token"}
+# The availability of the schedule query result of given user
+public type AvailabilityList record {
+    #  The token for a later to retrieve only the entries that have changed since this result was returned. It's omitted if further results are available, in which case `nextPageToken` is provided
+    @jsondata:Name {value: "next_page_token"}
     string nextPageToken?;
-    # The return of the specific user's availability
-    @http:Query {name: "user_id"}
-    string userId?;
-    # The maximum number of availability returned on one result page
-    @http:Query {name: "page_size"}
-    int pageSize?;
+    # array[User Availability Schedule]
+    AvailabilitySummary[] items?;
 };
 
-# The portions of the event resource
-public type EventseventIdBody record {
-    SchedulereventseventIdAttendees[] attendees?;
-    # The meeting notes of the event
-    @jsondata:Name {value: "meeting_notes"}
-    string meetingNotes?;
-    # The status of event: confirmed or cancelled
-    "confirmed"|"cancelled" status?;
+# A specific question and answer pair
+public type BookingQuestionAnswer record {
+    # A question for the booker. The string is case-sensitive and must exactly match the question
+    string question?;
+    # The booker's response to the question
+    string answer?;
+    # The position of the question in relation to others
+    string position?;
+};
+
+# This field indicates the extra time before or after the booked schedule
+public type ScheduleBuffer record {
+    # This field adds the time after the booked schedule
+    @constraint:Number {minValue: 0, maxValue: 240}
+    decimal before?;
+    # This field adds the time before the booked schedule
+    @constraint:Number {minValue: 0, maxValue: 240}
+    decimal after?;
+};
+
+public type RoutingFormResponse record {
+    # The time that the response was submitted
+    @jsondata:Name {value: "created_time"}
+    string createdTime?;
+    # The type of result returned after submitting the response
+    @jsondata:Name {value: "result_type"}
+    "event"|"text"|"url" resultType?;
+    # Indicating whether a final booking was made after submitting the response
+    boolean booked?;
+    # The booking link that the returned as the result of submitting the form. It could be empty because result type could be URL or text
+    @jsondata:Name {value: "booking_link"}
+    string bookingLink?;
+    # The creator of the response
+    @jsondata:Name {value: "creator_email"}
+    string creatorEmail?;
+    # The form ID
+    @jsondata:Name {value: "form_id"}
+    string formId?;
+    # The value of result returned after submitting this response. Itcould be a booking schedule or a URL or a text. 
+    @jsondata:Name {value: "result_value"}
+    string resultValue?;
+    # The questions and answers in the response
+    @jsondata:Name {value: "questions_and_answers"}
+    RoutingQuestionAnswer[] questionsAndAnswers?;
+};
+
+# Optional tracking parameters for analytics or attribution purposes, such as UTM parameters or custom tracking data
+public type BookingTracking record {|
+    # The UTM campaign parameter used to track a campaign.
+    string utm_campaign?;
+    # The UTM source parameter that identifies where the traffic originates.
+    string utm_source?;
+    # The UTM medium parameter that identifies the type of input. For example, Cost Per Click (CPC), social media, affiliate, or QR code.
+    string utm_medium?;
+    # The UTM content tracking parameter.
+    string utm_content?;
+    # The UTM term parameter used to track keywords.
+    string utm_term?;
+    # The 15 or 18-digit Salesforce ID.
+    string salesforce_person?;
+    # The 15 or 18-digit Salesforce ID.
+    string salesforce_related?;
+    string...;
+|};
+
+public type ScheduledEventAttendeeUpdate record {
+    # The ID of attendee
+    @jsondata:Name {value: "attendee_id"}
+    string attendeeId?;
+    # This field inidcates the attendee if shown in the scheduled event
+    @jsondata:Name {value: "no_show"}
+    boolean noShow?;
+    # The attendee's email
+    string email?;
+};
+
+# Represents the Queries record for the operation: getAnalyticsReport
+public type GetAnalyticsReportQueries record {
+    # The specific user's web user ID. Default is "me". Use "all" to query for analytics with respect to all members under that account. 
+    @http:Query {name: "user_id"}
+    string userId?;
+    # The lower bound (exclusive) for an event's end time from which to filter. Optional. The default is not to filter by end time. It must be an RFC3339 timestamp with mandatory time zone offset, for example, 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds can be provided but are ignored. If `timeMax` is set, `timeMin` must be smaller than `timeMax`
+    string 'from?;
+    # The upper bound (exclusive) for an event's start time to filter by. Optional. The default is not to filter by start time. It must be an RFC3339 timestamp with mandatory time zone offset. For example, 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds may be provided but are ignored. If `timeMin` is set, `timeMax` must be greater than `timeMin`
+    string to?;
+    # The time zone in the response. The default is the time zone of the calendar. Optional. 
+    @http:Query {name: "time_zone"}
+    string timeZone?;
 };
 
 # The availability schedule set by the user
-public type AvailabilityavailabilityIdBody record {
+public type CreateAvailabilityRequest record {
+    # the owner's ID
+    string owner?;
     # The default availability schedule in use
     boolean default?;
     # The name of this availability schedule
     @constraint:String {minLength: 1}
     string name;
+    # The unique ID of availability
+    @jsondata:Name {value: "availability_id"}
+    string availabilityId?;
+    # Weekly recurring availability segments, keyed by day of the week
     @jsondata:Name {value: "segments_recurrence"}
-    ScheduleravailabilitySegmentsRecurrence segmentsRecurrence?;
+    AvailabilityWeeklyRecurrence segmentsRecurrence?;
     # The timezone for which this availability schedule originates
     @jsondata:Name {value: "time_zone"}
     string timeZone;
     # The date on which the rule needs to be applied outside of the availability rule
-    ScheduleravailabilityavailabilityIdSegments[] segments?;
+    AvailabilityDateOverride[] segments?;
 };
 
-# The week of the available time rule
-public type SchedulerschedulesscheduleIdSegmentsRecurrence1 record {
-    # Thursday
-    ScheduleravailabilitySegmentsRecurrenceSun[] thu?;
-    # Tuesday
-    ScheduleravailabilitySegmentsRecurrenceSun[] tue?;
-    # Wednesday
-    ScheduleravailabilitySegmentsRecurrenceSun[] wed?;
-    # Saturday
-    ScheduleravailabilitySegmentsRecurrenceSun[] sat?;
-    # Friday 
-    ScheduleravailabilitySegmentsRecurrenceSun[] fri?;
-    # Sunday
-    ScheduleravailabilitySegmentsRecurrenceSun[] sun?;
-    # Monday
-    ScheduleravailabilitySegmentsRecurrenceSun[] mon?;
-};
-
-# The creator of the schedule. This field is read-only
-public type InlineResponse2005Creator record {
-    # This field indicates if you created the schedule. The field is read-only
-    boolean self?;
-    # This field indicates the creator of the display name
-    @jsondata:Name {value: "display_name"}
-    string displayName?;
-    # This field indicates the creator's email address
-    string email?;
-};
-
-# Represents the Queries record for the operation: list_schedules
+# Represents the Queries record for the operation: listSchedules
 public type ListSchedulesQueries record {
     # Whether to include the deleted schedule (with status equals "cancelled") in the result
     @http:Query {name: "show_deleted"}
     boolean showDeleted?;
+    # The lower bound (exclusive) for an event's update time from which to filter
+    @http:Query {name: "updated_from"}
+    string updatedFrom?;
+    # An optional field. The default is false. False means only list schedules of specify user, or it means list schedules of all users below current account
+    @http:Query {name: "account_level"}
+    boolean accountLevel?;
+    # The team ID to which the user belongs
+    @http:Query {name: "team_id"}
+    string teamId?;
+    # The time zone in the response
+    @http:Query {name: "time_zone"}
+    string timeZone?;
+    # The upper bound (exclusive) for an event's create time from which to filter. 
+    @http:Query {name: "created_to"}
+    string createdTo?;
+    # This field returns search results from meeting ID or summary
+    string search?;
     # The token that specifies which result page to return
     @http:Query {name: "next_page_token"}
     string nextPageToken?;
@@ -850,101 +1311,46 @@ public type ListSchedulesQueries record {
     string 'from?;
     # The upper bound (exclusive) for a schedule's start time from which to filter
     string to?;
-    # The time zone in the response
-    @http:Query {name: "time_zone"}
-    string timeZone?;
+    # The upper bound (exclusive) for an event's update time from which to filter. 
+    @http:Query {name: "updated_to"}
+    string updatedTo?;
+    # The lower bound (exclusive) for an event's create time from which to filter. 
+    @http:Query {name: "created_from"}
+    string createdFrom?;
     # The maximum number of schedule results returned on a result page
     @http:Query {name: "page_size"}
     int pageSize?;
 };
 
-public type InlineResponse2012 record {
+public type SingleUseLink record {
     # The scheduling link URL
     @jsondata:Name {value: "scheduling_url"}
     string schedulingUrl;
 };
 
-public type InlineResponse2011 record {
-    # The schedule's end date
-    @jsondata:Name {value: "end_date"}
-    string endDate?;
-    # The hexadecimal color value of the event type's scheduling page
-    string color?;
-    # The schedule's description
-    @constraint:String {maxLength: 8192}
-    string description?;
-    # This field indicates if the event type is hidden on the owner's main scheduling page
-    boolean secret?;
-    # The availability of the time rule
-    @jsondata:Name {value: "availability_rules"}
-    InlineResponse2011AvailabilityRules[] availabilityRules?;
-    # This field indicates the maximum invitees per event
-    @constraint:Number {minValue: 1, maxValue: 200}
-    decimal capacity?;
-    # The available time segments of the event
-    SchedulerschedulesSegments[] segments?;
-    # This field indicates the duration of the meeting in minutes, range: [1, 1440]
-    @constraint:Number {minValue: 15, maxValue: 1440}
-    decimal duration?;
-    # This field indicates the minimum time before a schedule starts when the attendees can book
-    @constraint:Number {minValue: 0, maxValue: 14340}
-    decimal cushion?;
-    # This field indicates the extra time before or after the booked schedule
-    SchedulerschedulesBuffer buffer?;
+public type CreatedScheduleAvailabilityRule record {
+    # This field indicates the use of custom availability instead of the rule
+    @jsondata:Name {value: "use_custom"}
+    boolean useCustom?;
+    # The ID of this availability rule. 
+    @jsondata:Name {value: "availability_id"}
+    string availabilityId?;
+    # Weekly recurring availability segments, keyed by day of the week
     @jsondata:Name {value: "segments_recurrence"}
-    SchedulerschedulesSegmentsRecurrence segmentsRecurrence?;
-    # The event portion of the event's URL that identifies a specific web page
-    @constraint:String {maxLength: 256, minLength: 3}
-    string slug?;
-    # The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`
-    @jsondata:Name {value: "interval_type"}
-    "unlimited"|"fixed" intervalType?;
-    # The schedule's start date
-    @jsondata:Name {value: "start_date"}
-    string startDate?;
-    # The method of the type of `addOn`, such as Zoom meeting, Zoom phone, or offline
-    @jsondata:Name {value: "add_on_type"}
-    "zoomMeeting"|"zoomPhone"|"offline" addOnType?;
-    # The URL of the user’s scheduling site where invitees book this event type
-    @jsondata:Name {value: "scheduling_url"}
-    string schedulingUrl?;
-    # This field sets the frequency of available time slots for invitees
-    @jsondata:Name {value: "start_time_increment"}
-    decimal startTimeIncrement?;
-    # The event's summary
-    @constraint:String {maxLength: 256}
-    string summary?;
-    # The creator of the schedule. The field is read-only
-    InlineResponse2011Creator creator?;
-    # This field indicates if the schedule type is "one" (belongs to an individual user) or "multiple"
-    @jsondata:Name {value: "schedule_type"}
-    "one"|"multiple" scheduleType?;
-    # This field contains the custom question
-    @jsondata:Name {value: "custom_fields"}
-    InlineResponse2011CustomFields[] customFields?;
-    # This field indicates if the schedule is active
-    boolean active?;
-    # This field sets the maximum events allowed per day
-    @jsondata:Name {value: "booking_limit"}
-    decimal bookingLimit?;
-    # the timezone of this availability rule. 
+    WeeklyRecurrence segmentsRecurrence?;
+    # The timezone of this availability rule. 
     @jsondata:Name {value: "time_zone"}
     string timeZone?;
-    # The organizer of the schedule. This field is read-only
-    InlineResponse2011Organizer organizer?;
-    # The information for a custom location
-    @constraint:String {maxLength: 1024}
-    string location?;
-    # The unique identifier of schedule
-    @jsondata:Name {value: "schedule_id"}
-    string scheduleId?;
-    # The moment the schedule type was updated
-    string updated?;
-    # This field indicates the use of the availability rule
-    @jsondata:Name {value: "availability_override"}
-    boolean availabilityOverride?;
-    # The status of schedule: confirmed or cancelled
-    "confirmed"|"cancelled" status?;
+    # The owner of this availability rule. 
+    string email?;
+    # The available time segments of the event
+    DateSegment[] segments?;
+};
+
+public type TeamList record {
+    # A collection of all existing team items
+    @constraint:Array {maxLength: 1000}
+    Team[] teams?;
 };
 
 # OAuth2 Refresh Token Grant Configs
@@ -954,33 +1360,107 @@ public type OAuth2RefreshTokenGrantConfig record {|
     string refreshUrl = "";
 |};
 
-public type SchedulerschedulesAvailabilityRules record {
-    # This field indicates the use of custom availability instead of the rule
-    @jsondata:Name {value: "use_custom"}
-    boolean useCustom?;
-    # The ID of this availability rule. 
-    @jsondata:Name {value: "availability_id"}
-    string availabilityId?;
+# The availability schedule set by the user
+public type UpdateAvailabilityRequest record {
+    # The default availability schedule in use
+    boolean default?;
+    # The name of this availability schedule
+    @constraint:String {minLength: 1}
+    string name;
+    # Weekly recurring availability segments, keyed by day of the week
     @jsondata:Name {value: "segments_recurrence"}
-    SchedulerschedulesSegmentsRecurrence segmentsRecurrence?;
-    # the timezone of this availability rule. 
+    AvailabilityWeeklyRecurrence segmentsRecurrence?;
+    # The timezone for which this availability schedule originates
     @jsondata:Name {value: "time_zone"}
-    string timeZone?;
-    # The owner of this availability rule. 
-    string email?;
-    # The available time segments of the event
-    SchedulerschedulesSegments[] segments?;
+    string timeZone;
+    # The date on which the rule needs to be applied outside of the availability rule
+    AvailabilityDateOverrideUpdate[] segments?;
 };
 
-public type ScheduleravailabilitySegmentsRecurrenceSun record {
-    # The start time of this day
-    string 'start?;
-    # The end time of this day
-    string end?;
+public type ScheduledEventTrackingParam record {
+    # The scheduler tags that correspond to UTM parameters one by one
+    string label?;
+    # The value of UTM parameters set in schedule links by host
+    string value?;
+    # The UTM parameters in schedule links
+    string 'key?;
+};
+
+public type Team record {
+    # The owner user ID of the team
+    @jsondata:Name {value: "owner_id"}
+    string ownerId?;
+    # The timezone of the team
+    string timezone?;
+    # The name of the team
+    string name?;
+    # The team ID
+    @jsondata:Name {value: "team_id"}
+    string teamId?;
+    # The team members count between 0 and 10000
+    @jsondata:Name {value: "member_count"}
+    int memberCount?;
+    # The slug of the team
+    string slug?;
+};
+
+# The portions of the event resource
+public type UpdateScheduledEventRequest record {
+    # The attendees of the scheduled event
+    ScheduledEventAttendeeUpdate[] attendees?;
+    # The meeting notes of the event
+    @jsondata:Name {value: "meeting_notes"}
+    string meetingNotes?;
+    # The status of event: confirmed or cancelled
+    "confirmed"|"cancelled" status?;
+};
+
+public type ScheduledEvent record {
+    # The event's summary
+    @constraint:String {maxLength: 256}
+    string summary?;
+    # The attendees of the event
+    ScheduledEventAttendeeInfo[] attendees?;
+    # The meeting notes of the event
+    @jsondata:Name {value: "meeting_notes"}
+    string meetingNotes?;
+    # The event's description
+    @constraint:String {maxLength: 8192}
+    string description?;
+    # The scheduled event's end date time
+    @jsondata:Name {value: "end_date_time"}
+    string endDateTime?;
+    # The unique identifier of event
+    @jsondata:Name {value: "event_id"}
+    string eventId?;
+    # This field indicates whether the type is default(scheduled) or a pending event
+    @jsondata:Name {value: "event_type"}
+    "default"|"pending" eventType?;
+    # The information to track the source of invitee. Only use this setting you add UTM parameters in schedule links
+    @jsondata:Name {value: "tracking_params"}
+    ScheduledEventTrackingParam[] trackingParams?;
+    # The guest's collection
+    string[] guests?;
+    # The information for a custom location
+    @constraint:String {maxLength: 1024}
+    string location?;
+    # The scheduled event's start date time
+    @jsondata:Name {value: "start_date_time"}
+    string startDateTime?;
+    # The unique identifier of schedule
+    @jsondata:Name {value: "schedule_id"}
+    string scheduleId?;
+    # The moment the event was updated
+    string updated?;
+    # The meeting details for when users have scheduled appointments
+    @jsondata:Name {value: "external_location"}
+    record {string kind?; string meeting_id?; string personal_meeting_id?; string meeting_passcode?; string meeting_description?; string meeting_join_url?;} externalLocation?;
+    # The status of event: confirmed or cancelled
+    "confirmed"|"cancelled" status?;
 };
 
 # The stats of the last N days
-public type InlineResponse200LastNDays record {
+public type AnalyticsLastNDays record {
     # The number of "all host available" type schedules
     @jsondata:Name {value: "all_host_available"}
     int allHostAvailable?;
@@ -1019,10 +1499,80 @@ public type InlineResponse200LastNDays record {
     int schedulesCreated?;
 };
 
-public type SchedulerschedulesscheduleIdCustomFields record {
+public type ScheduleCustomField record {
     # The invitee's option(s) for single_select or multi_select type of responses
     @jsondata:Name {value: "answer_choices"}
-    SchedulerschedulesscheduleIdCustomFieldsAnswerchoicesItemsString[] answerChoices?;
+    ScheduleCustomFieldAnswerchoicesItemsString[] answerChoices?;
+    # The ID of this question
+    @jsondata:Name {value: "custom_field_id"}
+    string customFieldId?;
+    # The type of response that the invitee provides to the custom question. It can be one or multiple lines of text, a phone number, or single- or multiple-select.[`string text phone_number single_select multi_select`]
+    "text"|"string"|"phone_number"|"choices_one"|"choices_many"|"select" format;
+    # The custom question the host created for the event type
+    string name;
+    # This field is true if the custom question allows invitees to record a written response in addition to single-select or multiple-select type of responses. This field is false if the custom question does not allow invitees to record a written response
+    @jsondata:Name {value: "include_other"}
+    boolean includeOther;
+    # The position of this question
+    decimal position;
+    # This field is true if the question the host creates is ON and visible on the event booking page. This field is false if it's OFF and invisible on the event booking page
+    boolean enabled;
+    # This field is true if a response to the question created by the host is required for invitees to book the event type. This field is false if a response to the question created by the host is not required for invitees to book the event type
+    boolean required;
+};
+
+# The rules of this availability schedule
+public type AvailabilityWeeklyRecurrence record {
+    # Available time segments on Thursday
+    TimeSegment[] thu?;
+    # Available time segments on Tuesday
+    TimeSegment[] tue?;
+    # Available time segments on Wednesday
+    TimeSegment[] wed?;
+    # Available time segments on Saturday
+    TimeSegment[] sat?;
+    # Available time segments on Friday
+    TimeSegment[] fri?;
+    # Available time segments on Sunday
+    TimeSegment[] sun?;
+    # Available time segments on Monday
+    TimeSegment[] mon?;
+};
+
+public type RoutingResponseList record {
+    # The token to retrieve the next page of results. If empty, no more results are available
+    @jsondata:Name {value: "next_page_token"}
+    string nextPageToken?;
+    # The list of routing responses across all routing forms under the account
+    RoutingResponse[] responses?;
+};
+
+# Represents the Queries record for the operation: getScheduledEvent
+public type GetScheduledEventQueries record {
+    # This field indicates whether the admin handles certain users. It's only for admin
+    @http:Query {name: "user_id"}
+    string userId?;
+    # The ID of the team to which the user belongs
+    @http:Query {name: "team_id"}
+    string teamId?;
+};
+
+public type ScheduledEventAttendeeCustomValue record {
+    # The answers of question
+    @constraint:Array {maxLength: 10}
+    ScheduledEventAttendeeCustomValueValuesItemsString[] values?;
+    # The name of question
+    @constraint:String {maxLength: 8192, minLength: 1}
+    string name?;
+    # The position of question
+    @constraint:Int {minValue: 0, maxValue: 9}
+    int position?;
+};
+
+public type UpdateScheduleCustomField record {
+    # The invitee's option(s) for single_select or multi_select type of responses
+    @jsondata:Name {value: "answer_choices"}
+    UpdateScheduleCustomFieldAnswerchoicesItemsString[] answerChoices?;
     # The type of response that the invitee provides to the custom question. It can be one or multiple lines of text, a phone number, or single- or multiple-select.[`string text phone_number single_select multi_select`]
     "text"|"string"|"phone_number"|"choices_one"|"choices_many"|"select" format;
     # The ID of this question
@@ -1041,258 +1591,106 @@ public type SchedulerschedulesscheduleIdCustomFields record {
     boolean required;
 };
 
-public type SchedulerschedulesSegments record {
-    # The start date and time of the segment
-    string 'start?;
-    # The end date and time of the segment
-    string end?;
-};
-
-# The date interval that needs to overridden
-public type ScheduleravailabilityavailabilityIdSegments record {
-    # The start date to override
-    string 'start;
-    # The end date to override
-    string end;
-};
-
-# Represents the Queries record for the operation: report_analytics
-public type ReportAnalyticsQueries record {
-    # The specific user's web user ID. Default is "me". Use "all" to query for analytics with respect to all members under that account. 
-    @http:Query {name: "user_id"}
-    string userId?;
-    # The lower bound (exclusive) for an event's end time from which to filter. Optional. The default is not to filter by end time. It must be an RFC3339 timestamp with mandatory time zone offset, for example, 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds can be provided but are ignored. If `timeMax` is set, `timeMin` must be smaller than `timeMax`
-    string 'from?;
-    # The upper bound (exclusive) for an event's start time to filter by. Optional. The default is not to filter by start time. It must be an RFC3339 timestamp with mandatory time zone offset. For example, 2011-06-03T10:00:00-07:00, 2011-06-03T10:00:00Z. Milliseconds may be provided but are ignored. If `timeMin` is set, `timeMax` must be greater than `timeMin`
-    string to?;
-    # The time zone in the response. The default is the time zone of the calendar. Optional. 
-    @http:Query {name: "time_zone"}
-    string timeZone?;
-};
-
-public type SchedulerschedulesscheduleIdCustomFieldsAnswerchoicesItemsString string;
-
-# The availability of the schedule query result of given user
-public type InlineResponse2001 record {
-    #  The token for a later to retrieve only the entries that have changed since this result was returned. It's omitted if further results are available, in which case `nextPageToken` is provided
-    @jsondata:Name {value: "next_page_token"}
-    string nextPageToken?;
-    # array[User Availability Schedule]
-    InlineResponse2001Items[] items?;
-};
-
-public type InlineResponse2003 record {
-    # The token to access the next page of this result
-    @jsondata:Name {value: "next_page_token"}
-    string nextPageToken?;
-    InlineResponse2003Items[] items?;
-};
-
-public type SchedulerschedulesCustomFieldsAnswerchoicesItemsString string;
-
-# The availability schedule set by the user
-public type InlineResponse2002 record {
-    # The owner's ID
-    string owner?;
-    # The default availability schedule in use
-    boolean default?;
-    # The name of this availability schedule
-    string name?;
-    # The unique ID of availability
-    @jsondata:Name {value: "availability_id"}
-    string availabilityId?;
-    @jsondata:Name {value: "segments_recurrence"}
-    ScheduleravailabilitySegmentsRecurrence segmentsRecurrence?;
-    # The timezone for which this availability schedule originates
-    @jsondata:Name {value: "time_zone"}
-    string timeZone?;
-};
-
-public type InlineResponse2005 record {
-    # The token that accesses the next page of this result
-    @jsondata:Name {value: "next_page_token"}
-    string nextPageToken?;
-    InlineResponse2005Items[] items?;
-};
-
-public type InlineResponse2004 record {
-    # The event's summary
-    @constraint:String {maxLength: 256}
-    string summary?;
-    # The attendees of the event
-    InlineResponse2004Attendees[] attendees?;
-    # The meeting notes of the event
-    @jsondata:Name {value: "meeting_notes"}
-    string meetingNotes?;
-    # The event's description
-    @constraint:String {maxLength: 8192}
-    string description?;
-    # The scheduled event's end date time
-    @jsondata:Name {value: "end_date_time"}
-    string endDateTime?;
+public type ScheduledEventAttendee record {
+    # The answer of the booking page questions
+    @jsondata:Name {value: "custom_values"}
+    ScheduledEventAttendeeCustomValue[] customValues?;
     # The unique identifier of event
     @jsondata:Name {value: "event_id"}
     string eventId?;
-    # This field indicates whether the type is default(scheduled) or a pending event
-    @jsondata:Name {value: "event_type"}
-    "default"|"pending" eventType?;
-    # The information to track the source of invitee. Only use this setting you add UTM parameters in schedule links
-    @jsondata:Name {value: "tracking_params"}
-    InlineResponse2004TrackingParams[] trackingParams?;
-    # The guest's collection
-    string[] guests?;
-    # The information for a custom location
-    @constraint:String {maxLength: 1024}
-    string location?;
-    # The scheduled event's start date time
-    @jsondata:Name {value: "start_date_time"}
-    string startDateTime?;
+    # This field indicates when the attendee created this event
+    string created?;
+    # The ID of attendee
+    @jsondata:Name {value: "attendee_id"}
+    string attendeeId?;
+    #  The attendee's last name
+    @jsondata:Name {value: "last_name"}
+    string lastName?;
+    # The attendee's name
+    @jsondata:Name {value: "display_name"}
+    string displayName?;
+    # The attendee's time zone
+    @jsondata:Name {value: "time_zone"}
+    string timeZone?;
+    # Whether an attendee did not attend an event
+    @jsondata:Name {value: "no_show"}
+    boolean noShow?;
     # The unique identifier of schedule
     @jsondata:Name {value: "schedule_id"}
     string scheduleId?;
-    # The moment the event was updated
-    string updated?;
-    # The meeting details for when users have scheduled appointments
-    @jsondata:Name {value: "external_location"}
-    record {string kind?; string meeting_id?; string personal_meeting_id?; string meeting_passcode?; string meeting_description?; string meeting_join_url?;} externalLocation?;
-    # The status of event: confirmed or cancelled
-    "confirmed"|"cancelled" status?;
+    # The attendee's first name
+    @jsondata:Name {value: "first_name"}
+    string firstName?;
+    # The attendee's email
+    string email?;
 };
 
-public type InlineResponse2005Items record {
-    # The schedule's end date
-    @jsondata:Name {value: "end_date"}
-    string endDate?;
-    # The hexadecimal color value of the event type's scheduling page
-    string color?;
-    # The schedule's description
-    @constraint:String {maxLength: 8192}
-    string description?;
-    # This field indicates if the event type is hidden on the owner's main scheduling page
-    boolean secret?;
-    # The availability of the time rule
-    @jsondata:Name {value: "availability_rules"}
-    InlineResponse2005AvailabilityRules[] availabilityRules?;
-    # This field indicates the maximum invitees per event
-    @constraint:Number {minValue: 1, maxValue: 200}
-    decimal capacity?;
-    # The available time segments of the event
-    SchedulerschedulesSegments[] segments?;
-    # This field indicates the duration of the meeting in minutes, range: [1, 1440]
-    @constraint:Number {minValue: 15, maxValue: 1440}
-    decimal duration?;
-    # This field indicates the minimum time before a schedule starts when the attendees can book
-    @constraint:Number {minValue: 0, maxValue: 14340}
-    decimal cushion?;
-    # This field indicates the extra time before or after the booked schedule
-    SchedulerschedulesBuffer buffer?;
+# The week of the available time rule
+public type WeeklyRecurrence record {
+    # Available time segments on Thursday
+    TimeSegment[] thu?;
+    # Available time segments on Tuesday
+    TimeSegment[] tue?;
+    # Available time segments on Wednesday
+    TimeSegment[] wed?;
+    # Available time segments on Saturday
+    TimeSegment[] sat?;
+    # Available time segments on Friday
+    TimeSegment[] fri?;
+    # Available time segments on Sunday
+    TimeSegment[] sun?;
+    # Available time segments on Monday
+    TimeSegment[] mon?;
+};
+
+public type AvailabilitySummary record {
+    # The owner's ID
+    string owner?;
+    # Whether this is the user's default availability
+    boolean default?;
+    # The name of the availability
+    string name?;
+    # The unique identifier of the availability
+    @jsondata:Name {value: "availability_id"}
+    string availabilityId?;
+    # Weekly recurring availability segments, keyed by day of the week
     @jsondata:Name {value: "segments_recurrence"}
-    SchedulerschedulesscheduleIdSegmentsRecurrence1 segmentsRecurrence?;
-    # The event portion of the event's URL that identifies a specific web page
-    @constraint:String {maxLength: 256, minLength: 3}
-    string slug?;
-    # The schedule time range. Unlimited means forever and fixed means using `startDate` and `endDate`
-    @jsondata:Name {value: "interval_type"}
-    "unlimited"|"fixed" intervalType?;
-    # The schedule's start date
-    @jsondata:Name {value: "start_date"}
-    string startDate?;
-    # The method of the type of `addOn`, such as Zoom meeting, Zoom phone, or offline
-    @jsondata:Name {value: "add_on_type"}
-    "zoomMeeting"|"zoomPhone"|"offline" addOnType?;
-    # The URL of the user's scheduling site where invitees book this event type
-    @jsondata:Name {value: "scheduling_url"}
-    string schedulingUrl?;
-    # This field sets the frequency of available time slots for invitees
-    @jsondata:Name {value: "start_time_increment"}
-    decimal startTimeIncrement?;
-    # The event's summary
-    @constraint:String {maxLength: 256}
-    string summary?;
-    # The creator of the schedule. This field is read-only
-    InlineResponse2005Creator creator?;
-    # This field indicates if the schedule type is "one" (belongs to an individual user) or "multiple"
-    @jsondata:Name {value: "schedule_type"}
-    "one"|"multiple" scheduleType?;
-    # This field contains the custom question
-    @jsondata:Name {value: "custom_fields"}
-    InlineResponse2011CustomFields[] customFields?;
-    # This field indicates if the schedule is active
-    boolean active?;
-    # This field sets the maximum events allowed per day
-    @jsondata:Name {value: "booking_limit"}
-    decimal bookingLimit?;
-    # the timezone of this availability rule. 
+    AvailabilitySummaryRecurrence segmentsRecurrence?;
+    # The time zone of the availability, as an IANA time zone name
     @jsondata:Name {value: "time_zone"}
     string timeZone?;
-    # The organizer of the schedule. This field is read-only
-    InlineResponse2011Organizer organizer?;
-    # The information for a custom location
-    @constraint:String {maxLength: 1024}
-    string location?;
-    # The unique identifier of the schedule
-    @jsondata:Name {value: "schedule_id"}
-    string scheduleId?;
-    # The moment the schedule type was updated
-    string updated?;
-    # This field indicates the use of the availability rule
-    @jsondata:Name {value: "availability_override"}
-    boolean availabilityOverride?;
-    # The status of schedule: confirmed or cancelled
-    "confirmed"|"cancelled" status?;
 };
 
-# The user's information
-public type InlineResponse2007 record {
-    # The URL of the user’s scheduling site where invitees book this event type
-    @jsondata:Name {value: "scheduling_url"}
-    string schedulingUrl?;
-    # This field enables users to upload their company's logo on Zoom
-    string logo?;
-    # The user's name
+public type BookingAttendee record {
+    # The attendee's preferred time display format
+    @jsondata:Name {value: "time_format"}
+    "12h"|"24h" timeFormat?;
+    # The attendee's RSVP response status
+    @jsondata:Name {value: "response_status"}
+    "accepted"|"declined"|"tentative"|"needs_action" responseStatus?;
+    # The timestamp when the attendee record was created
+    string created?;
+    # The attendee's last name
+    @jsondata:Name {value: "last_name"}
+    string lastName?;
+    # The unique identifier of the attendee
+    string id?;
+    # The attendee's full display name, computed from the first name and last name
     @jsondata:Name {value: "display_name"}
     string displayName?;
-    # The time zone to use when presenting time to the user
+    # The attendee's time zone
     @jsondata:Name {value: "time_zone"}
     string timeZone?;
-    # The portion of URL for the user's scheduling page where invitees book sessions that renders in a human-readable format
-    string slug?;
-    # This field enables users to upload their personal avatars on Zoom
-    string picture?;
+    # The attendee's first name
+    @jsondata:Name {value: "first_name"}
+    string firstName?;
+    # Whether this attendee is the person who made the booking
+    boolean booker?;
+    # The attendee's email address
+    string email?;
 };
 
-# Represents the Queries record for the operation: list_scheduled_events
-public type ListScheduledEventsQueries record {
-    # Whether to include deleted events (with status equals `cancelled`) in the result
-    @http:Query {name: "show_deleted"}
-    boolean showDeleted?;
-    # This field returns search results from meeting ID or summary
-    string search?;
-    # Whether to return the pending events
-    @http:Query {name: "event_type"}
-    "pending" eventType?;
-    # The token that specifies which result page to return
-    @http:Query {name: "next_page_token"}
-    string nextPageToken?;
-    # The return of the specific user's scheduled event. It's only for admin
-    @http:Query {name: "user_id"}
-    string userId?;
-    # This field indicates the start time or the time when the event has been updated
-    @http:Query {name: "order_by"}
-    string orderBy?;
-    # The lower bound (exclusive) for an event's end time from which to filter. 
-    string 'from?;
-    # The upper bound (exclusive) for an event's start time from which to filter
-    string to?;
-    # The time zone in the response
-    @http:Query {name: "time_zone"}
-    string timeZone?;
-    # The maximum number of events returned on one result page
-    @http:Query {name: "page_size"}
-    int pageSize?;
-};
-
-public type InlineResponse2006 record {
+public type Schedule record {
     # The schedule's end date
     @jsondata:Name {value: "end_date"}
     string endDate?;
@@ -1305,12 +1703,12 @@ public type InlineResponse2006 record {
     boolean secret?;
     # The availability of the time rule
     @jsondata:Name {value: "availability_rules"}
-    InlineResponse2006AvailabilityRules[] availabilityRules?;
+    ScheduleAvailabilityRule[] availabilityRules?;
     # This field indicates the maximum invitees per event
     @constraint:Number {minValue: 1, maxValue: 200}
     decimal capacity?;
     # The available time segments of the event
-    SchedulerschedulesSegments[] segments?;
+    DateSegment[] segments?;
     # This field indicates the duration of the meeting in minutes, range: [1, 1440]
     @constraint:Number {minValue: 15, maxValue: 1440}
     decimal duration?;
@@ -1318,9 +1716,10 @@ public type InlineResponse2006 record {
     @constraint:Number {minValue: 0, maxValue: 14340}
     decimal cushion?;
     # This field indicates the extra time before or after the booked schedule
-    SchedulerschedulesBuffer buffer?;
+    ScheduleBuffer buffer?;
+    # Weekly recurring availability segments, keyed by day of the week
     @jsondata:Name {value: "segments_recurrence"}
-    SchedulerschedulesSegmentsRecurrence segmentsRecurrence?;
+    WeeklyRecurrence segmentsRecurrence?;
     # The event portion of the event's URL that identifies a specific web page
     @constraint:String {maxLength: 256, minLength: 3}
     string slug?;
@@ -1343,13 +1742,13 @@ public type InlineResponse2006 record {
     @constraint:String {maxLength: 256}
     string summary?;
     # The creator of the schedule. The field is read-only
-    InlineResponse2011Creator creator?;
+    ScheduleCreator creator?;
     # This field indicates if the schedule type is **one** (belongs to an individual user) or **multiple**
     @jsondata:Name {value: "schedule_type"}
     "one"|"multiple" scheduleType?;
     # This field contains the custom question
     @jsondata:Name {value: "custom_fields"}
-    InlineResponse2011CustomFields[] customFields?;
+    ScheduleCustomField[] customFields?;
     # This field indicates if the schedule is active
     boolean active?;
     # This field sets the maximum events allowed per day
@@ -1359,7 +1758,7 @@ public type InlineResponse2006 record {
     @jsondata:Name {value: "time_zone"}
     string timeZone?;
     # The organizer of the schedule. This field is read-only
-    InlineResponse2011Organizer organizer?;
+    ScheduleOrganizer organizer?;
     # The information for a custom location
     @constraint:String {maxLength: 1024}
     string location?;
@@ -1374,3 +1773,97 @@ public type InlineResponse2006 record {
     # The status of schedule: confirmed or cancelled
     "confirmed"|"cancelled" status?;
 };
+
+# The week of available time rule
+public type UpdateScheduleRuleRecurrence record {
+    # Available time segments on Thursday
+    TimeSegment[] thu?;
+    # Available time segments on Tuesday
+    TimeSegment[] tue?;
+    # Available time segments on Wednesday
+    TimeSegment[] wed?;
+    # Available time segments on Saturday
+    TimeSegment[] sat?;
+    # Available time segments on Friday
+    TimeSegment[] fri?;
+    # Available time segments on Sunday
+    TimeSegment[] sun?;
+    # Available time segments on Monday
+    TimeSegment[] mon?;
+};
+
+public type ScheduleList record {
+    # The token that accesses the next page of this result
+    @jsondata:Name {value: "next_page_token"}
+    string nextPageToken?;
+    # List of schedules
+    ScheduleSummary[] items?;
+};
+
+public type Share record {
+    # The scheduling link URL
+    @jsondata:Name {value: "scheduling_url"}
+    string schedulingUrl;
+};
+
+# The creator of the schedule. This field is read-only
+public type ScheduleSummaryCreator record {
+    # This field indicates if you created the schedule. The field is read-only
+    boolean self?;
+    # This field indicates the creator of the display name
+    @jsondata:Name {value: "display_name"}
+    string displayName?;
+    # This field indicates the creator's email address
+    string email?;
+};
+
+# Represents the Queries record for the operation: listScheduledEvents
+public type ListScheduledEventsQueries record {
+    # Whether to include deleted events (with status equals `cancelled`) in the result
+    @http:Query {name: "show_deleted"}
+    boolean showDeleted?;
+    # The lower bound (exclusive) for an event's update time from which to filter
+    @http:Query {name: "updated_from"}
+    string updatedFrom?;
+    # An optional field. The default is false. False means only list scheduled events of specify user, or it means list scheduled events of all users below current account
+    @http:Query {name: "account_level"}
+    boolean accountLevel?;
+    # The team ID of which the user belongs
+    @http:Query {name: "team_id"}
+    string teamId?;
+    # The time zone in the response
+    @http:Query {name: "time_zone"}
+    string timeZone?;
+    # The upper bound (exclusive) for an event's create time from which to filter. 
+    @http:Query {name: "created_to"}
+    string createdTo?;
+    # This field returns search results from meeting ID or summary
+    string search?;
+    # Whether to return the pending events
+    @http:Query {name: "event_type"}
+    "pending" eventType?;
+    # The token that specifies which result page to return
+    @http:Query {name: "next_page_token"}
+    string nextPageToken?;
+    # The return of the specific user's scheduled event. It's only for admin
+    @http:Query {name: "user_id"}
+    string userId?;
+    # This field indicates the start time or the time when the event has been updated
+    @http:Query {name: "order_by"}
+    string orderBy?;
+    # The lower bound (exclusive) for an event's end time from which to filter. 
+    string 'from?;
+    # The upper bound (exclusive) for an event's start time from which to filter
+    string to?;
+    # The upper bound (exclusive) for an event's update time from which to filter. 
+    @http:Query {name: "updated_to"}
+    string updatedTo?;
+    # The lower bound (exclusive) for an event's create time from which to filter. 
+    @http:Query {name: "created_from"}
+    string createdFrom?;
+    # The maximum number of events returned on one result page
+    @http:Query {name: "page_size"}
+    int pageSize?;
+};
+
+public type UpdateScheduleCustomFieldAnswerchoicesItemsString string;

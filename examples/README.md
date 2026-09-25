@@ -2,22 +2,25 @@
 
 The `ballerinax/zoom.scheduler` connector provides practical examples illustrating usage in various scenarios.
 
-1. **[Meeting Scheduler](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/tree/main/examples/meeting-scheduler)** - Create scheduled meetings, generate single-use scheduling links, and manage team meeting schedules with automated booking capabilities.
+1. **[Schedule slot booking](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/tree/main/examples/schedule_slot_booking)** - Create a booking page, find the first open slot in a time window, book it for an invitee and issue a single-use scheduling link.
 
-2. **[Availability Manager](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/tree/main/examples/availability-manager)** - Configure availability schedules, analyze scheduler analytics, and manage working hours for different time zones and business requirements. 
+2. **[Availability hours review](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/tree/main/examples/availability_hours_review)** - Review a user's availabilities across all pages, create missing working hours and compare booking analytics with the previous period.
 
 ## Prerequisites
 
 1. Generate Zoom credentials to authenticate the connector as described in the [Setup guide](https://central.ballerina.io/ballerinax/zoom.scheduler/latest#setup-guide).
 
-2. For each example, create a Config.toml file the related configuration. Here's an example of how your Config.toml file should look:
+2. For each example, create a `Config.toml` file with the related configuration. Here's an example of how your Config.toml file should look:
 
 ```toml
-   clientId = "your_client_id"
-   clientSecret = "your_client_secret"
-   refreshToken = "user_refresh_token_from_step"
-   userId = "user_id_from_step5"
+clientId = "<client-id>"
+clientSecret = "<client-secret>"
+refreshToken = "<refresh-token>"
+refreshUrl = "https://zoom.us/oauth/token"
+userId = "<zoom-user-id>"
 ```
+
+Each example lists the additional values it needs in its own README.
 
 ## Running an example
 

@@ -1,97 +1,56 @@
 # Running Tests
 
 ## Prerequisites
-You need an access token from a Zoom developer account.
 
-To do this, refer to [Ballerina Zoom Connector](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/blob/main/ballerina/README.md).
+To run the tests against the live Zoom API you need a Zoom OAuth app, its client ID and client secret, and a refresh token. Follow the [Setup guide](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/blob/main/ballerina/README.md#setup-guide) to obtain them.
 
-And You need Find Your User ID to run some of the tests by running this curl command.
-```curl
+Several tests also need the ID of your Zoom user. You can find it with:
+
+```bash
 curl -X GET "https://api.zoom.us/v2/users/me" \
--H "Authorization: Bearer YOUR_ACCESS_TOKEN"
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN"
 ```
 
-# Running Tests
+## Test environments
 
-There are two test environments for running the Zoom connector tests. The default test environment is the mock server for Zoom API. The other test environment is the actual Zoom API. 
+There are two test environments. The default is a mock server for the Zoom Scheduler API, together with a mock OAuth token endpoint. The other is the live Zoom API.
 
-You can run the tests in either of these environments and each has its own compatible set of tests.
+ Test Groups | Environment
+-------------|------------------------------------------------
+ mock_tests  | Mock server for Zoom Scheduler API (default)
+ live_tests  | Zoom Scheduler API
 
- Test Groups | Environment                                       
--------------|---------------------------------------------------
- mock_tests  | Mock server for Zoom API (Default Environment) 
- live_tests  | Zoom API                                       
+## Running tests against the mock server
 
-## Running Tests in the Mock Server
+No configuration is needed. With no `Config.toml`, or with `isLiveServer = false`, the tests run against the mock server on port `9090` and the mock token endpoint on port `9444`.
 
-To execute the tests on the mock server, ensure that the `IS_LIVE_SERVER` environment variable is either set to `false` or unset before initiating the tests. 
+```bash
+./gradlew clean test
+```
 
-This environment variable can be configured within the `Config.toml` file located in the tests directory or specified as an environmental variable.
+## Running tests against the live Zoom API
 
-#### Using a Config.toml File
-
-Create a `Config.toml` file in the tests directory and the following content:
+Create a `Config.toml` file in the `ballerina/tests` directory with the following content:
 
 ```toml
-isLiveServer = false
+isLiveServer = true
+clientId = "<your-client-id>"
+clientSecret = "<your-client-secret>"
+refreshToken = "<your-refresh-token>"
+refreshUrl = "https://zoom.us/oauth/token"
+userId = "<your-user-id>"
+scheduleId = "<an-existing-schedule-id>"
+availabilityId = "<an-existing-availability-id>"
+eventId = "<an-existing-scheduled-event-id>"
+attendeeId = "<an-attendee-id-of-that-event>"
+routingFormId = "<a-routing-form-id>"
+routingResponseId = "<a-response-id-of-that-form>"
 ```
 
-#### Using Environment Variables
+The create, update and delete tests change data in your Zoom account. Each delete test creates the availability, schedule or booking it deletes, so no existing data is removed.
 
-Alternatively, you can set your authentication credentials as environment variables:
-
-If you are using Linux or Mac, you can use the following method:
-```bash
-   export IS_LIVE_SERVER=false
-```
-If you are using Windows, you can use the following method:
-```bash
-   setx IS_LIVE_SERVER false
-```
-Then, run the following command to run the tests:
-
-```bash
-   ./gradlew clean test
-```
-
-## Running Tests Against Zoom Live API
-
-#### Using a Config.toml File
-
-Create a `Config.toml` file in the tests directory and add your authentication credentials as follows:
-
-```toml
-   isLiveServer = true
-   clientId = "your_client_id"
-   clientSecret = "your_client_secret"
-   refreshToken = "user_refresh_token_from_step4"
-   refreshUrl = "https://zoom.us/oauth/token"
-   userId = "user_id_from_step5"
-```
-
-#### Using Environment Variables
-
-Alternatively, you can set your authentication credentials as environment variables:
-
-If you are using Linux or Mac, you can use the following method:
-```bash
-   export IS_LIVE_SERVER="true"
-   export ZOOM_CLIENT_ID="your_client_id"
-   export ZOOM_CLIENT_SECRET="your_client_secret"  
-   export ZOOM_REFRESH_TOKEN="user_refresh_token_from_step4"
-   export ZOOM_USER_ID="user_id_from_step5"
-```
-
-If you are using Windows, you can use the following method:
-```bash
-   setx IS_LIVE_SERVER true
-   setx ZOOM_CLIENT_ID "your_client_id"
-   setx ZOOM_CLIENT_SECRET "your_client_secret"
-   setx ZOOM_REFRESH_TOKEN "user_refresh_token_from_step4"
-   setx ZOOM_USER_ID "user_id_from_step5"
-```
-Then, run the following command to run the tests:
+Then run:
 
 ```bash
-   ./gradlew clean test 
+./gradlew clean test
 ```
