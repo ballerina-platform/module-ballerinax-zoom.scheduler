@@ -20,8 +20,8 @@ refreshUrl = "https://zoom.us/oauth/token"
 userId = "<zoom-user-id>"
 availabilityName = "<availability-name, e.g. Extended office hours>"
 timeZone = "<iana-time-zone, e.g. America/New_York>"
-reportFrom = "<report-start-date, e.g. 2026-09-01>"
-reportTo = "<report-end-date, e.g. 2026-09-30>"
+reportFrom = "<report-start-timestamp (RFC3339 with offset), e.g. 2026-09-01T00:00:00-04:00>"
+reportTo = "<report-end-timestamp (RFC3339 with offset), e.g. 2026-09-30T23:59:59-04:00>"
 ```
 
 ## Run the example

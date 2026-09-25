@@ -83,7 +83,7 @@ function bookingRequest() returns CreateBookingRequest => {
 
 @test:Config {groups: ["live_tests", "mock_tests"]}
 function testGetAnalyticsReport() returns error? {
-    AnalyticsReport report = check zoom->getAnalyticsReport(userId = userId, 'from = "2026-09-01", to = "2026-09-30");
+    AnalyticsReport report = check zoom->getAnalyticsReport(userId = userId, 'from = "2026-09-01T00:00:00Z", to = "2026-09-30T23:59:59Z");
     test:assertTrue(report.lastNDays !is ());
 }
 
