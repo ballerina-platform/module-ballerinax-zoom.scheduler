@@ -33,12 +33,32 @@ public isolated client class Client {
         self.clientEp = check new (serviceUrl, httpClientConfig);
     }
 
+    # Get routing form response
+    #
+    # + formId - The identifier of the routing form
+    # + responseId - The identifier of the response to a particular routing form
+    # + headers - Headers to be sent with the request 
+    # + return - If succeeded, this method returns the routing response details in the response body. The response body will include basic routing form information, the questions in the form and the corresponding awnsers, and the final results after submitting the response, which could be one of the following: a URL, a text or a booking link.  
+    remote isolated function getRoutingFormResponse(string formId, string responseId, map<string|string[]> headers = {}) returns RoutingFormResponse|error {
+        string resourcePath = string `/routing/forms/${getEncodedUri(formId)}/response/${getEncodedUri(responseId)}`;
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # List account routing responses
+    #
+    # + headers - Headers to be sent with the request 
+    # + return - If succeeded, this method returns a list of routing responses across all routing forms under the account 
+    remote isolated function listRoutingResponses(map<string|string[]> headers = {}) returns RoutingResponseList|error {
+        string resourcePath = string `/routing/responses`;
+        return self.clientEp->get(resourcePath, headers);
+    }
+
     # Report analytics
     #
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - If successful, this method returns the scheduler analytics or the user ID or account ID provided 
-    resource isolated function get analytics(map<string|string[]> headers = {}, *ReportAnalyticsQueries queries) returns InlineResponse200|error {
+    remote isolated function getAnalyticsReport(map<string|string[]> headers = {}, *GetAnalyticsReportQueries queries) returns AnalyticsReport|error {
         string resourcePath = string `/analytics`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->get(resourcePath, headers);
@@ -49,18 +69,18 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - Successful availability of the schedule query result of given user 
-    resource isolated function get availability(map<string|string[]> headers = {}, *ListAvailabilityQueries queries) returns InlineResponse2001|error {
+    remote isolated function listAvailabilities(map<string|string[]> headers = {}, *ListAvailabilitiesQueries queries) returns AvailabilityList|error {
         string resourcePath = string `/availability`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Insert availability
+    # Create availability
     #
     # + headers - Headers to be sent with the request 
     # + payload - In the request body, it supplies an availability resource properties 
     # + return - If successful, this method returns a availability resource in the response body 
-    resource isolated function post availability(SchedulerAvailabilityBody payload, map<string|string[]> headers = {}) returns InlineResponse201|error {
+    remote isolated function createAvailability(CreateAvailabilityRequest payload, map<string|string[]> headers = {}) returns CreatedAvailability|error {
         string resourcePath = string `/availability`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
@@ -68,12 +88,12 @@ public isolated client class Client {
         return self.clientEp->post(resourcePath, request, headers);
     }
 
-    # Get availability 
+    # Get availability
     #
     # + availabilityId - The UUID of the availability schedule
     # + headers - Headers to be sent with the request 
     # + return - If successful, this method returns an availability resource in the response body 
-    resource isolated function get availability/[string availabilityId](map<string|string[]> headers = {}) returns InlineResponse2002|error {
+    remote isolated function getAvailability(string availabilityId, map<string|string[]> headers = {}) returns Availability|error {
         string resourcePath = string `/availability/${getEncodedUri(availabilityId)}`;
         return self.clientEp->get(resourcePath, headers);
     }
@@ -83,23 +103,38 @@ public isolated client class Client {
     # + availabilityId - The UUID of the availability schedule
     # + headers - Headers to be sent with the request 
     # + return - If successful, this method returns an empty response body 
-    resource isolated function delete availability/[string availabilityId](map<string|string[]> headers = {}) returns error? {
+    remote isolated function deleteAvailability(string availabilityId, map<string|string[]> headers = {}) returns error? {
         string resourcePath = string `/availability/${getEncodedUri(availabilityId)}`;
         return self.clientEp->delete(resourcePath, headers = headers);
     }
 
-    # Patch availability
+    # Update availability
     #
     # + availabilityId - The UUID of the availability schedule
     # + headers - Headers to be sent with the request 
     # + payload - In the request body, supply availability resource properties 
     # + return - If successful, this method returns an empty response body 
-    resource isolated function patch availability/[string availabilityId](AvailabilityavailabilityIdBody payload, map<string|string[]> headers = {}) returns error? {
+    remote isolated function updateAvailability(string availabilityId, UpdateAvailabilityRequest payload, map<string|string[]> headers = {}) returns error? {
         string resourcePath = string `/availability/${getEncodedUri(availabilityId)}`;
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
         request.setPayload(jsonBody, "application/json");
         return self.clientEp->patch(resourcePath, request, headers);
+    }
+
+    # Create a booking for a schedule slot
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - The booking details including the schedule to book, time slot, booker information, and optional configuration 
+    # + return - Booking created successfully. Returns the full booking event object with attendee details, assigned host, and computed fields 
+    remote isolated function createBooking(CreateBookingRequest payload, map<string|string[]> headers = {}, *CreateBookingQueries queries) returns Booking|error {
+        string resourcePath = string `/attendee`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        http:Request request = new;
+        json jsonBody = jsondata:toJson(payload);
+        request.setPayload(jsonBody, "application/json");
+        return self.clientEp->post(resourcePath, request, headers);
     }
 
     # List scheduled events
@@ -107,48 +142,61 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - If successful, this method returns a response body with the following structure: 
-    resource isolated function get events(map<string|string[]> headers = {}, *ListScheduledEventsQueries queries) returns InlineResponse2003|error {
+    remote isolated function listScheduledEvents(map<string|string[]> headers = {}, *ListScheduledEventsQueries queries) returns ScheduledEventList|error {
         string resourcePath = string `/events`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Get scheduled events 
+    # Get scheduled event
     #
+    # + eventId - The opaque identifier of the scheduled event
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - If successful, this method returns the scheduled event resource in the response body 
-    resource isolated function get events/[string eventId](map<string|string[]> headers = {}, *GetScheduledEventsQueries queries) returns InlineResponse2004|error {
+    remote isolated function getScheduledEvent(string eventId, map<string|string[]> headers = {}, *GetScheduledEventQueries queries) returns ScheduledEvent|error {
         string resourcePath = string `/events/${getEncodedUri(eventId)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Delete scheduled events 
+    # Delete scheduled event
     #
+    # + eventId - The opaque identifier of the scheduled event
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - If successful, this method returns an empty response body 
-    resource isolated function delete events/[string eventId](map<string|string[]> headers = {}, *DeleteScheduledEventsQueries queries) returns error? {
+    remote isolated function deleteScheduledEvent(string eventId, map<string|string[]> headers = {}, *DeleteScheduledEventQueries queries) returns error? {
         string resourcePath = string `/events/${getEncodedUri(eventId)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
 
-    # Patch scheduled events
+    # Update scheduled event
     #
     # + eventId - The opaque identifier of the scheduled event
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - In the request body, it supplies the relevant portions of event resource 
     # + return - If successful, this method returns an event resource in the response body 
-    resource isolated function patch events/[string eventId](EventseventIdBody payload, map<string|string[]> headers = {}, *PatchScheduledEventsQueries queries) returns error? {
+    remote isolated function updateScheduledEvent(string eventId, UpdateScheduledEventRequest payload, map<string|string[]> headers = {}, *UpdateScheduledEventQueries queries) returns error? {
         string resourcePath = string `/events/${getEncodedUri(eventId)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
         request.setPayload(jsonBody, "application/json");
         return self.clientEp->patch(resourcePath, request, headers);
+    }
+
+    # Get scheduled event attendee
+    #
+    # + eventId - The ID of scheduled event
+    # + attendeeId - The ID of attendee to get scheduled event attendee information
+    # + headers - Headers to be sent with the request 
+    # + return - If successful, this method returns the scheduled event attendee resource in the response body 
+    remote isolated function getScheduledEventAttendee(string eventId, string attendeeId, map<string|string[]> headers = {}) returns ScheduledEventAttendee|error {
+        string resourcePath = string `/events/${getEncodedUri(eventId)}/attendees/${getEncodedUri(attendeeId)}`;
+        return self.clientEp->get(resourcePath, headers);
     }
 
     # List schedules
@@ -156,19 +204,19 @@ public isolated client class Client {
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - If successful, this method returns a response body with this structure 
-    resource isolated function get schedules(map<string|string[]> headers = {}, *ListSchedulesQueries queries) returns InlineResponse2005|error {
+    remote isolated function listSchedules(map<string|string[]> headers = {}, *ListSchedulesQueries queries) returns ScheduleList|error {
         string resourcePath = string `/schedules`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Insert schedules
+    # Create schedule
     #
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - In the request body, it supplies the schedule resource properties 
     # + return - If successful, this method returns an schedule resource in the response body 
-    resource isolated function post schedules(SchedulerSchedulesBody payload, map<string|string[]> headers = {}, *InsertScheduleQueries queries) returns InlineResponse2011|error {
+    remote isolated function createSchedule(CreateScheduleRequest payload, map<string|string[]> headers = {}, *CreateScheduleQueries queries) returns CreatedSchedule|error {
         string resourcePath = string `/schedules`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
@@ -177,38 +225,38 @@ public isolated client class Client {
         return self.clientEp->post(resourcePath, request, headers);
     }
 
-    # Get schedules
+    # Get schedule
     #
     # + scheduleId - The schedule's unique identifier
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - If successful, this method returns an schedule resource in the response body 
-    resource isolated function get schedules/[string scheduleId](map<string|string[]> headers = {}, *GetScheduleQueries queries) returns InlineResponse2006|error {
+    remote isolated function getSchedule(string scheduleId, map<string|string[]> headers = {}, *GetScheduleQueries queries) returns Schedule|error {
         string resourcePath = string `/schedules/${getEncodedUri(scheduleId)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->get(resourcePath, headers);
     }
 
-    # Delete schedules
+    # Delete schedule
     #
     # + scheduleId - The unique identifier of the schedule
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + return - If successful, this method returns an empty response body 
-    resource isolated function delete schedules/[string scheduleId](map<string|string[]> headers = {}, *DeleteSchedulesQueries queries) returns error? {
+    remote isolated function deleteSchedule(string scheduleId, map<string|string[]> headers = {}, *DeleteScheduleQueries queries) returns error? {
         string resourcePath = string `/schedules/${getEncodedUri(scheduleId)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         return self.clientEp->delete(resourcePath, headers = headers);
     }
 
-    # Patch schedules
+    # Update schedule
     #
     # + scheduleId - The schedule's unique identifier
     # + headers - Headers to be sent with the request 
     # + queries - Queries to be sent with the request 
     # + payload - In the request body, it supplies the relevant portions of a schedule resource, according to the rules of patch semantics 
     # + return - If successful, this method returns an empty response body 
-    resource isolated function patch schedules/[string scheduleId](SchedulesscheduleIdBody payload, map<string|string[]> headers = {}, *PatchScheduleQueries queries) returns error? {
+    remote isolated function updateSchedule(string scheduleId, UpdateScheduleRequest payload, map<string|string[]> headers = {}, *UpdateScheduleQueries queries) returns error? {
         string resourcePath = string `/schedules/${getEncodedUri(scheduleId)}`;
         resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
@@ -217,23 +265,63 @@ public isolated client class Client {
         return self.clientEp->patch(resourcePath, request, headers);
     }
 
-    # Single use link
+    # List schedule available times
+    #
+    # + scheduleId - The unique identifier of the schedule or scheduling page this query belongs to
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - Successfully returned the available time slots 
+    remote isolated function listAvailableTimes(string scheduleId, map<string|string[]> headers = {}, *ListAvailableTimesQueries queries) returns AvailableTimes|error {
+        string resourcePath = string `/schedules/${getEncodedUri(scheduleId)}/available_times`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Create single-use scheduling link
     #
     # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + payload - Schedule ID for which a single-use scheduling link is created 
     # + return - If successful, this method returns a scheduling link URL in the response body 
-    resource isolated function post schedules/single_use_link(SchedulesSingleUseLinkBody payload, map<string|string[]> headers = {}) returns InlineResponse2012|error {
+    remote isolated function createSingleUseLink(CreateSingleUseLinkRequest payload, map<string|string[]> headers = {}, *CreateSingleUseLinkQueries queries) returns SingleUseLink|error {
         string resourcePath = string `/schedules/single_use_link`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
         http:Request request = new;
         json jsonBody = jsondata:toJson(payload);
         request.setPayload(jsonBody, "application/json");
         return self.clientEp->post(resourcePath, request, headers);
     }
 
-    # Get user
+    # Create share
     #
     # + headers - Headers to be sent with the request 
+    # + payload - Schedule customisations to share with a specific attendee without a new schedule 
+    # + return - Returned a customed link  
+    remote isolated function createShare(CreateShareRequest payload, map<string|string[]> headers = {}) returns Share|error {
+        string resourcePath = string `/shares`;
+        http:Request request = new;
+        json jsonBody = jsondata:toJson(payload);
+        request.setPayload(jsonBody, "application/json");
+        return self.clientEp->post(resourcePath, request, headers);
+    }
+
+    # List teams
+    #
+    # + headers - Headers to be sent with the request 
+    # + queries - Queries to be sent with the request 
+    # + return - The response body of the list team 
+    remote isolated function listTeams(map<string|string[]> headers = {}, *ListTeamsQueries queries) returns TeamList|error {
+        string resourcePath = string `/teams`;
+        resourcePath = resourcePath + check getPathForQueryParam(queries);
+        return self.clientEp->get(resourcePath, headers);
+    }
+
+    # Get Scheduler user
+    #
+    # + userId - The identifier of the user whose Scheduler details are returned
+    # + headers - Headers to be sent with the request 
     # + return - If successful, this method returns user information in the response body 
-    resource isolated function get users/[string userId](map<string|string[]> headers = {}) returns InlineResponse2007|error {
+    remote isolated function getUser(string userId, map<string|string[]> headers = {}) returns SchedulerUser|error {
         string resourcePath = string `/users/${getEncodedUri(userId)}`;
         return self.clientEp->get(resourcePath, headers);
     }

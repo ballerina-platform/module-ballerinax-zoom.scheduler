@@ -1,19 +1,20 @@
 ## Overview
 
-[Zoom](https://www.zoom.com/) is a video communications platform that enables users to schedule, host, and join virtual meetings, webinars, and conferences. it provides an integrated platform for reliable video and audio collaboration.
+[Zoom](https://www.zoom.com/) is a video communications platform for meetings, webinars and team chat. [Zoom Scheduler](https://developers.zoom.us/docs/zoom-scheduler/) is its booking tool: hosts publish schedules with their availability, and invitees book open time slots that become Zoom meetings.
 
-The Zoom Scheduler connector offers APIs to connect and interact with Zoom Scheduler endpoints, specifically based on Zoom API v2.
+The Zoom Scheduler connector lets Ballerina applications manage schedules, availability, bookings and scheduled events, create single-use and customised scheduling links, and read routing-form responses and booking analytics. It supports version 2 of the Zoom Scheduler API.
 
-### Key Features
+### Key features
 
-- Programmatically schedule and manage Zoom meetings
-- Access and update scheduling preferences and calendars
-- Support for Zoom Scheduler API endpoints
-- Secure integration with Zoom platform via OAuth2
+- Publish and manage booking schedules, including buffers, custom questions and weekly availability rules
+- Maintain users' working-hour availability and date-specific overrides
+- Find open time slots and book them on behalf of invitees
+- Track, update and cancel scheduled events and their attendees
+- Issue single-use and customised scheduling links, and report on routing forms and booking analytics
 
 ## Setup guide
 
-To use the Zoom scheduler connector, you must have access to the Zoom API through [Zoom Marketplace](https://marketplace.zoom.us/) and a project under it. If you do not have a Zoom account, you can sign up for one [here](https://zoom.us/signup#/signup).
+To use the Zoom Scheduler connector, you must have access to the Zoom API through [Zoom Marketplace](https://marketplace.zoom.us/) and a project under it. If you do not have a Zoom account, you can sign up for one [here](https://zoom.us/signup#/signup).
 
 ### Step 1: Create a new app
 
@@ -88,7 +89,7 @@ This will give you the user ID needed for API calls.
 
 ## Quickstart
 
-To use the `ballerinax/zoom.scheduler` connector in your Ballerina application, update the `.bal` file as follows:
+To use the Zoom Scheduler connector in your Ballerina application, update the `.bal` file as follows:
 
 ### Step 1: Import the module
 
@@ -100,29 +101,31 @@ import ballerinax/zoom.scheduler as zoom;
 
 ### Step 2: Instantiate a new connector
 
-1. Create a `Config.toml` file and, configure the obtained credentials in the above steps as follows:
+1. Create a `Config.toml` file and configure the credentials obtained in the steps above:
 
-```bash
+```toml
 clientId = "<Client ID>"
 clientSecret = "<Client Secret>"
 refreshToken = "<Refresh Token>"
+refreshUrl = "https://zoom.us/oauth/token"
 userId = "<Zoom User ID>"
 ```
 
-2. Create a `zoom.scheduler:ConnectionConfig` with the obtained access token and initialize the connector with it.
+2. Create a `zoom:ConnectionConfig` with the OAuth 2.0 refresh-token credentials and initialize the connector with it.
 
 ```ballerina
 configurable string clientId = ?;
 configurable string clientSecret = ?;
 configurable string refreshToken = ?;
+configurable string refreshUrl = ?;
 configurable string userId = ?;
 
 final zoom:Client zoomClient = check new ({
     auth: {
         clientId,
         clientSecret,
-        refreshUrl: "https://zoom.us/oauth/token",
-        refreshToken
+        refreshToken,
+        refreshUrl
     }
 });
 ```
@@ -131,18 +134,11 @@ final zoom:Client zoomClient = check new ({
 
 Now, utilize the available connector operations.
 
-#### Create a schedule
+#### List the user's schedules
 
 ```ballerina
 public function main() returns error? {
-    zoom:InlineResponse2011 schedule = check zoomClient->/schedules.post(
-        payload = {
-            summary: "Team Meeting",
-            description: "Weekly team sync",
-            duration: 60
-        }
-    );
-    io:println("Schedule created with ID: ", schedule.scheduleId);
+    zoom:ScheduleList _ = check zoomClient->listSchedules(userId = userId, pageSize = 10);
 }
 ```
 
@@ -154,8 +150,8 @@ bal run
 
 ## Examples
 
-The `Zoom Scheduler` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/module-ballerinax-zoom.scheduler/tree/main/examples/), covering the following use cases:
+The Zoom Scheduler connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/tree/main/examples/), covering the following use cases:
 
-1. **[Meeting Scheduler](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/tree/main/examples/meeting-scheduler)** - Create scheduled meetings, generate single-use scheduling links, and manage team meeting schedules with automated booking capabilities.
+1. [Schedule slot booking](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/tree/main/examples/schedule_slot_booking) - Create a booking page, find the first open slot in a time window, book it for an invitee and issue a single-use scheduling link.
 
-2. **[Availability Manager](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/tree/main/examples/availability-manager)** - Configure availability schedules, analyze scheduler analytics, and manage working hours for different time zones and business requirements.
+2. [Availability hours review](https://github.com/ballerina-platform/module-ballerinax-zoom.scheduler/tree/main/examples/availability_hours_review) - Review a user's availabilities across all pages, create missing working hours and compare booking analytics with the previous period.
